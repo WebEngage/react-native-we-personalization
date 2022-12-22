@@ -3,6 +3,7 @@ import {
   UIManager,
   Platform,
   ViewStyle,
+  NativeModules,
 } from 'react-native';
 
 const LINKING_ERROR =
@@ -18,9 +19,24 @@ type WebengagePersonalizationProps = {
 
 const ComponentName = 'WebengagePersonalizationView';
 
+const PersonalizationBridge = NativeModules.PersonalizationBridge
+  ? NativeModules.PersonalizationBridge
+  : new Proxy(
+      {},
+      {
+        get() {
+          throw new Error(LINKING_ERROR);
+        },
+      }
+    );
+
 export const WebengagePersonalizationView =
   UIManager.getViewManagerConfig(ComponentName) != null
     ? requireNativeComponent<WebengagePersonalizationProps>(ComponentName)
     : () => {
         throw new Error(LINKING_ERROR);
       };
+
+export function multiply(a: number, b: number): Promise<number> {
+  return PersonalizationBridge.multiply(a, b);
+}
