@@ -12,6 +12,14 @@ const LINKING_ERROR =
   '- You rebuilt the app after installing the package\n' +
   '- You are not using Expo Go\n';
 
+
+  const BRIDGE_ERROR =
+  `bridge package 'react-native-webengage-personalization' doesn't seem to be linked. Make sure: \n\n` +
+  Platform.select({ ios: "- You have run 'pod install'\n", default: '' }) +
+  '- You rebuilt the app after installing the package\n' +
+  '- You are not using Expo Go\n';
+
+
 type WebengagePersonalizationProps = {
   color: string;
   style: ViewStyle;
@@ -25,7 +33,7 @@ const PersonalizationBridge = NativeModules.PersonalizationBridge
       {},
       {
         get() {
-          throw new Error(LINKING_ERROR);
+          throw new Error(BRIDGE_ERROR);
         },
       }
     );
@@ -39,4 +47,8 @@ export const WebengagePersonalizationView =
 
 export function multiply(a: number, b: number): Promise<number> {
   return PersonalizationBridge.multiply(a, b);
+}
+
+export function add(a: number, b: number): Promise<number> {
+  return PersonalizationBridge.add(a, b);
 }
