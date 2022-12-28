@@ -49,6 +49,7 @@ export function multiply(a: number, b: number): Promise<number> {
   return PersonalizationBridge.multiply(a, b);
 }
 
+// Below code is example for multiple call
 export function add(a: number, b: number): Promise<number> {
   return PersonalizationBridge.add(a, b);
 }
