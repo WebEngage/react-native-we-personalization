@@ -7,6 +7,7 @@ import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.module.annotations.ReactModule;
+import com.facebook.react.bridge.Callback;
 
 @ReactModule(name = PersonalizationBridgeModule.NAME)
 public class PersonalizationBridgeModule extends ReactContextBaseJavaModule {
@@ -29,4 +30,15 @@ public class PersonalizationBridgeModule extends ReactContextBaseJavaModule {
   public void multiply(double a, double b, Promise promise) {
     promise.resolve(a * b);
   }
+
+  @ReactMethod
+  public void add(double a, double b, Promise promise) {
+    promise.resolve(a + b);
+  }
+
+  @ReactMethod
+   public void createCalendarEvent(String name, String location, Callback callBack) {
+       String eventId = "event123";
+       callBack.invoke(null,eventId);
+   }
 }
