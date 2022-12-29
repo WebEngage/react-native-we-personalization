@@ -15,7 +15,7 @@ export default function App() {
     add(6, 8).then(setAddition);
   }, []);
 
-  const onPress = () => {
+  const immediateCallback = () => {
     NativeModules.PersonalizationBridge.createCalendarEvent(
       'testName',
       'testLocation',
@@ -28,6 +28,17 @@ export default function App() {
     );
   };
 
+  const promiseCallback = async () => {
+    try {
+      const eventId = await NativeModules.PersonalizationBridge.promiseCallback(
+        'testString'
+      );
+      console.log('Event Id received from Java -> ' + eventId);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
   return (
     <View style={styles.container}>
       <WebengagePersonalizationView color="#32a852" style={styles.box} />
@@ -35,8 +46,10 @@ export default function App() {
       <Text>Addition Result - {addition}</Text>
       <Button
         title="Trigger Immediate Callback from native"
-        onPress={onPress}
+        onPress={immediateCallback}
       />
+      <View style={styles.margin20} />
+      <Button title="Promise callback Immediate" onPress={promiseCallback} />
     </View>
   );
 }
@@ -46,6 +59,9 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  margin20: {
+    marginTop: 20,
   },
   box: {
     width: 60,

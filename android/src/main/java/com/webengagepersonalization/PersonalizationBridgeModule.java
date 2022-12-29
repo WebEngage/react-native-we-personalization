@@ -9,6 +9,8 @@ import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.module.annotations.ReactModule;
 import com.facebook.react.bridge.Callback;
 
+import android.os.Handler;
+
 @ReactModule(name = PersonalizationBridgeModule.NAME)
 public class PersonalizationBridgeModule extends ReactContextBaseJavaModule {
   public static final String NAME = "PersonalizationBridge";
@@ -41,4 +43,23 @@ public class PersonalizationBridgeModule extends ReactContextBaseJavaModule {
        String eventId = "event123";
        callBack.invoke(null,eventId);
    }
+
+   @ReactMethod
+public void promiseCallback(String name, Promise promise) {
+    try {
+        String eventId = "25";
+        // Below Handler will delay execution for 5 seconds
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                // delayCallback.afterDelay();
+                promise.resolve(eventId);
+
+            }
+        }, 5 * 1000);
+    } catch(Exception e) {
+        promise.reject("Create Event Error", e);
+    }
+}
 }
