@@ -8,15 +8,22 @@ import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.module.annotations.ReactModule;
 import com.facebook.react.bridge.Callback;
+import com.facebook.react.modules.core.DeviceEventManagerModule;
+import com.facebook.react.bridge.WritableMap;
+import com.facebook.react.bridge.Arguments;
+import androidx.annotation.Nullable;
 
 import android.os.Handler;
 
 @ReactModule(name = PersonalizationBridgeModule.NAME)
 public class PersonalizationBridgeModule extends ReactContextBaseJavaModule {
   public static final String NAME = "PersonalizationBridge";
+  private ReactApplicationContext applicationContext = null;
+
 
   public PersonalizationBridgeModule(ReactApplicationContext reactContext) {
     super(reactContext);
+    this.applicationContext = reactContext;
   }
 
   @Override
@@ -39,9 +46,16 @@ public class PersonalizationBridgeModule extends ReactContextBaseJavaModule {
   }
 
   @ReactMethod
-   public void createCalendarEvent(String name, String location, Callback callBack) {
+   public void immediateCallback(String name, String location, Callback callBack) {
        String eventId = "event123";
        callBack.invoke(null,eventId);
+   }
+
+   @ReactMethod
+   public void listenerCallback() {
+        WritableMap params = Arguments.createMap();
+        params.putString("eventProperty", "someValue");
+      sendEvent(this.applicationContext, "EventReminder", params);
    }
 
    @ReactMethod
@@ -61,5 +75,17 @@ public void promiseCallback(String name, Promise promise) {
     } catch(Exception e) {
         promise.reject("Create Event Error", e);
     }
-}
+  }
+
+//  Call this method to send event to registered event listeners
+// ex-  sendEvent(this.applicationContext, "EventReminder", params);
+  private void sendEvent(ReactApplicationContext reactContext,
+  String eventName, @Nullable WritableMap params) {
+    reactContext
+     .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
+     .emit(eventName, params);
+  }
+
+
+
 }

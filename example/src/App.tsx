@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { StyleSheet, View, Text, Button, NativeModules } from 'react-native';
+import { StyleSheet, View, Text, Button, NativeModules, NativeEventEmitter } from 'react-native';
 import {
   WebengagePersonalizationView,
   multiply,
@@ -16,7 +16,7 @@ export default function App() {
   }, []);
 
   const immediateCallback = () => {
-    NativeModules.PersonalizationBridge.createCalendarEvent(
+    NativeModules.PersonalizationBridge.immediateCallback(
       'testName',
       'testLocation',
       (error: object, eventId: string) => {
@@ -39,6 +39,18 @@ export default function App() {
     }
   };
 
+  const listenerCallback = () => {
+    NativeModules.PersonalizationBridge.listenerCallback()
+  }
+
+  React.useEffect(() => {
+   const eventEmitter = new NativeEventEmitter(NativeModules.PersonalizationBridge);
+   eventEmitter.addListener('EventReminder', (event) => {
+      console.log(event) // "someValue"
+   });
+  }, [])
+
+
   return (
     <View style={styles.container}>
       <WebengagePersonalizationView color="#32a852" style={styles.box} />
@@ -50,6 +62,9 @@ export default function App() {
       />
       <View style={styles.margin20} />
       <Button title="Promise callback Immediate" onPress={promiseCallback} />
+      <View style={styles.margin20} />
+
+      <Button title="Trigger previously Registered callback(Push click)" onPress={listenerCallback} />
     </View>
   );
 }
