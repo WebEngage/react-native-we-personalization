@@ -2,7 +2,6 @@ import {
   requireNativeComponent,
   UIManager,
   Platform,
-  ViewStyle,
   NativeModules,
 } from 'react-native';
 
@@ -18,10 +17,10 @@ const BRIDGE_ERROR =
   '- You rebuilt the app after installing the package\n' +
   '- You are not using Expo Go\n';
 
-type WebengagePersonalizationProps = {
-  color: string;
-  style: ViewStyle;
-};
+// type WebengagePersonalizationProps = {
+//   color: string;
+//   style: ViewStyle;
+// };
 
 const ComponentName = 'WebengagePersonalizationView';
 
@@ -38,16 +37,16 @@ const PersonalizationBridge = NativeModules.PersonalizationBridge
 
 export const WebengagePersonalizationView =
   UIManager.getViewManagerConfig(ComponentName) != null
-    ? requireNativeComponent<WebengagePersonalizationProps>(ComponentName)
+    ? requireNativeComponent(ComponentName)
     : () => {
         throw new Error(LINKING_ERROR);
       };
 
-export function multiply(a: number, b: number): Promise<number> {
+export function multiply(a, b) {
   return PersonalizationBridge.multiply(a, b);
 }
 
 // Below code is example for multiple call
-export function add(a: number, b: number): Promise<number> {
+export function add(a, b) {
   return PersonalizationBridge.add(a, b);
 }

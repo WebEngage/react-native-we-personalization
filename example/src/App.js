@@ -1,6 +1,13 @@
 import * as React from 'react';
 
-import { StyleSheet, View, Text, Button, NativeModules, NativeEventEmitter } from 'react-native';
+import {
+  StyleSheet,
+  View,
+  Text,
+  Button,
+  NativeModules,
+  NativeEventEmitter,
+} from 'react-native';
 import {
   WebengagePersonalizationView,
   multiply,
@@ -8,8 +15,8 @@ import {
 } from 'react-native-webengage-personalization';
 
 export default function App() {
-  const [result, setResult] = React.useState<number | undefined>();
-  const [addition, setAddition] = React.useState<number | undefined>();
+  const [result, setResult] = React.useState();
+  const [addition, setAddition] = React.useState();
   React.useEffect(() => {
     multiply(6, 8).then(setResult);
     add(6, 8).then(setAddition);
@@ -19,7 +26,7 @@ export default function App() {
     NativeModules.PersonalizationBridge.immediateCallback(
       'testName',
       'testLocation',
-      (error: object, eventId: string) => {
+      (error, eventId) => {
         if (error) {
           console.error(`Error found! ${error}`);
         }
@@ -40,16 +47,17 @@ export default function App() {
   };
 
   const listenerCallback = () => {
-    NativeModules.PersonalizationBridge.listenerCallback()
-  }
+    NativeModules.PersonalizationBridge.listenerCallback();
+  };
 
   React.useEffect(() => {
-   const eventEmitter = new NativeEventEmitter(NativeModules.PersonalizationBridge);
-   eventEmitter.addListener('EventReminder', (event) => {
-      console.log(event) // "someValue"
-   });
-  }, [])
-
+    const eventEmitter = new NativeEventEmitter(
+      NativeModules.PersonalizationBridge
+    );
+    eventEmitter.addListener('EventReminder', (event) => {
+      console.log(event); // "someValue"
+    });
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -64,7 +72,10 @@ export default function App() {
       <Button title="Promise callback Immediate" onPress={promiseCallback} />
       <View style={styles.margin20} />
 
-      <Button title="Trigger previously Registered callback(Push click)" onPress={listenerCallback} />
+      <Button
+        title="Trigger previously Registered callback(Push click)"
+        onPress={listenerCallback}
+      />
     </View>
   );
 }
