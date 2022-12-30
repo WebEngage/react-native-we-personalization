@@ -3,7 +3,10 @@ import {
   UIManager,
   Platform,
   NativeModules,
+  Text,
+  View,
 } from 'react-native';
+import React from 'react';
 
 const LINKING_ERROR =
   `The package 'react-native-webengage-personalization' doesn't seem to be linked. Make sure: \n\n` +
@@ -17,11 +20,6 @@ const BRIDGE_ERROR =
   '- You rebuilt the app after installing the package\n' +
   '- You are not using Expo Go\n';
 
-// type WebengagePersonalizationProps = {
-//   color: string;
-//   style: ViewStyle;
-// };
-
 const ComponentName = 'WebengagePersonalizationView';
 
 const PersonalizationBridge = NativeModules.PersonalizationBridge
@@ -34,6 +32,17 @@ const PersonalizationBridge = NativeModules.PersonalizationBridge
         },
       }
     );
+
+export const WEPersonalization = (props) => {
+  console.log("props in webengage docs - ",props)
+  // return (
+  //   <View>
+  //     <Text> Hello </Text>
+  //     <WebengagePersonalizationView {...props} />
+  //   </View>
+  // );
+  return <WebengagePersonalizationView {...props} />;
+};
 
 export const WebengagePersonalizationView =
   UIManager.getViewManagerConfig(ComponentName) != null

@@ -9,7 +9,7 @@ import {
   NativeEventEmitter,
 } from 'react-native';
 import {
-  WebengagePersonalizationView,
+  WEPersonalization,
   multiply,
   add,
 } from 'react-native-webengage-personalization';
@@ -30,7 +30,10 @@ export default function App() {
         if (error) {
           console.error(`Error found! ${error}`);
         }
-        console.log(`event id ${eventId} returned`);
+        console.log(`event id ${eventId} returned but no Error - ${error}`);
+      },
+      () => {
+        console.log('error callback');
       }
     );
   };
@@ -38,7 +41,8 @@ export default function App() {
   const promiseCallback = async () => {
     try {
       const eventId = await NativeModules.PersonalizationBridge.promiseCallback(
-        'testString'
+        'testString',
+        'test 2'
       );
       console.log('Event Id received from Java -> ' + eventId);
     } catch (e) {
@@ -61,7 +65,7 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      <WebengagePersonalizationView color="#32a852" style={styles.box} />
+      <WEPersonalization color="#32a852" style={styles.box} />
       <Text>Result: {result}</Text>
       <Text>Addition Result - {addition}</Text>
       <Button

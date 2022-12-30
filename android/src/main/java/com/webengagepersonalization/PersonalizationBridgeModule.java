@@ -46,7 +46,7 @@ public class PersonalizationBridgeModule extends ReactContextBaseJavaModule {
   }
 
   @ReactMethod
-   public void immediateCallback(String name, String location, Callback callBack) {
+   public void immediateCallback(String name, String location, Callback callBack, Callback errorCallback) {
        String eventId = "event123";
        callBack.invoke(null,eventId);
    }
