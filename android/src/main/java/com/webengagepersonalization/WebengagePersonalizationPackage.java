@@ -10,6 +10,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.ArrayList;
 
+
 public class WebengagePersonalizationPackage implements ReactPackage {
   @Override
   public List<NativeModule> createNativeModules(ReactApplicationContext reactContext) {
@@ -20,6 +21,6 @@ public class WebengagePersonalizationPackage implements ReactPackage {
 
   @Override
   public List<ViewManager> createViewManagers(ReactApplicationContext reactContext) {
-    return Arrays.<ViewManager>asList(new WebengagePersonalizationViewManager());
+    return Arrays.<ViewManager>asList(new WebengagePersonalizationViewManager(reactContext));
   }
 }

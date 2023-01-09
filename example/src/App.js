@@ -54,6 +54,11 @@ export default function App() {
     NativeModules.PersonalizationBridge.listenerCallback();
   };
 
+  // Values added in event - will be data available here
+  const personalizationCallback = (d) => {
+    console.log('Personalization callback triggered-', d.nativeEvent);
+  };
+
   React.useEffect(() => {
     const eventEmitter = new NativeEventEmitter(
       NativeModules.PersonalizationBridge
@@ -65,7 +70,14 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      <WEPersonalization color="#32a852" style={styles.box} />
+      <WEPersonalization
+        color="#32a852"
+        style={styles.box}
+        propertyId="123"
+        screenName="screen-inline"
+        personalizationCallback={personalizationCallback}
+        // personalizationCallback="personalizationCallback data"
+      />
       <Text>Result: {result}</Text>
       <Text>Addition Result - {addition}</Text>
       <Button

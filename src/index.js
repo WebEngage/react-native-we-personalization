@@ -35,12 +35,6 @@ const PersonalizationBridge = NativeModules.PersonalizationBridge
 
 export const WEPersonalization = (props) => {
   console.log("props in webengage docs - ",props)
-  // return (
-  //   <View>
-  //     <Text> Hello </Text>
-  //     <WebengagePersonalizationView {...props} />
-  //   </View>
-  // );
   return <WebengagePersonalizationView {...props} />;
 };
 
