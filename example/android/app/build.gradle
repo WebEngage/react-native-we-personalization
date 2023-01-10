@@ -251,6 +251,13 @@ android {
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
 
+    // Google API error fix
+    implementation 'com.android.support:multidex:1.0.3'
+    implementation 'com.google.android.gms:play-services:12.0.1'
+
+    //WebEngage
+    implementation 'com.webengage:android-sdk:3.+'
+
     //noinspection GradleDynamicVersion
     implementation "com.facebook.react:react-native:+"  // From node_modules
 

@@ -13,13 +13,18 @@ import {
   multiply,
   add,
 } from 'react-native-webengage-personalization';
+import WebEngage from 'react-native-webengage';
 
 export default function App() {
   const [result, setResult] = React.useState();
   const [addition, setAddition] = React.useState();
+
+  var webengage = new WebEngage();
+
   React.useEffect(() => {
     multiply(6, 8).then(setResult);
     add(6, 8).then(setAddition);
+    // Customs -> WebEngage.registerInline("Property_id","screenName", callback)
   }, []);
 
   const immediateCallback = () => {
@@ -70,6 +75,7 @@ export default function App() {
 
   return (
     <View style={styles.container}>
+      {/* Banner/Text */}
       <WEPersonalization
         color="#32a852"
         style={styles.box}

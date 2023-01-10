@@ -20,6 +20,7 @@ import com.facebook.react.uimanager.annotations.ReactProp;
 //import android.os.Handler.Callback;
 import com.facebook.react.bridge.Callback;
 import com.facebook.react.uimanager.events.RCTEventEmitter;
+import com.webengagepersonalization.Views.Registry;
 
 import android.widget.FrameLayout;
 import android.widget.Toast;
@@ -45,7 +46,6 @@ public class WebengagePersonalizationViewManager extends SimpleViewManager<View>
   @Override
   @NonNull
   public View createViewInstance(ThemedReactContext reactContext) {
-
     return new View(reactContext);
   }
 
@@ -65,6 +65,23 @@ public class WebengagePersonalizationViewManager extends SimpleViewManager<View>
 
     view.setBackgroundColor(Color.parseColor(color));
   }
+
+  @ReactProp(name = "screenName")
+  public void setScreenName(View view, String screenName) {
+    Log.d("WebEngage", "Screen Name to register -> "+screenName);
+    Registry.getInstance().setScreenName(screenName);
+    Map<String, String> data = Registry.getInstance().getRegistryData();
+    Log.d("Akshay", data.toString());
+  }
+
+  @ReactProp(name = "propertyId")
+  public void setPropertyId(View view, String propertyId) {
+    Log.d("WebEngage", "PropertyId to register -> "+propertyId);
+    Registry.getInstance().setPropertyId(propertyId);
+
+  }
+
+
 
   public Map getExportedCustomBubblingEventTypeConstants() {
     return MapBuilder.builder().put(
