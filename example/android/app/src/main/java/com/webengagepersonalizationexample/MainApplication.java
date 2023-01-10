@@ -15,6 +15,7 @@ import java.util.List;
 import com.webengage.WebengageBridge;
 import com.webengage.sdk.android.WebEngageConfig;
 import com.webengage.sdk.android.WebEngageActivityLifeCycleCallbacks;
+import com.webengage.personalization.WEPersonalization;
 
 public class MainApplication extends Application implements ReactApplication {
 
@@ -67,6 +68,9 @@ public class MainApplication extends Application implements ReactApplication {
               .setDebugMode(true) // only in development mode
               .build();
   registerActivityLifecycleCallbacks(new WebEngageActivityLifeCycleCallbacks(this, webEngageConfig));
+
+  // Initializing WebEngage Personalization SDK
+  WEPersonalization.Companion.get().init();
 
   }
 

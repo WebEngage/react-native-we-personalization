@@ -257,7 +257,12 @@ dependencies {
 
     //WebEngage
     // implementation 'com.webengage:android-sdk:3.+'
+    // implementation 'com.webengage:we-personalization:1.0.0'
+
     implementation project(':android-sdk')
+    implementation (project(':we-personalization'))
+
+
 
     //noinspection GradleDynamicVersion
     implementation "com.facebook.react:react-native:+"  // From node_modules

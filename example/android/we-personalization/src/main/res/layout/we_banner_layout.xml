@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/we_parent_card_view"
+    android:layout_width="match_parent"
+    style="@style/NoDarkTheme"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/we_banner_iv_bg"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:visibility="gone" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/we_banner_btn1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAllCaps="false"
+                android:paddingStart="15dp"
+                android:paddingEnd="15dp"
+                android:maxLines="1"
+                android:layout_gravity="bottom|center_horizontal"
+                android:visibility="gone" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/we_banner_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="top|center_horizontal"
+                android:ellipsize="end"
+                android:textColor="@android:color/black"
+                android:textSize="12sp"
+                android:textAlignment="textStart"
+                android:visibility="gone" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/we_banner_description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:ellipsize="end"
+                android:textColor="@android:color/black"
+                android:textSize="12sp"
+                android:textAlignment="textStart"
+                android:visibility="gone" />
+        </FrameLayout>
+    </RelativeLayout>
+</androidx.cardview.widget.CardView>
