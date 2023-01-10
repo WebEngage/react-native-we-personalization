@@ -256,7 +256,8 @@ dependencies {
     implementation 'com.google.android.gms:play-services:12.0.1'
 
     //WebEngage
-    implementation 'com.webengage:android-sdk:3.+'
+    // implementation 'com.webengage:android-sdk:3.+'
+    implementation project(':android-sdk')
 
     //noinspection GradleDynamicVersion
     implementation "com.facebook.react:react-native:+"  // From node_modules

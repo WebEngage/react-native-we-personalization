@@ -1,0 +1,2 @@
+-keep class com.webengage.sdk.android.**{*;}
+-dontwarn com.webengage.sdk.android.**

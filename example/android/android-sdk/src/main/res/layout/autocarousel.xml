@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/carousel_v1_viewflipper_container"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_marginTop="@dimen/we_big_view_margin_top">
+
+    <ViewFlipper
+        android:id="@+id/carousel_v1_viewflipper"
+        android:layout_width="match_parent"
+        android:layout_height="192dp"
+        android:autoStart="true"
+        android:inAnimation="@anim/fade_in"
+        android:outAnimation="@anim/fade_out"/>
+
+</RelativeLayout>

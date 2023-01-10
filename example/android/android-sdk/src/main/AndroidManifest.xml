@@ -1,0 +1,43 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.webengage.sdk.android">
+
+    <uses-permission android:name="com.google.android.gms.permission.AD_ID"/>
+    <uses-permission android:name="android.permission.BROADCAST_CLOSE_SYSTEM_DIALOGS"
+        tools:ignore="ProtectedPermissions" />
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
+    <application>
+        <service android:name="com.webengage.sdk.android.ExecutorService" />
+        <service android:name="com.webengage.sdk.android.EventLogService" />
+        <service android:name="com.webengage.sdk.android.NotificationClickHandlerService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.webengage.sdk.android.intent.ACTION" />
+                <category android:name="${applicationId}" />
+            </intent-filter>
+        </service>
+        <activity
+            android:name="com.webengage.sdk.android.actions.render.WebEngageActivity"
+            android:theme="@android:style/Theme.Translucent"
+            android:configChanges="orientation|screenSize" />
+        <receiver
+            android:name="com.webengage.sdk.android.WebEngageReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.webengage.sdk.android.intent.ACTION" />
+                <category android:name="${applicationId}" />
+            </intent-filter>
+        </receiver>
+
+        <service android:name="com.webengage.sdk.android.WebEngageJobService"
+            android:permission="android.permission.BIND_JOB_SERVICE">
+        </service>
+
+        <activity android:name="WETransparentActivity"
+            android:enabled="true"
+            android:theme="@style/Theme.Transparent"
+            android:excludeFromRecents="true"/>
+    </application>
+</manifest>
