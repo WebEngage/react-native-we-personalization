@@ -80,7 +80,7 @@ export default function App() {
         color="#32a852"
         style={styles.box}
         propertyId="123"
-        screenName="screen-inline"
+        screenName="akshay"
         personalizationCallback={personalizationCallback}
         // personalizationCallback="personalizationCallback data"
       />

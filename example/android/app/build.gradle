@@ -260,7 +260,7 @@ dependencies {
     // implementation 'com.webengage:we-personalization:1.0.0'
 
     implementation project(':android-sdk')
-    implementation (project(':we-personalization'))
+//    implementation (project(':we-personalization'))
 
 
 
