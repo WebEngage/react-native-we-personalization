@@ -7,9 +7,11 @@ import {
   Button,
   NativeModules,
   NativeEventEmitter,
+  Dimensions,
 } from 'react-native';
 import {
   WEPersonalization,
+  WebengagePersonalizationView,
   multiply,
   add,
 } from 'react-native-webengage-personalization';
@@ -24,7 +26,7 @@ export default function App() {
   React.useEffect(() => {
     multiply(6, 8).then(setResult);
     add(6, 8).then(setAddition);
-    // Customs -> WebEngage.registerInline("Property_id","screenName", callback)
+    // webengage.screen("ET_home");
   }, []);
 
   const immediateCallback = () => {
@@ -60,8 +62,12 @@ export default function App() {
   };
 
   // Values added in event - will be data available here
-  const personalizationCallback = (d) => {
-    console.log('Personalization callback triggered-', d.nativeEvent);
+  const personalizationCallback1 = (d) => {
+    console.log('Personalization callback1 triggered-', d.nativeEvent);
+  };
+
+  const personalizationCallback2 = (d) => {
+    console.log('Personalization callback2 triggered-', d.nativeEvent);
   };
 
   React.useEffect(() => {
@@ -69,26 +75,37 @@ export default function App() {
       NativeModules.PersonalizationBridge
     );
     eventEmitter.addListener('EventReminder', (event) => {
-      console.log(event); // "someValue"
+      console.log('Event Listerner called', event); // "someValue"
     });
   }, []);
 
   return (
     <View style={styles.container}>
       {/* Banner/Text */}
+
+      {/* <View style={styles.aboveBox}> */}
       <WEPersonalization
         color="#32a852"
         style={styles.box}
-        propertyId="123"
-        screenName="akshay"
-        personalizationCallback={personalizationCallback}
+        propertyId="flutter_banner"
+        screenName="ET_home"
+        personalizationCallback={personalizationCallback1}
         // personalizationCallback="personalizationCallback data"
       />
+      {/* </View> */}
       <Text>Result: {result}</Text>
       <Text>Addition Result - {addition}</Text>
       <Button
         title="Trigger Immediate Callback from native"
         onPress={immediateCallback}
+      />
+      <WEPersonalization
+        color="#12023f"
+        style={styles.box2}
+        propertyId="flutter_text"
+        screenName="ET_home"
+        personalizationCallback={personalizationCallback2}
+        // personalizationCallback="personalizationCallback data"
       />
       <View style={styles.margin20} />
       <Button title="Promise callback Immediate" onPress={promiseCallback} />
@@ -111,9 +128,24 @@ const styles = StyleSheet.create({
   margin20: {
     marginTop: 20,
   },
+  aboveBox: {
+    width: '100%',
+    height: 300,
+    borderWidth: 1,
+    padding: 10,
+  },
   box: {
-    width: 60,
-    height: 60,
-    marginVertical: 20,
+    width: Dimensions.get('window').width,
+    height: 500,
+    borderWidth: 10,
+    borderColor: 'red',
+    padding: 50,
+  },
+  box2: {
+    width: Dimensions.get('window').width,
+    height: 100,
+    borderWidth: 10,
+    borderColor: 'red',
+    padding: 50,
   },
 });

@@ -6,38 +6,46 @@ import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.NonNull;
+
+import java.util.HashMap;
 import java.util.Map;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContext;
-import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.common.MapBuilder;
 import com.facebook.react.uimanager.SimpleViewManager;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.annotations.ReactProp;
 //import android.os.Handler.Callback;
-import com.facebook.react.bridge.Callback;
+import com.facebook.react.uimanager.annotations.ReactPropGroup;
 import com.facebook.react.uimanager.events.RCTEventEmitter;
 import com.webengage.personalization.WEPersonalization;
 import com.webengage.personalization.callbacks.WEPlaceholderCallback;
 import com.webengage.personalization.data.WECampaignData;
+//import  androidx.annotation..widget.CardView;
 import com.webengage.sdk.android.WebEngage;
 import com.webengagepersonalization.Views.Registry;
-import android.widget.FrameLayout;
-import android.widget.Toast;
+import com.webengagepersonalization.InlineWidget;
+
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import javax.annotation.Nullable;
 
 
-public class WebengagePersonalizationViewManager extends SimpleViewManager<View> implements WEPlaceholderCallback {
+public class WebengagePersonalizationViewManager extends SimpleViewManager<ViewGroup> implements WEPlaceholderCallback {
   public static final String REACT_CLASS = "WebengagePersonalizationView";
   private ReactApplicationContext applicationContext = null;
+
+  private InlineWidget simpleUi;
+  int width, height;
 
   public WebengagePersonalizationViewManager(ReactApplicationContext reactContext) {
     super();
     this.applicationContext = reactContext;
+    WebEngage.get().analytics().screenNavigated("ET_home");
   }
 
   @Override
@@ -48,37 +56,48 @@ public class WebengagePersonalizationViewManager extends SimpleViewManager<View>
 
   @Override
   @NonNull
-  public View createViewInstance(ThemedReactContext reactContext) {
-    return new View(reactContext);
+  public ViewGroup createViewInstance(ThemedReactContext reactContext) {
+    Log.d("Ak","Instance created");
+    HashMap<String, Object> map = new HashMap<String, Object>();
+    map.put("height", height);
+    map.put("width", width);
+
+     simpleUi = new InlineWidget(reactContext.getReactApplicationContext(),map,this);
+    return simpleUi;
+//    return new LinearLayout(reactContext) {
+//    };
   }
+
+
+//  @ReactPropGroup(names = {"width", "height"}, customType = "Style")
+//  public void setStyle(View view, int index, int value) {
+//Log.d("Ak1","index - "+index+ "\n Val - "+value);
+//    if (index == 0) {
+//      width = value;
+//    }
+//
+//    if (index == 1) {
+//      height = value;
+//    }
+////    simpleUi.updateStyle(height, width);
+//  }
 
 
   @ReactProp(name = "color")
   public void setColor(View view, String color) {
     Log.d("WebEngage", "inside color data -> ");
     WEPersonalization.Companion.get().init(); // Initializing Personalization SDK
-//    The below code will trigger the callback called from Native View Method
-    WritableMap event = Arguments.createMap();
-    event.putString("customData", "event data");
-    final Context context = view.getContext();
-    if (context instanceof ReactContext) {
-      ((ReactContext) context).getJSModule(RCTEventEmitter.class)
-        .receiveEvent(view.getId(),
-          "personalizationCallback", event);
-    }
-    WebEngage.get().analytics().screenNavigated("akshay");
-//    WEPersonalization.Companion.get().registerWEPlaceholderCallback("ak_test_2", this);
-    WEPersonalization.Companion.get().registerWEPlaceholderCallback("ak_test_1", this);
-//    WEPersonalization.Companion.get().registerWEPlaceholderCallback("S1P1", this);
-//    WEPersonalization.Companion.get().registerWEPlaceholderCallback("property_1", this);
-    view.setBackgroundColor(Color.parseColor(color));
+//    WebEngage.get().analytics().screenNavigated("list-screen");
+//    WEPersonalization.Companion.get().registerWEPlaceholderCallback("ak_test_2", this); // Custom View
+//    WEPersonalization.Companion.get().registerWEPlaceholderCallback("placeholder_1", this);  // Text View
+//    WEPersonalization.Companion.get().registerWEPlaceholderCallback("1", this);  // Text View
+//    view.setBackgroundColor(Color.parseColor(color));
   }
 
   @ReactProp(name = "screenName")
   public void setScreenName(View view, String screenName) {
     Log.d("WebEngage", "Screen Name to register -> "+screenName);
     Registry.getInstance().setScreenName(screenName);
-    WebEngage.get().analytics().screenNavigated(screenName);
     Map<String, String> data = Registry.getInstance().getRegistryData();
     Log.d("Akshay", data.toString());
   }
@@ -87,6 +106,7 @@ public class WebengagePersonalizationViewManager extends SimpleViewManager<View>
   public void setPropertyId(View view, String propertyId) {
     Log.d("WebEngage", "PropertyId to register -> "+propertyId);
     Registry.getInstance().setPropertyId(propertyId);
+    simpleUi.updateViewTag(propertyId);
 
   }
 

@@ -11,12 +11,18 @@ import com.facebook.react.bridge.Callback;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.bridge.Arguments;
+import com.webengage.personalization.WEPersonalization;
+import com.webengage.personalization.callbacks.WEPlaceholderCallback;
+import com.webengage.personalization.data.WECampaignData;
+import com.webengage.sdk.android.WebEngage;
+
 import androidx.annotation.Nullable;
 
 import android.os.Handler;
+import android.util.Log;
 
 @ReactModule(name = PersonalizationBridgeModule.NAME)
-public class PersonalizationBridgeModule extends ReactContextBaseJavaModule {
+public class PersonalizationBridgeModule extends ReactContextBaseJavaModule implements WEPlaceholderCallback {
   public static final String NAME = "PersonalizationBridge";
   private ReactApplicationContext applicationContext = null;
 
@@ -47,15 +53,17 @@ public class PersonalizationBridgeModule extends ReactContextBaseJavaModule {
 
   @ReactMethod
    public void immediateCallback(String name, String location, Callback callBack, Callback errorCallback) {
-       String eventId = "event123";
-       callBack.invoke(null,eventId);
-   }
+    WEPersonalization.Companion.get().init(); // Initializing Personalization SDK
+    WebEngage.get().analytics().screenNavigated("ET_home");
+    // WEPersonalization.Companion.get().registerWEPlaceholderCallback("flutter_banner", this);  // Text View
+
+  }
 
    @ReactMethod
    public void listenerCallback() {
         WritableMap params = Arguments.createMap();
         params.putString("eventProperty", "someValue");
-      sendEvent(this.applicationContext, "EventReminder", params);
+//      sendEvent(this.applicationContext, "EventReminder", params);
    }
 
    @ReactMethod
@@ -88,4 +96,20 @@ public void promiseCallback(String name, Promise promise) {
 
 
 
+  @Override
+  public void onDataReceived(WECampaignData weCampaignData) {
+    Log.d("WebEngage1", "OnDataReceived from personalization view manager - "+weCampaignData);
+  }
+
+  @Override
+  public void onPlaceholderException(String s, String s1, Exception e) {
+    Log.d("WebEngage1", "onPlaceholderException from personalization view manager-> \ns- "+s+"\ns1- "+s1 + "\nerror-"+e);
+
+  }
+
+  @Override
+  public void onRendered(WECampaignData weCampaignData) {
+    Log.d("WebEngage1", "onRendered from personalization view manager");
+
+  }
 }
