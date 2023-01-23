@@ -1,8 +1,13 @@
 package com.webengagepersonalization;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.graphics.Color;
+import android.graphics.Rect;
+import android.os.Build;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -25,6 +30,7 @@ import com.webengage.personalization.WEPersonalization;
 import com.webengage.personalization.callbacks.WEPlaceholderCallback;
 import com.webengage.personalization.data.WECampaignData;
 //import  androidx.annotation..widget.CardView;
+import com.webengage.personalization.utils.ConstantsKt;
 import com.webengage.sdk.android.WebEngage;
 import com.webengagepersonalization.Views.Registry;
 import com.webengagepersonalization.InlineWidget;
@@ -46,6 +52,9 @@ public class WebengagePersonalizationViewManager extends SimpleViewManager<ViewG
     super();
     this.applicationContext = reactContext;
     WebEngage.get().analytics().screenNavigated("ET_home");
+    SharedPreferences sharedPrefsManager = applicationContext.getSharedPreferences(ConstantsKt.WE_SHARED_STORAGE, Context.MODE_PRIVATE);
+    sharedPrefsManager.edit().putBoolean(ConstantsKt.KEY_SHOULD_AUTO_TRACK_IMPRESSIONS, false).apply();
+    WEPersonalization.Companion.get().init(); // Initializing Personalization SDK
   }
 
   @Override
@@ -69,24 +78,23 @@ public class WebengagePersonalizationViewManager extends SimpleViewManager<ViewG
   }
 
 
-//  @ReactPropGroup(names = {"width", "height"}, customType = "Style")
-//  public void setStyle(View view, int index, int value) {
-//Log.d("Ak1","index - "+index+ "\n Val - "+value);
-//    if (index == 0) {
-//      width = value;
-//    }
-//
-//    if (index == 1) {
-//      height = value;
-//    }
-////    simpleUi.updateStyle(height, width);
-//  }
+  @ReactPropGroup(names = {"width", "height"}, customType = "Style")
+  public void setStyle(View view, int index, int value) {
+Log.d("Ak1","index - "+index+ "\n Val - "+value);
+    if (index == 0) {
+      width = value;
+    }
+
+    if (index == 1) {
+      height = value;
+    }
+    simpleUi.updateStyle(height, width);
+  }
 
 
   @ReactProp(name = "color")
   public void setColor(View view, String color) {
     Log.d("WebEngage", "inside color data -> ");
-    WEPersonalization.Companion.get().init(); // Initializing Personalization SDK
 //    WebEngage.get().analytics().screenNavigated("list-screen");
 //    WEPersonalization.Companion.get().registerWEPlaceholderCallback("ak_test_2", this); // Custom View
 //    WEPersonalization.Companion.get().registerWEPlaceholderCallback("placeholder_1", this);  // Text View
@@ -109,6 +117,7 @@ public class WebengagePersonalizationViewManager extends SimpleViewManager<ViewG
     simpleUi.updateViewTag(propertyId);
 
   }
+
 
 
 

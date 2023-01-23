@@ -63,7 +63,7 @@ repositories {
 
 
 dependencies {
-  implementation fileTree(include: ['*.jar'], dir: 'libs')
+  implementation fileTree(include: ['*.jar', '*.aar'], dir: 'libs')
 
   // For < 0.71, this will be from the local maven repo
   // For > 0.71, this will be replaced by `com.facebook.react:react-android:$version` by react gradle plugin
@@ -73,7 +73,7 @@ dependencies {
   implementation 'androidx.cardview:cardview:1.0.0'
   implementation 'androidx.core:core:1.3.2'
 
-  implementation 'com.webengage:android-sdk:3.19.1'
+//  implementation 'com.webengage:android-sdk:4.0.0'
 //  implementation files('we-personalization')
 
 //  implementation 'com.webengage:we-personalization:1.0.0'

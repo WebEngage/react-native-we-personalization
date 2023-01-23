@@ -1,12 +1,22 @@
 package com.webengagepersonalization;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Color;
+import android.graphics.Rect;
+import android.os.Handler;
+import android.os.Looper;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.util.TypedValue;
+import android.view.Choreographer;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -15,59 +25,127 @@ import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.WritableMap;
 import com.webengage.personalization.WEInlineView;
+import com.webengage.personalization.WEPersonalization;
+import com.webengage.personalization.callbacks.WECampaignCallback;
 import com.webengage.personalization.callbacks.WEPlaceholderCallback;
 import com.webengage.personalization.data.WECampaignData;
+import com.webengage.sdk.android.utils.WebEngageConstant;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class InlineWidget extends FrameLayout {
+public class InlineWidget extends FrameLayout implements WECampaignCallback {
   private static InlineWidget instance = null;
+  String TAG = "WebEngage-personalization-Hybrid";
   WEInlineView weInlineView;
   private ReactApplicationContext applicationContext = null;
-
   int height = 0, width = 0;
-
-
-//  private Object WEInlineView;
-
+  String tagName = "";
   public InlineWidget(@NonNull ReactApplicationContext context, HashMap<String, Object> map, WebengagePersonalizationViewManager ref) {
     super(context);
     this.applicationContext = context;
-    Log.d("Ak1", "Map inside widget -> "+map);
+     WEPersonalization.Companion.get().registerWECampaignCallback(this);
     init(context);
   }
   public void init(Context context) {
-//    super();
-    Log.d("WebEngage1", "inside Init method");
     View view = LayoutInflater.from(context).inflate(R.layout.view_inlinewidget, this, false);
     weInlineView =  view.findViewById(R.id.weinline_widget);
     addView(view);
+    weInlineView.requestLayout(); // called when smtg is changed in the UI view
   }
+
+  public static boolean isVisible(final View view) {
+
+    if (view == null) {
+      return false;
+    }
+    if (!view.isShown()) {
+      return false;
+    }
+
+    final Rect actualPosition = new Rect();
+    view.getGlobalVisibleRect(actualPosition);
+    final Rect screen = new Rect(0, 0, Resources.getSystem().getDisplayMetrics().widthPixels, Resources.getSystem().getDisplayMetrics().heightPixels);
+    return actualPosition.intersect(screen);
+  }
+
+//  Fetched from react native docs
+public void setupLayout(View view, WECampaignData weCampaignData) {
+      Log.d(TAG, "setupLayout called - ");
+      String tagName = weCampaignData.getTargetViewId();
+
+  Choreographer.getInstance().postFrameCallback(new Choreographer.FrameCallback() {
+    @Override
+    public void doFrame(long frameTimeNanos) {
+      manuallyLayoutChildren(view, tagName);
+      ViewTreeObserver viewTreeObserver = view.getViewTreeObserver();
+      viewTreeObserver.dispatchOnGlobalLayout();
+      boolean isScreenVisible = isVisible(view);
+      Log.d(TAG, tagName+" isisScreenVisible- "+isScreenVisible);
+      if(!isScreenVisible) {
+        viewTreeObserver.addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
+          @Override
+          public void onScrollChanged() {
+            boolean isUserScreenVisible = isVisible(view);
+            if(isUserScreenVisible) {
+              Log.d(TAG, "Viewed "+tagName);
+              weCampaignData.trackImpression(null);
+              view.getViewTreeObserver().removeOnScrollChangedListener(this);
+            }
+            Log.d(TAG, tagName + " isVisible -> " + isUserScreenVisible);
+          }
+        });
+      } else {
+        Log.d(TAG, "Viewed "+tagName);
+        weCampaignData.trackImpression(null);
+      }
+    }
+  });
+}
+
+
+  public void manuallyLayoutChildren(View view, String tagName) {
+    // propWidth and propHeight coming from react-native props
+    int width = this.width;
+    int height = this.height;
+    Resources r = getResources();
+    int heightInPixel = Math.round((TypedValue.applyDimension(
+      TypedValue.COMPLEX_UNIT_DIP,
+      height,
+      r.getDisplayMetrics()
+    )));
+    int widthInPixel = Math.round((TypedValue.applyDimension(
+      TypedValue.COMPLEX_UNIT_DIP,
+      width,
+      r.getDisplayMetrics()
+    )));
+
+    Log.d(TAG, "DipToPx original height-"+height+ "\n updaeted pixel height - "+heightInPixel);
+
+    // Size of the view
+    view.measure(
+      View.MeasureSpec.makeMeasureSpec(widthInPixel  , View.MeasureSpec.EXACTLY),
+      View.MeasureSpec.makeMeasureSpec(heightInPixel, View.MeasureSpec.EXACTLY));
+
+    //    Placement for the view
+    view.layout(0, 0, widthInPixel, heightInPixel);
+  }
+
 
   public void updateStyle(int heights, int widths) {
     height = heights;
     width = widths;
-    Log.d("Ak1", "LinearLayout updated vals -"+height+ "\n width - "+width);
-
-    weInlineView.measure(
-      View.MeasureSpec.makeMeasureSpec(width, View.MeasureSpec.EXACTLY),
-      View.MeasureSpec.makeMeasureSpec(height, View.MeasureSpec.EXACTLY));
-
-    weInlineView.layout(0,0, width, height);
-    String tagName = weInlineView.getTransitionName();
-    Log.d("Ak1", "Update style height-"+height+ "\n width - "+width);
-    Log.d("Ak1", "Update tagName-"+tagName);
+    Log.d(TAG, "Style updated height-"+height+ "\n width - "+width);
   }
 
   public void updateViewTag(String tagName) {
-    Log.d("Ak1", "Update tagName in view-"+tagName);
+    this.tagName = tagName;
     weInlineView.setTag(tagName);
-    weInlineView.load(new WEPlaceholderCallback() {
+    weInlineView.load(tagName,new WEPlaceholderCallback() {
 
       @Override
       public void onDataReceived(WECampaignData weCampaignData) {
-        Log.d("WebEngage12", "OnDataReceived from personalization view manager - "+weCampaignData);
+        Log.d(TAG, "OnDataReceived from personalization view manager - "+weCampaignData);
         WritableMap params = Arguments.createMap();
 
 //        TODO - Yet to Add weCampaignData.content
@@ -80,7 +158,7 @@ public class InlineWidget extends FrameLayout {
 
       @Override
       public void onPlaceholderException(String s, String s1, Exception e) {
-        Log.d("WebEngage12", "onPlaceholderException from personalization view manager-> \ns- "+s+"\ns1- "+s1 + "\nerror-"+e);
+        Log.d(TAG, "onPlaceholderException from personalization view manager-> \ns- "+s+"\ns1- "+s1 + "\nerror-"+e);
         WritableMap params = Arguments.createMap();
 
         Utils.sendEvent(applicationContext,"onPlaceholderException", params );
@@ -89,13 +167,38 @@ public class InlineWidget extends FrameLayout {
 
       @Override
       public void onRendered(WECampaignData weCampaignData) {
-        Log.d("WebEngage12", "onRendered from personalization view manager");
-        WritableMap params = Arguments.createMap();
-        Utils.sendEvent(applicationContext,"onDataReceived", params );
+        Log.d(TAG, "onRendered from personalization view manager id-> "+weCampaignData.getTargetViewId());
+//        WritableMap params = Arguments.createMap();
+//        Utils.sendEvent(applicationContext,"onDataReceived", params );
+        setupLayout(weInlineView, weCampaignData);
       }
     });
   }
 
 
+   @Override
+   public boolean onCampaignClicked(@NonNull String s, @NonNull String s1, @NonNull WECampaignData weCampaignData) {
+     Log.d(TAG, "onCampaignClicked shown ---- "+weCampaignData);
+     weCampaignData.trackClick(null);
+     return false;
+   }
 
+   @Override
+   public void onCampaignException(@Nullable String s, @NonNull String s1, @NonNull Exception e) {
+     Log.d(TAG, "onCampaignException shown ---- "+e);
+
+   }
+
+   @Nullable
+   @Override
+   public WECampaignData onCampaignPrepared(@NonNull WECampaignData weCampaignData) {
+     Log.d(TAG, "onCampaignPrepared shown ---- "+weCampaignData);
+     return null;
+   }
+
+   @Override
+   public void onCampaignShown(@NonNull WECampaignData weCampaignData) {
+     Log.d(TAG, "Campaign data shown ---- "+weCampaignData);
+     weCampaignData.trackImpression(null);
+   }
 }
