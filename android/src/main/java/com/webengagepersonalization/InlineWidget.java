@@ -20,6 +20,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactApplicationContext;
@@ -29,6 +30,7 @@ import com.webengage.personalization.WEPersonalization;
 import com.webengage.personalization.callbacks.WECampaignCallback;
 import com.webengage.personalization.callbacks.WEPlaceholderCallback;
 import com.webengage.personalization.data.WECampaignData;
+import com.webengage.personalization.utils.WEUtils;
 import com.webengage.sdk.android.utils.WebEngageConstant;
 
 import java.util.HashMap;
@@ -72,14 +74,15 @@ public class InlineWidget extends FrameLayout implements WECampaignCallback {
 //  Fetched from react native docs
 public void setupLayout(View view, WECampaignData weCampaignData) {
       Log.d(TAG, "setupLayout called - ");
-      String tagName = weCampaignData.getTargetViewId();
+//      String tagName = weCampaignData.getTargetViewId();
 
   Choreographer.getInstance().postFrameCallback(new Choreographer.FrameCallback() {
     @Override
     public void doFrame(long frameTimeNanos) {
-      manuallyLayoutChildren(view, tagName);
+      manuallyLayoutChildren(view, weCampaignData);
       ViewTreeObserver viewTreeObserver = view.getViewTreeObserver();
       viewTreeObserver.dispatchOnGlobalLayout();
+//
       boolean isScreenVisible = isVisible(view);
       Log.d(TAG, tagName+" isisScreenVisible- "+isScreenVisible);
       if(!isScreenVisible) {
@@ -103,8 +106,18 @@ public void setupLayout(View view, WECampaignData weCampaignData) {
   });
 }
 
+  public static float dpFromPx(final Context context, final float px) {
+    return px / context.getResources().getDisplayMetrics().density;
+  }
 
-  public void manuallyLayoutChildren(View view, String tagName) {
+  public void manuallyLayoutChildren(View view, WECampaignData weCampaignData) {
+    String tagName = weCampaignData.getTargetViewId();
+    CardView.LayoutParams lp = (FrameLayout.LayoutParams) view.findViewWithTag("INLINE_PERSONALIZATION_TAG").getLayoutParams();
+    int lm = lp.leftMargin;
+    int rm = lp.rightMargin;
+    int tm = lp.topMargin;
+    int bm = lp.bottomMargin;
+
     // propWidth and propHeight coming from react-native props
     int width = this.width;
     int height = this.height;
@@ -120,15 +133,28 @@ public void setupLayout(View view, WECampaignData weCampaignData) {
       r.getDisplayMetrics()
     )));
 
-    Log.d(TAG, "DipToPx original height-"+height+ "\n updaeted pixel height - "+heightInPixel);
+    Log.d("WebEngage", " margin layouts top- "+tm+" \n bottom- "+bm+" \n left- "+lm+"\n right- "+rm);
+    Log.d(TAG, "DipToPx original before calculation height-"+height+ "\n updaeted pixel height - "+heightInPixel);
 
-    // Size of the view
+    heightInPixel -= (bm+tm);
+    widthInPixel -= (rm+lm);
+
+    Log.d(TAG, "DipToPx original after calculation height-"+height+ "\n updaeted pixel height - "+heightInPixel);
+
     view.measure(
       View.MeasureSpec.makeMeasureSpec(widthInPixel  , View.MeasureSpec.EXACTLY),
       View.MeasureSpec.makeMeasureSpec(heightInPixel, View.MeasureSpec.EXACTLY));
 
-    //    Placement for the view
-    view.layout(0, 0, widthInPixel, heightInPixel);
+    view.layout(view.getLeft() +lm  , view.getTop() + tm , widthInPixel + rm, heightInPixel + bm);
+
+
+
+    Log.d("WebEngage", "InlineWidget height -  "+this.getHeight()+" \n view -getHeight - "+ dpFromPx(applicationContext, view.getHeight()));
+    Log.d("WebEngage", "InlineWidget height layout LEft "+this.getLeft()+" \n this.top- "+this.getTop()+" \n view.getTop- "+view.getTop());
+    Log.d("WebEngage", "InlineWidget height layout LEft "+this.getLeft()+" \n this.getY- "+this.getY()+" \n view.getY- "+view.getY());
+
+//    Log.d("WebEngage", "");
+
   }
 
 
@@ -170,7 +196,9 @@ public void setupLayout(View view, WECampaignData weCampaignData) {
         Log.d(TAG, "onRendered from personalization view manager id-> "+weCampaignData.getTargetViewId());
 //        WritableMap params = Arguments.createMap();
 //        Utils.sendEvent(applicationContext,"onDataReceived", params );
-        setupLayout(weInlineView, weCampaignData);
+
+        View view = weInlineView.findViewWithTag("INLINE_PERSONALIZATION_TAG");
+        setupLayout(view, weCampaignData);
       }
     });
   }
@@ -199,6 +227,5 @@ public void setupLayout(View view, WECampaignData weCampaignData) {
    @Override
    public void onCampaignShown(@NonNull WECampaignData weCampaignData) {
      Log.d(TAG, "Campaign data shown ---- "+weCampaignData);
-     weCampaignData.trackImpression(null);
    }
 }

@@ -9,7 +9,6 @@ import {
   Image,
   Text,
 } from 'react-native';
-import InView from 'react-native-component-inview';
 import { WEPersonalization } from 'react-native-webengage-personalization';
 const ScrollableScreen = ({ navigation }) => {
   const container = React.useRef(null);
