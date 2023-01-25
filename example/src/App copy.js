@@ -96,12 +96,10 @@ export default function App() {
   };
 
   React.useEffect(() => {
-    const eventEmitter = new NativeEventEmitter(
-      NativeModules.PersonalizationBridge
-    );
-    eventEmitter.addListener('EventReminder', (event) => {
-      console.log('Event Listerner called', event); // "someValue"
-    });
+    // const eventEmitter = new NativeEventEmitter();
+    // eventEmitter.addListener('EventReminder', (event) => {
+    //   console.log('Event Listerner called', event); // "someValue"
+    // });
   }, []);
 
   const naviagateToRegular = () => {

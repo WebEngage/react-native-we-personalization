@@ -2,12 +2,7 @@ import {
   requireNativeComponent,
   UIManager,
   Platform,
-  NativeModules,
-  Text,
-  View,
   NativeEventEmitter,
-  Dimensions,
-  Animated,
 } from 'react-native';
 import React from 'react';
 
@@ -17,52 +12,48 @@ const LINKING_ERROR =
   '- You rebuilt the app after installing the package\n' +
   '- You are not using Expo Go\n';
 
-const BRIDGE_ERROR =
-  `bridge package 'react-native-webengage-personalization' doesn't seem to be linked. Make sure: \n\n` +
-  Platform.select({ ios: "- You have run 'pod install'\n", default: '' }) +
-  '- You rebuilt the app after installing the package\n' +
-  '- You are not using Expo Go\n';
-
 const ComponentName = 'WebengagePersonalizationView';
-const eventEmitter = new NativeEventEmitter(
-  NativeModules.PersonalizationBridge
-);
+const eventEmitter = new NativeEventEmitter();
+let listener = null;
 let isListenerAdded = false;
 const propertyProcessor = {
   screenName: '',
   propertyList: [],
 };
 
-const PersonalizationBridge = NativeModules.PersonalizationBridge
-  ? NativeModules.PersonalizationBridge
-  : new Proxy(
-      {},
-      {
-        get() {
-          throw new Error(BRIDGE_ERROR);
-        },
-      }
-    );
-
-export const WEPersonalization = React.forwardRef((props, ref) => {
+export const WEPersonalization = (props) => {
   console.log('props in webengage docs - ', props);
-  const { propertyId, personalizationCallback } = props;
+  const { propertyId = '', screenName = '', personalizationCallback } = props;
+
+  React.useEffect(() => {
+    return () => {
+      console.log("Unmounting Component")
+      if (listener) {
+        isListenerAdded = false;
+        listener.remove();
+      }
+    };
+  });
 
   const propertyListArr = propertyProcessor?.propertyList.flatMap(
     (curr) => curr.propertyId
   );
-  console.log('## ', propertyListArr);
-  if (!propertyListArr.includes(props.propertyId)) {
+  if (propertyProcessor.screenName !== screenName) {
+    propertyProcessor.screenName = screenName;
+    propertyProcessor.propertyList = [];
+    propertyListArr?.splice(0);
+  }
+
+  if (!propertyListArr.includes(propertyId)) {
     let obj = {};
     obj.propertyId = propertyId;
     obj.callback = personalizationCallback;
     propertyProcessor.propertyList.push(obj);
-    propertyProcessor.screenName = props.screenName;
   }
 
-  console.log('propertyProcessors ---- ', propertyProcessor);
+  console.log('## propertyProcessors ---- ', propertyProcessor);
   if (!isListenerAdded) {
-    eventEmitter.addListener('onDataReceived', (event) => {
+    listener = eventEmitter.addListener('onDataReceived', (event) => {
       console.log('onDataReceived - Event Listerner called ->', event);
 
       propertyProcessor.propertyList.map((val) => {
@@ -76,7 +67,7 @@ export const WEPersonalization = React.forwardRef((props, ref) => {
   }
 
   return <WebengagePersonalizationView {...props} />;
-});
+};
 
 export const WebengagePersonalizationView =
   UIManager.getViewManagerConfig(ComponentName) != null
@@ -84,12 +75,3 @@ export const WebengagePersonalizationView =
     : () => {
         throw new Error(LINKING_ERROR);
       };
-
-export function multiply(a, b) {
-  return PersonalizationBridge.multiply(a, b);
-}
-
-// Below code is example for multiple call
-export function add(a, b) {
-  return PersonalizationBridge.add(a, b);
-}

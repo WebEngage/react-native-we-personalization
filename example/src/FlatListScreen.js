@@ -5,15 +5,18 @@ import {
   View,
   Dimensions,
   PixelRatio,
-  ScrollView,
-  Image,
   Text,
   SafeAreaView,
   FlatList,
 } from 'react-native';
+import WebEngage from 'react-native-webengage';
 import { WEPersonalization } from 'react-native-webengage-personalization';
-const FlatListScreen = ({ navigation }) => {
-  var window = Dimensions.get('window');
+const FlatListScreen = () => {
+  const webengage = new WebEngage();
+
+  React.useEffect(() => {
+    webengage.screen('ET_home');
+  }, []);
 
   const personalizationCallback1 = (d) => {
     console.log('PPersonalization callback1 triggered-', d);
@@ -39,32 +42,20 @@ const FlatListScreen = ({ navigation }) => {
     { id: 12, title: 'Twelves item' },
     { id: 13, title: 'Thirteenth item' },
   ];
-
-  const onViewableItemsChanged = ({ viewableItems }) => {
-    console.log('viewableItemsss --> ', viewableItems);
-  };
-  const viewabilityConfig = {
-    waitForInteraction: false,
-    viewAreaCoveragePercentThreshold: 10,
-  };
-
   const renderItem = ({ item }) => {
     return (
       <View style={styles.itemView}>
         <Text> {item.title} </Text>
         {item.id === 2 ? (
           <WEPersonalization
-            color="#32a852"
             style={styles.box}
             propertyId="flutter_banner"
             screenName="ET_home"
-            isVisibleInTheViewport={true}
             personalizationCallback={personalizationCallback1}
           />
         ) : null}
         {item.id === 7 ? (
           <WEPersonalization
-            color="#12023f"
             style={styles.box2}
             propertyId="flutter_text"
             screenName="ET_home"
@@ -74,23 +65,12 @@ const FlatListScreen = ({ navigation }) => {
       </View>
     );
   };
-  const handleScroll = (event) => {
-    console.log(' FlatList handleScroll -> ', event.nativeEvent);
-
-  };
 
   return (
     <SafeAreaView>
-      <FlatList
-        data={data}
-        onScroll={handleScroll}
-        renderItem={renderItem}
-        viewabilityConfig={viewabilityConfig}
-        onViewableItemsChanged={onViewableItemsChanged}
-      />
+      <FlatList data={data} renderItem={renderItem} />
     </SafeAreaView>
   );
-
 };
 
 const styles = StyleSheet.create({

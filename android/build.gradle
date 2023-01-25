@@ -73,14 +73,14 @@ dependencies {
   implementation 'androidx.cardview:cardview:1.0.0'
   implementation 'androidx.core:core:1.3.2'
 
-//  implementation 'com.webengage:android-sdk:4.0.0'
+  implementation 'com.webengage:android-sdk:4.0.0'
 //  implementation files('we-personalization')
 
 //  implementation 'com.webengage:we-personalization:1.0.0'
 
 //  implementation(name:'libs/we-personalization-debug1', ext:'aar')
 
-  implementation files('libs/we-personalization-debug.aar')
+//  implementation files('libs/we-personalization-debug.aar')
   // CoroutineScope
   api 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.0'
   api 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.0'

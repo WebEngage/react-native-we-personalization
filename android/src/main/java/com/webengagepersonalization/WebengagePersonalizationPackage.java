@@ -14,13 +14,14 @@ import java.util.ArrayList;
 public class WebengagePersonalizationPackage implements ReactPackage {
   @Override
   public List<NativeModule> createNativeModules(ReactApplicationContext reactContext) {
-    List<NativeModule> modules = new ArrayList<>();
+    // return Collections.emptyList();
+ List<NativeModule> modules = new ArrayList<>();
     modules.add(new PersonalizationBridgeModule(reactContext));
     return modules;
   }
 
   @Override
   public List<ViewManager> createViewManagers(ReactApplicationContext reactContext) {
-    return Arrays.<ViewManager>asList(new WebengagePersonalizationViewManager(reactContext));
+    return Arrays.<ViewManager>asList(new WEGPersonalizationViewManager(reactContext));
   }
 }

@@ -15,8 +15,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -30,95 +28,75 @@ import com.webengage.personalization.WEPersonalization;
 import com.webengage.personalization.callbacks.WECampaignCallback;
 import com.webengage.personalization.callbacks.WEPlaceholderCallback;
 import com.webengage.personalization.data.WECampaignData;
-import com.webengage.personalization.utils.WEUtils;
-import com.webengage.sdk.android.utils.WebEngageConstant;
-
 import java.util.HashMap;
-import java.util.Map;
 
-public class InlineWidget extends FrameLayout implements WECampaignCallback {
-  private static InlineWidget instance = null;
+public class WEHInlineWidget extends FrameLayout implements WECampaignCallback {
+  private static WEHInlineWidget instance = null;
   String TAG = "WebEngage-personalization-Hybrid";
   WEInlineView weInlineView;
   private ReactApplicationContext applicationContext = null;
   int height = 0, width = 0;
   String tagName = "";
-  public InlineWidget(@NonNull ReactApplicationContext context, HashMap<String, Object> map, WebengagePersonalizationViewManager ref) {
+
+//  @Override
+//  protected void onDetachedFromWindow() {
+//    super.onDetachedFromWindow();
+//    Logger.d(WEGConstants.TAG, "Detached is called");
+//
+////  TODO -  Detach ->variable to null
+////    TODO - This is not being called might be overriden from WeInlineView
+//  }
+
+  public WEHInlineWidget(@NonNull ReactApplicationContext context, HashMap<String, Object> map, WEGPersonalizationViewManager ref) {
     super(context);
     this.applicationContext = context;
-     WEPersonalization.Companion.get().registerWECampaignCallback(this);
     init(context);
   }
   public void init(Context context) {
     View view = LayoutInflater.from(context).inflate(R.layout.view_inlinewidget, this, false);
     weInlineView =  view.findViewById(R.id.weinline_widget);
     addView(view);
-    weInlineView.requestLayout(); // called when smtg is changed in the UI view
+    weInlineView.requestLayout(); // called when Somethings is changed in the UI view
   }
 
-  public static boolean isVisible(final View view) {
 
-    if (view == null) {
-      return false;
-    }
-    if (!view.isShown()) {
-      return false;
-    }
-
-    final Rect actualPosition = new Rect();
-    view.getGlobalVisibleRect(actualPosition);
-    final Rect screen = new Rect(0, 0, Resources.getSystem().getDisplayMetrics().widthPixels, Resources.getSystem().getDisplayMetrics().heightPixels);
-    return actualPosition.intersect(screen);
-  }
-
-//  Fetched from react native docs
+//  Enforce this to reflect new Changes to the UI
 public void setupLayout(View view, WECampaignData weCampaignData) {
-      Log.d(TAG, "setupLayout called - ");
-//      String tagName = weCampaignData.getTargetViewId();
-
   Choreographer.getInstance().postFrameCallback(new Choreographer.FrameCallback() {
     @Override
     public void doFrame(long frameTimeNanos) {
       manuallyLayoutChildren(view, weCampaignData);
       ViewTreeObserver viewTreeObserver = view.getViewTreeObserver();
       viewTreeObserver.dispatchOnGlobalLayout();
-//
-      boolean isScreenVisible = isVisible(view);
-      Log.d(TAG, tagName+" isisScreenVisible- "+isScreenVisible);
+      boolean isScreenVisible = Utils.isVisible(view);
+      Logger.d(WEGConstants.TAG, tagName+" isisScreenVisible- "+isScreenVisible);
       if(!isScreenVisible) {
         viewTreeObserver.addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
           @Override
           public void onScrollChanged() {
-            boolean isUserScreenVisible = isVisible(view);
+            boolean isUserScreenVisible = Utils.isVisible(view);
             if(isUserScreenVisible) {
-              Log.d(TAG, "Viewed "+tagName);
+              Logger.d(WEGConstants.TAG, "Viewed "+tagName);
               weCampaignData.trackImpression(null);
               view.getViewTreeObserver().removeOnScrollChangedListener(this);
             }
-            Log.d(TAG, tagName + " isVisible -> " + isUserScreenVisible);
           }
         });
       } else {
-        Log.d(TAG, "Viewed "+tagName);
+        Logger.d(WEGConstants.TAG, "Viewed "+tagName);
         weCampaignData.trackImpression(null);
       }
     }
   });
 }
 
-  public static float dpFromPx(final Context context, final float px) {
-    return px / context.getResources().getDisplayMetrics().density;
-  }
-
   public void manuallyLayoutChildren(View view, WECampaignData weCampaignData) {
-    String tagName = weCampaignData.getTargetViewId();
+//    Accessing cardView margins - Left, Right, Top, Bottom
     CardView.LayoutParams lp = (FrameLayout.LayoutParams) view.findViewWithTag("INLINE_PERSONALIZATION_TAG").getLayoutParams();
     int lm = lp.leftMargin;
     int rm = lp.rightMargin;
     int tm = lp.topMargin;
     int bm = lp.bottomMargin;
-
-    // propWidth and propHeight coming from react-native props
     int width = this.width;
     int height = this.height;
     Resources r = getResources();
@@ -133,99 +111,108 @@ public void setupLayout(View view, WECampaignData weCampaignData) {
       r.getDisplayMetrics()
     )));
 
-    Log.d("WebEngage", " margin layouts top- "+tm+" \n bottom- "+bm+" \n left- "+lm+"\n right- "+rm);
-    Log.d(TAG, "DipToPx original before calculation height-"+height+ "\n updaeted pixel height - "+heightInPixel);
-
+//    Removing Margins for horizontal and vertical
     heightInPixel -= (bm+tm);
     widthInPixel -= (rm+lm);
 
-    Log.d(TAG, "DipToPx original after calculation height-"+height+ "\n updaeted pixel height - "+heightInPixel);
-
+//    Size of the view
     view.measure(
       View.MeasureSpec.makeMeasureSpec(widthInPixel  , View.MeasureSpec.EXACTLY),
       View.MeasureSpec.makeMeasureSpec(heightInPixel, View.MeasureSpec.EXACTLY));
 
-    view.layout(view.getLeft() +lm  , view.getTop() + tm , widthInPixel + rm, heightInPixel + bm);
-
-
-
-    Log.d("WebEngage", "InlineWidget height -  "+this.getHeight()+" \n view -getHeight - "+ dpFromPx(applicationContext, view.getHeight()));
-    Log.d("WebEngage", "InlineWidget height layout LEft "+this.getLeft()+" \n this.top- "+this.getTop()+" \n view.getTop- "+view.getTop());
-    Log.d("WebEngage", "InlineWidget height layout LEft "+this.getLeft()+" \n this.getY- "+this.getY()+" \n view.getY- "+view.getY());
-
-//    Log.d("WebEngage", "");
-
+//    Positioning of the view - including the margin
+    view.layout(view.getLeft() + lm  , view.getTop() + tm , widthInPixel + rm, heightInPixel + bm);
   }
 
 
   public void updateStyle(int heights, int widths) {
     height = heights;
     width = widths;
-    Log.d(TAG, "Style updated height-"+height+ "\n width - "+width);
   }
 
   public void updateViewTag(String tagName) {
     this.tagName = tagName;
     weInlineView.setTag(tagName);
     weInlineView.load(tagName,new WEPlaceholderCallback() {
-
       @Override
       public void onDataReceived(WECampaignData weCampaignData) {
-        Log.d(TAG, "OnDataReceived from personalization view manager - "+weCampaignData);
         WritableMap params = Arguments.createMap();
-
 //        TODO - Yet to Add weCampaignData.content
 //        params.putMap("content",weCampaignData.getContent());
-
+//        convertToJSon
         params.putString("targetViewId", weCampaignData.getTargetViewId());
         params.putString("campaignId",weCampaignData.getCampaignId());
+
         Utils.sendEvent(applicationContext,"onDataReceived", params );
       }
 
       @Override
       public void onPlaceholderException(String s, String s1, Exception e) {
-        Log.d(TAG, "onPlaceholderException from personalization view manager-> \ns- "+s+"\ns1- "+s1 + "\nerror-"+e);
+        Logger.d(WEGConstants.TAG, "onPlaceholderException from personalization view manager-> \ns- "+s+"\ns1- "+s1 + "\nerror-"+e);
         WritableMap params = Arguments.createMap();
-
+//        TODO - Add it in hybrid also
         Utils.sendEvent(applicationContext,"onPlaceholderException", params );
 
       }
 
       @Override
       public void onRendered(WECampaignData weCampaignData) {
-        Log.d(TAG, "onRendered from personalization view manager id-> "+weCampaignData.getTargetViewId());
-//        WritableMap params = Arguments.createMap();
-//        Utils.sendEvent(applicationContext,"onDataReceived", params );
-
+        //        TODO - Add it in hybrid also
+        Logger.d(WEGConstants.TAG, "onRendered from personalization view manager id-> "+weCampaignData.getTargetViewId());
         View view = weInlineView.findViewWithTag("INLINE_PERSONALIZATION_TAG");
-        setupLayout(view, weCampaignData);
+        // view will be null custom_data
+        if(view != null) {
+          setupLayout(view, weCampaignData);
+        }
       }
     });
+//    registerCallback(tagName);
+//    weInlineView.load(tagName);
+  }
+
+  public void registerCallback(String tagName) {
+//    WEPersonalization.Companion.get().registerWEPlaceholderCallback(tagName, this);
   }
 
 
+//  TODO - Check with sarthak if it has to be visible at hybrid for the below methods
    @Override
    public boolean onCampaignClicked(@NonNull String s, @NonNull String s1, @NonNull WECampaignData weCampaignData) {
-     Log.d(TAG, "onCampaignClicked shown ---- "+weCampaignData);
+     Logger.d(WEGConstants.TAG, "onCampaignClicked shown ---- "+weCampaignData);
      weCampaignData.trackClick(null);
      return false;
    }
 
    @Override
    public void onCampaignException(@Nullable String s, @NonNull String s1, @NonNull Exception e) {
-     Log.d(TAG, "onCampaignException shown ---- "+e);
-
+     Logger.d(WEGConstants.TAG, "onCampaignException shown ---- "+e);
    }
 
    @Nullable
    @Override
    public WECampaignData onCampaignPrepared(@NonNull WECampaignData weCampaignData) {
-     Log.d(TAG, "onCampaignPrepared shown ---- "+weCampaignData);
+     Logger.d(WEGConstants.TAG, "onCampaignPrepared shown ---- "+weCampaignData);
      return null;
    }
 
    @Override
    public void onCampaignShown(@NonNull WECampaignData weCampaignData) {
-     Log.d(TAG, "Campaign data shown ---- "+weCampaignData);
+     Logger.d(WEGConstants.TAG, "Campaign data shown ---- "+weCampaignData);
    }
+
+//  @Override
+//  public void onDataReceived(@NonNull WECampaignData weCampaignData) {
+//
+//  }
+//
+//  @Override
+//  public void onPlaceholderException(@Nullable String s, @NonNull String s1, @NonNull Exception e) {
+//
+//  }
+//
+//  @Override
+//  public void onRendered(@NonNull WECampaignData weCampaignData) {
+//    Logger.d(WEGConstants.TAG, "onRendered - from WEPlaceHolderCallback");
+//
+//  }
 }

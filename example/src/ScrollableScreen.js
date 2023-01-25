@@ -4,59 +4,53 @@ import {
   StyleSheet,
   View,
   Dimensions,
-  PixelRatio,
   ScrollView,
   Image,
   Text,
+  Button,
 } from 'react-native';
+import WebEngage from 'react-native-webengage';
 import { WEPersonalization } from 'react-native-webengage-personalization';
 const ScrollableScreen = ({ navigation }) => {
-  const container = React.useRef(null);
-  const container1 = React.useRef(null);
+const webengage = new WebEngage();
+  React.useEffect(() => {
+    webengage.screen('ET_home');
+  }, []);
   const personalizationCallback1 = (d) => {
-    console.log('PPersonalization callback1 triggered-', d);
+    console.log('PPersonalization callback1 triggered for flutter_banner-', d);
   };
 
   const personalizationCallback2 = (d) => {
-    console.log('PPersonalization callback2 triggered-', d);
+    console.log('Personalization callback2 triggered for flutter_text-', d);
   };
 
-  const handleScroll = (event) => {
-    console.log('### handleScroll -> ', event.nativeEvent);
-
-    container1.current.onScroll(event);
+  const navigateToScroll = () => {
+    navigation.navigate('flatlist');
   };
 
-  const handleScroll1 = (event) => {
-    container.current.onScroll(event);
-  };
-
-  var window = Dimensions.get('window');
-  console.log('Dimensoin in  -> ', window);
   return (
-    <ScrollView style={styles.container} onScroll={handleScroll}>
-      <ScrollView style={styles.container} onScroll={handleScroll1} horizontal>
+    <ScrollView style={styles.container}>
+      <ScrollView style={styles.container} horizontal>
+        <Text style={styles.textStyle}> Second</Text>
+        <Text style={styles.textStyle}> Second</Text>
+        <Text style={styles.textStyle}> Second</Text>
+        <Text style={styles.textStyle}> Second</Text>
+        <Text style={styles.textStyle}> Second</Text>
         <WEPersonalization
-          color="#32a852"
           style={styles.box}
           propertyId="flutter_banner"
           screenName="ET_home"
-          ref={container}
-          // handleScroll={handleScroll}
           personalizationCallback={personalizationCallback1}
         />
-        <Text style={{ width: 150, marginRight: 50,}}> Second</Text>
-        <Text style={{ width: 150, marginRight: 50,}}> Second</Text>
-        <Text style={{ width: 150, marginRight: 50,}}> Second</Text>
-        <Text style={{ width: 150, marginRight: 50,}}> Second</Text>
-        <Text style={{ width: 150, marginRight: 50,}}> Second</Text>
-        <Text style={{ width: 150, marginRight: 50,}}> Second</Text>
-        <Text style={{ width: 150, marginRight: 50,}}> Second</Text>
+        <Text style={styles.textStyle}> Second</Text>
+        <Text style={styles.textStyle}> Second</Text>
       </ScrollView>
       <Text style={styles.nativeText}>
-        {' '}
-        Above View is from Native - Android (flutter_banner){' '}
+        Above View is from Native - Android (flutter_banner)
       </Text>
+
+      <Button title={'Scroll screen'} onPress={navigateToScroll} />
+
 
       <View style={styles.margin50} />
       <Image
@@ -78,15 +72,12 @@ const ScrollableScreen = ({ navigation }) => {
       />
 
       <Text style={styles.nativeText}>
-        {' '}
-        Below View is from Native - Android (flutter_text){' '}
+        Below View is from Native - Android (flutter_text)
       </Text>
       <WEPersonalization
-        color="#12023f"
         style={styles.box2}
         propertyId="flutter_text"
         screenName="ET_home"
-        ref={container1}
         personalizationCallback={personalizationCallback2}
       />
       <Text style={styles.nativeText}> Below View is React-Native</Text>
@@ -110,6 +101,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#dde691',
     fontSize: 18,
   },
+  textStyle: { width: 150, marginRight: 50 },
   aboveBox: {
     width: '100%',
     height: 300,
@@ -117,9 +109,7 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   box: {
-    // width: PixelRatio.getPixelSizeForLayoutSize(Dimensions.get('window').width),
     width: Dimensions.get('window').width,
-    // height: PixelRatio.getPixelSizeForLayoutSize(80),
     height: 220,
     borderWidth: 10,
     borderColor: 'red',
@@ -127,9 +117,6 @@ const styles = StyleSheet.create({
   },
   box2: {
     width: Dimensions.get('window').width,
-
-    // width: Dimensions.get('window').width,
-    // height: PixelRatio.getPixelSizeForLayoutSize(150),
     height: 220,
     borderWidth: 10,
     borderColor: 'red',

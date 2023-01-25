@@ -1,98 +1,65 @@
 import * as React from 'react';
 
-import {
-  StyleSheet,
-  View,
-  Text,
-  Button,
-  NativeModules,
-  NativeEventEmitter,
-  Dimensions,
-  PixelRatio,
-} from 'react-native';
-import {
-  WEPersonalization,
-  multiply,
-  add,
-} from 'react-native-webengage-personalization';
+import { StyleSheet, View, Text, Dimensions, Button } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
+import { WEPersonalization } from 'react-native-webengage-personalization';
 import WebEngage from 'react-native-webengage';
 const RegularScreen = ({ navigation }) => {
-  const [result, setResult] = React.useState();
-  const [addition, setAddition] = React.useState();
-
   var webengage = new WebEngage();
-  webengage.user.login('Ak112');
+
+  useFocusEffect(
+    React.useCallback(() => {
+      webengage.screen('ak_test');
+      // WEPersonalization.registerWEPlaceholderCallback("ak_test_2", callback);
+      return () => {
+        // Perform cleanup on blur
+      };
+    }, [])
+  );
 
   React.useEffect(() => {
-    multiply(6, 8).then(setResult);
-    add(6, 8).then(setAddition);
-    // webengage.screen("ET_home");
+    return () => {
+      console.log('Unmouting from regular screen');
+    };
   }, []);
 
-  const promiseCallback = async () => {
-    try {
-      const eventId = await NativeModules.PersonalizationBridge.promiseCallback(
-        'testString',
-        'test 2'
-      );
-      console.log('Event Id received from Java -> ' + eventId);
-    } catch (e) {
-      console.error(e);
-    }
-  };
-
-  const listenerCallback = () => {
-    NativeModules.PersonalizationBridge.listenerCallback();
-  };
-
-  // Values added in event - will be data available here
   const personalizationCallback1 = (d) => {
-    console.log('PPersonalization callback1 triggered-', d);
+    console.log(
+      'PPersonalization callback1 triggered for ak_test_2 (Custom) -',
+      d
+    );
   };
 
   const personalizationCallback2 = (d) => {
-    console.log('PPersonalization callback2 triggered-', d);
+    console.log('PPersonalization callback2 triggered for ak_test_1', d);
   };
 
-  React.useEffect(() => {
-    const eventEmitter = new NativeEventEmitter(
-      NativeModules.PersonalizationBridge
-    );
-    eventEmitter.addListener('EventReminder', (event) => {
-      console.log('Event Listerner called', event); // "someValue"
-    });
-  }, []);
+  const navigateToScroll = () => {
+    navigation.navigate('scrollable');
+  };
+
   return (
     <View style={styles.container}>
       <WEPersonalization
         color="#32a852"
         style={styles.box}
-        propertyId="flutter_banner"
-        screenName="ET_home"
+        propertyId="ak_test_2" // ak_test_2 - custom
+        screenName="ak_test"
         personalizationCallback={personalizationCallback1}
       />
-      <Text>Result: {result}</Text>
-      <Text>Addition Result - {addition}</Text>
-      <Button
-        title="Trigger Immediate Callback from native"
-        onPress={immediateCallback}
-      />
+      <Button title={'Scroll screen'} onPress={navigateToScroll} />
+      <Text>This text is from React Native</Text>
+      <Text>But Above and below Views are from WebEngage </Text>
       <WEPersonalization
         color="#12023f"
         style={styles.box2}
-        propertyId="flutter_text"
-        screenName="ET_home"
-        personalizationCallback={personalizationCallback2}
-        // personalizationCallback="personalizationCallback data"
+        propertyId="ak_test_1" // ak_test_1 - Text banner
+        screenName="ak_test"
+        personalizationCallback={personalizationCallback2} //onDataReceived
       />
-      <View style={styles.margin20} />
-      <Button title="Promise callback Immediate" onPress={promiseCallback} />
       <View style={styles.margin20} />
 
-      <Button
-        title="Trigger previously Registered callback(Push click)"
-        onPress={listenerCallback}
-      />
+      <View style={styles.margin20} />
     </View>
   );
 };
@@ -112,7 +79,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 10,
   },
-  // banner
   box: {
     width: Dimensions.get('window').width,
     height: 200,
@@ -120,13 +86,9 @@ const styles = StyleSheet.create({
     borderColor: 'red',
     padding: 50,
   },
-  // text
   box2: {
     width: Dimensions.get('window').width,
     height: 240,
-    // borderWidth: 10,
-    // borderColor: 'red',
-    // padding: 50,
   },
 });
 export default RegularScreen;
