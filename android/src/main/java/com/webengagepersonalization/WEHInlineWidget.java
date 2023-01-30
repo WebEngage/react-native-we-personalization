@@ -1,5 +1,4 @@
 package com.webengagepersonalization;
-
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Color;
@@ -27,16 +26,20 @@ import com.webengage.personalization.WEInlineView;
 import com.webengage.personalization.WEPersonalization;
 import com.webengage.personalization.callbacks.WECampaignCallback;
 import com.webengage.personalization.callbacks.WEPlaceholderCallback;
+import com.webengage.personalization.callbacks.WEPropertyRegistryCallback;
 import com.webengage.personalization.data.WECampaignData;
+
+import org.json.JSONObject;
+
 import java.util.HashMap;
 
-public class WEHInlineWidget extends FrameLayout implements WECampaignCallback {
+public class WEHInlineWidget extends FrameLayout implements WECampaignCallback, ScreenNavigatorCallback {
   private static WEHInlineWidget instance = null;
   String TAG = "WebEngage-personalization-Hybrid";
   WEInlineView weInlineView;
   private ReactApplicationContext applicationContext = null;
   int height = 0, width = 0;
-  String tagName = "";
+  String tagName = "", screenName = "";
 
 //  @Override
 //  protected void onDetachedFromWindow() {
@@ -50,6 +53,7 @@ public class WEHInlineWidget extends FrameLayout implements WECampaignCallback {
   public WEHInlineWidget(@NonNull ReactApplicationContext context, HashMap<String, Object> map, WEGPersonalizationViewManager ref) {
     super(context);
     this.applicationContext = context;
+    Log.d("WebEngage", "INside WEHInlineWidget @@@");
     init(context);
   }
   public void init(Context context) {
@@ -57,11 +61,18 @@ public class WEHInlineWidget extends FrameLayout implements WECampaignCallback {
     weInlineView =  view.findViewById(R.id.weinline_widget);
     addView(view);
     weInlineView.requestLayout(); // called when Somethings is changed in the UI view
+
   }
 
+  @Override
+  public void addOnLayoutChangeListener(OnLayoutChangeListener listener) {
+    super.addOnLayoutChangeListener(listener);
+    Logger.d(WEGConstants.TAG, "addOnLayoutChangeListener called from WEHInlineWidger ");
+  }
 
-//  Enforce this to reflect new Changes to the UI
+  //  Enforce this to reflect new Changes to the UI
 public void setupLayout(View view, WECampaignData weCampaignData) {
+    Logger.d(WEGConstants.TAG, "Setup layout called");
   Choreographer.getInstance().postFrameCallback(new Choreographer.FrameCallback() {
     @Override
     public void doFrame(long frameTimeNanos) {
@@ -122,6 +133,8 @@ public void setupLayout(View view, WECampaignData weCampaignData) {
 
 //    Positioning of the view - including the margin
     view.layout(view.getLeft() + lm  , view.getTop() + tm , widthInPixel + rm, heightInPixel + bm);
+    Logger.d(WEGConstants.TAG, "Manual Layout completed");
+
   }
 
 
@@ -130,19 +143,31 @@ public void setupLayout(View view, WECampaignData weCampaignData) {
     width = widths;
   }
 
+  public  void setScreenName(String screenName) {
+    this.screenName = screenName;
+    Callbacker.setScreenNavigatorCallback(this.screenName, this);
+  }
+
+
   public void updateViewTag(String tagName) {
+    Logger.d(WEGConstants.TAG, " updateViewTag is called for "+tagName);
     this.tagName = tagName;
     weInlineView.setTag(tagName);
+    loadView(tagName);
+  }
+
+  public void loadView(String tagName) {
+    Logger.d(WEGConstants.TAG, tagName+" loadView called for - "+tagName);
     weInlineView.load(tagName,new WEPlaceholderCallback() {
       @Override
       public void onDataReceived(WECampaignData weCampaignData) {
         WritableMap params = Arguments.createMap();
-//        TODO - Yet to Add weCampaignData.content
+//        TODO - Yet to Add weCampaignData.content should use parse to JSON
 //        params.putMap("content",weCampaignData.getContent());
 //        convertToJSon
+        JSONObject jsonObject = new JSONObject();
         params.putString("targetViewId", weCampaignData.getTargetViewId());
         params.putString("campaignId",weCampaignData.getCampaignId());
-
         Utils.sendEvent(applicationContext,"onDataReceived", params );
       }
 
@@ -150,14 +175,12 @@ public void setupLayout(View view, WECampaignData weCampaignData) {
       public void onPlaceholderException(String s, String s1, Exception e) {
         Logger.d(WEGConstants.TAG, "onPlaceholderException from personalization view manager-> \ns- "+s+"\ns1- "+s1 + "\nerror-"+e);
         WritableMap params = Arguments.createMap();
-//        TODO - Add it in hybrid also
         Utils.sendEvent(applicationContext,"onPlaceholderException", params );
 
       }
 
       @Override
       public void onRendered(WECampaignData weCampaignData) {
-        //        TODO - Add it in hybrid also
         Logger.d(WEGConstants.TAG, "onRendered from personalization view manager id-> "+weCampaignData.getTargetViewId());
         View view = weInlineView.findViewWithTag("INLINE_PERSONALIZATION_TAG");
         // view will be null custom_data
@@ -166,8 +189,6 @@ public void setupLayout(View view, WECampaignData weCampaignData) {
         }
       }
     });
-//    registerCallback(tagName);
-//    weInlineView.load(tagName);
   }
 
   public void registerCallback(String tagName) {
@@ -199,6 +220,17 @@ public void setupLayout(View view, WECampaignData weCampaignData) {
    public void onCampaignShown(@NonNull WECampaignData weCampaignData) {
      Logger.d(WEGConstants.TAG, "Campaign data shown ---- "+weCampaignData);
    }
+
+  @Override
+  public void screenNavigated(String screenName) {
+      Logger.d(WEGConstants.TAG, "screenNavigated of WEHInline called for screen - "+screenName+" for tagName- "+this.tagName);
+    if(!this.tagName.equals("")) {
+      loadView(this.tagName);
+    }
+
+
+  }
+
 
 //  @Override
 //  public void onDataReceived(@NonNull WECampaignData weCampaignData) {

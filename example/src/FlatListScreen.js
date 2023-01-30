@@ -15,7 +15,7 @@ const FlatListScreen = () => {
   const webengage = new WebEngage();
 
   React.useEffect(() => {
-    webengage.screen('ET_home');
+    webengage.screen('ET_home1');
   }, []);
 
   const personalizationCallback1 = (d) => {
@@ -50,7 +50,7 @@ const FlatListScreen = () => {
           <WEPersonalization
             style={styles.box}
             propertyId="flutter_banner"
-            screenName="ET_home"
+            screenName="ET_home1"
             personalizationCallback={personalizationCallback1}
           />
         ) : null}
@@ -58,7 +58,7 @@ const FlatListScreen = () => {
           <WEPersonalization
             style={styles.box2}
             propertyId="flutter_text"
-            screenName="ET_home"
+            screenName="ET_home1"
             personalizationCallback={personalizationCallback2}
           />
         ) : null}

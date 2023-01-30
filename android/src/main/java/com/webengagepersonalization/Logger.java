@@ -10,7 +10,7 @@ public class Logger {
     public static final int DEBUG = 1;
     public static final int VERBOSE = 2;
 
-    private static int sLogLevel = SILENT;
+    private static int sLogLevel = VERBOSE;
 
     public static void setLogLevel(int _sLogLevel) {
         sLogLevel = _sLogLevel;

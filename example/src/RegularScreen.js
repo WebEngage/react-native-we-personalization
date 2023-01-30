@@ -1,15 +1,16 @@
 import * as React from 'react';
 
-import { StyleSheet, View, Text, Dimensions, Button } from 'react-native';
+import { StyleSheet, View, Text, Dimensions, Button, AppState } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
-import { WEPersonalization } from 'react-native-webengage-personalization';
+import { WEPersonalization, initializePersonalization } from 'react-native-webengage-personalization';
 import WebEngage from 'react-native-webengage';
 const RegularScreen = ({ navigation }) => {
   var webengage = new WebEngage();
 
   useFocusEffect(
     React.useCallback(() => {
-      webengage.screen('ak_test');
+      webengage.screen('ET_home'); //
+      console.log("ET_home is navigated")
       // WEPersonalization.registerWEPlaceholderCallback("ak_test_2", callback);
       return () => {
         // Perform cleanup on blur
@@ -38,25 +39,36 @@ const RegularScreen = ({ navigation }) => {
     navigation.navigate('scrollable');
   };
 
+  const onRendered_ak_test_1 = (d) => {
+    console.log('onRendered_ak_test_1 triggered for ak_test_1', d);
+  };
+
+  const onPlaceholderException_aktest1 = (d) => {
+    console.log('onPlaceholderException_aktest1 triggered for ak_test_1', d);
+  };
+
   return (
     <View style={styles.container}>
       <WEPersonalization
         color="#32a852"
         style={styles.box}
-        propertyId="ak_test_2" // ak_test_2 - custom
-        screenName="ak_test"
+        propertyId="flutter_text" // ak_test_2 - custom
+        screenName="ET_home"
         personalizationCallback={personalizationCallback1}
+        // onRendered={onRendered_}
       />
       <Button title={'Scroll screen'} onPress={navigateToScroll} />
       <Text>This text is from React Native</Text>
       <Text>But Above and below Views are from WebEngage </Text>
-      <WEPersonalization
+      {/* <WEPersonalization
         color="#12023f"
         style={styles.box2}
         propertyId="ak_test_1" // ak_test_1 - Text banner
-        screenName="ak_test"
-        personalizationCallback={personalizationCallback2} //onDataReceived
-      />
+        screenName="ET_home"
+        personalizationCallback={personalizationCallback2} // onRendered
+        onDataReceived={onRendered_ak_test_1}
+        onPlaceholderException={onPlaceholderException_aktest1}
+      /> */}
       <View style={styles.margin20} />
 
       <View style={styles.margin20} />

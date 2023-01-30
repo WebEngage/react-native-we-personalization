@@ -1,3 +1,4 @@
+import { useFocusEffect } from '@react-navigation/native';
 import React from 'react';
 import {
   View,
@@ -7,7 +8,15 @@ import {
   StyleSheet,
   Pressable,
 } from 'react-native';
+import WebEngage from 'react-native-webengage';
 const ListScreen = ({ navigation }) => {
+  var webengage = new WebEngage();
+  useFocusEffect(
+    React.useCallback(() => {
+      webengage.screen('1234'); //
+      console.log("1234 is navigated")
+    }, [])
+  );
   return (
     <SafeAreaView style={styles.mainContainer}>
       <Text style={{ marginTop: 20, marginBottom: 50 }}>

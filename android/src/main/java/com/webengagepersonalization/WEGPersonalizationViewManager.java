@@ -6,11 +6,16 @@ import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import com.facebook.react.bridge.ReactApplicationContext;
+import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
+import com.facebook.react.bridge.ReadableArray;
+import com.facebook.react.common.MapBuilder;
 import com.facebook.react.uimanager.SimpleViewManager;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.annotations.ReactProp;
@@ -18,12 +23,13 @@ import com.facebook.react.uimanager.annotations.ReactProp;
 import com.facebook.react.uimanager.annotations.ReactPropGroup;
 import com.webengage.personalization.WEPersonalization;
 //import  androidx.annotation..widget.CardView;
+import com.webengage.personalization.callbacks.WEPropertyRegistryCallback;
 import com.webengage.personalization.utils.ConstantsKt;
 
 import android.view.ViewGroup;
 
 //  TODO  - Test scenario for screen back navigation
-public class WEGPersonalizationViewManager extends SimpleViewManager<ViewGroup>  {
+public class WEGPersonalizationViewManager extends SimpleViewManager<ViewGroup> {
   private ReactApplicationContext applicationContext = null;
 
   private WEHInlineWidget simpleUi;
@@ -31,10 +37,13 @@ public class WEGPersonalizationViewManager extends SimpleViewManager<ViewGroup> 
 
   public WEGPersonalizationViewManager(ReactApplicationContext reactContext) {
     super();
+    Logger.d("WebEngage", "WEGPersonalizationViewManager called @@@");
+
     this.applicationContext = reactContext;
     SharedPreferences sharedPrefsManager = applicationContext.getSharedPreferences(ConstantsKt.WE_SHARED_STORAGE, Context.MODE_PRIVATE);
     sharedPrefsManager.edit().putBoolean(ConstantsKt.KEY_SHOULD_AUTO_TRACK_IMPRESSIONS, false).apply();
     WEPersonalization.Companion.get().init(); // Initializing Personalization SDK - TODO - Give it to user
+    WEPersonalization.Companion.get().registerPropertyRegistryCallback(new Callbacker()); // added callback listener
   }
 
   @Override
@@ -49,6 +58,7 @@ public class WEGPersonalizationViewManager extends SimpleViewManager<ViewGroup> 
     HashMap<String, Object> map = new HashMap<String, Object>();
     map.put("height", height);
     map.put("width", width);
+    Logger.d(WEGConstants.TAG, "createViewInstance called for WEGPersonalizationViewManager @@@");
     simpleUi = new WEHInlineWidget(reactContext.getReactApplicationContext(),map,this);
     return simpleUi;
   }
@@ -72,9 +82,15 @@ public class WEGPersonalizationViewManager extends SimpleViewManager<ViewGroup> 
     simpleUi.updateViewTag(propertyId);
   }
 
+  @ReactProp(name = "screenName")
+  public void setScreenName(View view, String screenName) {
+    Logger.d(WEGConstants.TAG, "screenName received -> "+screenName);
+
+    simpleUi.setScreenName(screenName);
+  }
 
   @ReactMethod
-  public void myMethod(int viewTag) {
+  public void myMethod(String viewTag) {
     // Method implementation
     Logger.d("Akshay", "myMethod called");
   }
