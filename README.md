@@ -16,7 +16,18 @@ import { WebengagePersonalizationView } from "react-native-webengage-personaliza
 // ...
 
 <WebengagePersonalizationView color="tomato" />
+
 ```
+Steps to run 
+1. Take pull and npm install
+2. go to example -> node_modules -> react-native-webengage -> Android
+3. Open build.gradlew file and comment android-sdk import method 
+4. create libs folder and add android-sdk.aar file
+5. inside build.gradlew file add below code
+  implementation fileTree(include: ['*.jar', '*.aar'], dir: 'libs')
+  implementation files('libs/android-sdk.aar')
+ 
+6. Try Running App now
 
 ## Contributing
 
