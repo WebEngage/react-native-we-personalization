@@ -74,29 +74,30 @@ public class WEHInlineWidget extends FrameLayout implements WECampaignCallback, 
 public void setupLayout(View view, WECampaignData weCampaignData) {
     Logger.d(WEGConstants.TAG, "Setup layout called");
   Choreographer.getInstance().postFrameCallback(new Choreographer.FrameCallback() {
+
     @Override
     public void doFrame(long frameTimeNanos) {
       manuallyLayoutChildren(view, weCampaignData);
       ViewTreeObserver viewTreeObserver = view.getViewTreeObserver();
       viewTreeObserver.dispatchOnGlobalLayout();
-      boolean isScreenVisible = Utils.isVisible(view);
-      Logger.d(WEGConstants.TAG, tagName+" isisScreenVisible- "+isScreenVisible);
-      if(!isScreenVisible) {
-        viewTreeObserver.addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
-          @Override
-          public void onScrollChanged() {
-            boolean isUserScreenVisible = Utils.isVisible(view);
-            if(isUserScreenVisible) {
-              Logger.d(WEGConstants.TAG, "Viewed "+tagName);
-              weCampaignData.trackImpression(null);
-              view.getViewTreeObserver().removeOnScrollChangedListener(this);
-            }
-          }
-        });
-      } else {
-        Logger.d(WEGConstants.TAG, "Viewed "+tagName);
-        weCampaignData.trackImpression(null);
-      }
+     boolean isScreenVisible = Utils.isVisible(view);
+     Logger.d(WEGConstants.TAG, tagName+" isisScreenVisible- "+isScreenVisible);
+     if(!isScreenVisible) {
+       viewTreeObserver.addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
+         @Override
+         public void onScrollChanged() {
+           boolean isUserScreenVisible = Utils.isVisible(view);
+           if(isUserScreenVisible) {
+             Logger.d(WEGConstants.TAG, "Viewed "+tagName);
+             weCampaignData.trackImpression(null);
+             view.getViewTreeObserver().removeOnScrollChangedListener(this);
+           }
+         }
+       });
+     } else {
+       Logger.d(WEGConstants.TAG, "Viewed "+tagName);
+       weCampaignData.trackImpression(null);
+     }
     }
   });
 }
@@ -153,11 +154,11 @@ public void setupLayout(View view, WECampaignData weCampaignData) {
     Logger.d(WEGConstants.TAG, " updateViewTag is called for "+tagName);
     this.tagName = tagName;
     weInlineView.setTag(tagName);
-    loadView(tagName);
+//    loadView(tagName);
   }
 
   public void loadView(String tagName) {
-    Logger.d(WEGConstants.TAG, tagName+" loadView called for - "+tagName);
+    Logger.d(WEGConstants.TAG, " loadView called for - "+tagName);
     weInlineView.load(tagName,new WEPlaceholderCallback() {
       @Override
       public void onDataReceived(WECampaignData weCampaignData) {
@@ -182,10 +183,11 @@ public void setupLayout(View view, WECampaignData weCampaignData) {
       @Override
       public void onRendered(WECampaignData weCampaignData) {
         Logger.d(WEGConstants.TAG, "onRendered from personalization view manager id-> "+weCampaignData.getTargetViewId());
-        View view = weInlineView.findViewWithTag("INLINE_PERSONALIZATION_TAG");
-        // view will be null custom_data
-        if(view != null) {
-          setupLayout(view, weCampaignData);
+        // TODO- Uncommenting below view will fix height issue but navigating back will make the screen to blank
+//        View view = weInlineView.findViewWithTag("INLINE_PERSONALIZATION_TAG");
+
+        if(weInlineView != null) {
+          setupLayout(weInlineView, weCampaignData);
         }
       }
     });
@@ -227,8 +229,6 @@ public void setupLayout(View view, WECampaignData weCampaignData) {
     if(!this.tagName.equals("")) {
       loadView(this.tagName);
     }
-
-
   }
 
 

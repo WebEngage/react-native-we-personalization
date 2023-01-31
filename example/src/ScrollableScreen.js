@@ -16,8 +16,8 @@ const ScrollableScreen = ({ navigation }) => {
 const webengage = new WebEngage();
   useFocusEffect(
     React.useCallback(() => {
-      webengage.screen('zaqwe'); //
-      console.log("zaqwe is navigated")
+      webengage.screen('ET_home'); //
+      console.log("ET_home is navigated")
     }, [])
   );
   const personalizationCallback1 = (d) => {
@@ -42,8 +42,8 @@ const webengage = new WebEngage();
         <Text style={styles.textStyle}> Second</Text>
         <WEPersonalization
           style={styles.box}
-          propertyId="flutter_banner"
-          screenName="ET_home2"
+          screenName="ET_home"
+          propertyId="flutter_text"
           personalizationCallback={personalizationCallback1}
         />
         <Text style={styles.textStyle}> Second</Text>
@@ -80,8 +80,8 @@ const webengage = new WebEngage();
       </Text>
       <WEPersonalization
         style={styles.box2}
-        propertyId="flutter_text"
-        screenName="ET_home2"
+        screenName="ET_home"
+        propertyId="flutter_banner"
         personalizationCallback={personalizationCallback2}
       />
       <Text style={styles.nativeText}> Below View is React-Native</Text>
