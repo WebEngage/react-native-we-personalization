@@ -56,11 +56,11 @@ public class WEHInlineWidget extends FrameLayout implements WECampaignCallback, 
     Log.d("WebEngage", "INside WEHInlineWidget @@@");
     init(context);
   }
+
   public void init(Context context) {
     View view = LayoutInflater.from(context).inflate(R.layout.view_inlinewidget, this, false);
-    weInlineView =  view.findViewById(R.id.weinline_widget);
+    weInlineView = view.findViewById(R.id.weinline_widget);
     addView(view);
-    weInlineView.requestLayout(); // called when Somethings is changed in the UI view
 
   }
 
@@ -71,42 +71,42 @@ public class WEHInlineWidget extends FrameLayout implements WECampaignCallback, 
   }
 
   //  Enforce this to reflect new Changes to the UI
-public void setupLayout(View view, WECampaignData weCampaignData) {
+  public void setupLayout(View view, WECampaignData weCampaignData) {
     Logger.d(WEGConstants.TAG, "Setup layout called");
-  Choreographer.getInstance().postFrameCallback(new Choreographer.FrameCallback() {
+    Choreographer.getInstance().postFrameCallback(new Choreographer.FrameCallback() {
 
-    @Override
-    public void doFrame(long frameTimeNanos) {
-      manuallyLayoutChildren(view, weCampaignData);
-      ViewTreeObserver viewTreeObserver = view.getViewTreeObserver();
-      viewTreeObserver.dispatchOnGlobalLayout();
-     boolean isScreenVisible = Utils.isVisible(view);
-     Logger.d(WEGConstants.TAG, tagName+" isisScreenVisible- "+isScreenVisible);
-     if(!isScreenVisible) {
-       viewTreeObserver.addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
-         @Override
-         public void onScrollChanged() {
-           boolean isUserScreenVisible = Utils.isVisible(view);
-           if(isUserScreenVisible) {
-             Logger.d(WEGConstants.TAG, "Viewed "+tagName);
-             weCampaignData.trackImpression(null);
-             view.getViewTreeObserver().removeOnScrollChangedListener(this);
-           }
-         }
-       });
-     } else {
-       Logger.d(WEGConstants.TAG, "Viewed "+tagName);
-       weCampaignData.trackImpression(null);
-     }
-    }
-  });
-}
+      @Override
+      public void doFrame(long frameTimeNanos) {
+        manuallyLayoutChildren(view, weCampaignData);
+        ViewTreeObserver viewTreeObserver = view.getViewTreeObserver();
+        viewTreeObserver.dispatchOnGlobalLayout();
+        boolean isScreenVisible = Utils.isVisible(view);
+        Logger.d(WEGConstants.TAG, tagName + " isisScreenVisible- " + isScreenVisible);
+        if (!isScreenVisible) {
+          viewTreeObserver.addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
+            @Override
+            public void onScrollChanged() {
+              boolean isUserScreenVisible = Utils.isVisible(view);
+              if (isUserScreenVisible) {
+                Logger.d(WEGConstants.TAG, "Viewed " + tagName);
+                weCampaignData.trackImpression(null);
+                view.getViewTreeObserver().removeOnScrollChangedListener(this);
+              }
+            }
+          });
+        } else {
+          Logger.d(WEGConstants.TAG, "Viewed " + tagName);
+          weCampaignData.trackImpression(null);
+        }
+      }
+    });
+  }
 
   public void manuallyLayoutChildren(View view, WECampaignData weCampaignData) {
 //    Accessing cardView margins - Left, Right, Top, Bottom
-    CardView.LayoutParams lp = (FrameLayout.LayoutParams) view.findViewWithTag("INLINE_PERSONALIZATION_TAG").getLayoutParams();
-    int lm = lp.leftMargin;
-    int rm = lp.rightMargin;
+    LayoutParams lp = (LayoutParams) view.getLayoutParams();
+    int lm = lp.getMarginStart();
+    int rm = lp.getMarginEnd();
     int tm = lp.topMargin;
     int bm = lp.bottomMargin;
     int width = this.width;
@@ -124,16 +124,16 @@ public void setupLayout(View view, WECampaignData weCampaignData) {
     )));
 
 //    Removing Margins for horizontal and vertical
-    heightInPixel -= (bm+tm);
-    widthInPixel -= (rm+lm);
-
+    heightInPixel -= (bm + tm);
+    widthInPixel -= (rm + lm);
 //    Size of the view
     view.measure(
-      View.MeasureSpec.makeMeasureSpec(widthInPixel  , View.MeasureSpec.EXACTLY),
+      View.MeasureSpec.makeMeasureSpec(widthInPixel, View.MeasureSpec.EXACTLY),
       View.MeasureSpec.makeMeasureSpec(heightInPixel, View.MeasureSpec.EXACTLY));
 
 //    Positioning of the view - including the margin
-    view.layout(view.getLeft() + lm  , view.getTop() + tm , widthInPixel + rm, heightInPixel + bm);
+    view.layout(weInlineView.getLeft() + lm, weInlineView.getTop() + tm,
+      widthInPixel + rm, heightInPixel + bm);
     Logger.d(WEGConstants.TAG, "Manual Layout completed");
 
   }
@@ -160,15 +160,15 @@ public void setupLayout(View view, WECampaignData weCampaignData) {
 
 
   public void updateViewTag(String tagName) {
-    Logger.d(WEGConstants.TAG, " updateViewTag is called for "+tagName);
+    Logger.d(WEGConstants.TAG, " updateViewTag is called for " + tagName);
     this.tagName = tagName;
     weInlineView.setTag(tagName);
     loadView(tagName);
   }
 
   public void loadView(String tagName) {
-    Logger.d(WEGConstants.TAG, " loadView called for - "+tagName);
-    weInlineView.load(tagName,new WEPlaceholderCallback() {
+    Logger.d(WEGConstants.TAG, " loadView called for - " + tagName);
+    weInlineView.load(tagName, new WEPlaceholderCallback() {
       @Override
       public void onDataReceived(WECampaignData weCampaignData) {
         WritableMap params = Arguments.createMap();
@@ -177,26 +177,25 @@ public void setupLayout(View view, WECampaignData weCampaignData) {
 //        convertToJSon
         JSONObject jsonObject = new JSONObject();
         params.putString("targetViewId", weCampaignData.getTargetViewId());
-        params.putString("campaignId",weCampaignData.getCampaignId());
-        Utils.sendEvent(applicationContext,"onDataReceived", params );
+        params.putString("campaignId", weCampaignData.getCampaignId());
+        Utils.sendEvent(applicationContext, "onDataReceived", params);
       }
 
       @Override
       public void onPlaceholderException(String s, String s1, Exception e) {
-        Logger.d(WEGConstants.TAG, "onPlaceholderException from personalization view manager-> \ns- "+s+"\ns1- "+s1 + "\nerror-"+e);
+        Logger.d(WEGConstants.TAG, "onPlaceholderException from personalization view manager-> \ns- " + s + "\ns1- " + s1 + "\nerror-" + e);
         WritableMap params = Arguments.createMap();
-        Utils.sendEvent(applicationContext,"onPlaceholderException", params );
+        Utils.sendEvent(applicationContext, "onPlaceholderException", params);
 
       }
 
       @Override
       public void onRendered(WECampaignData weCampaignData) {
-        Logger.d(WEGConstants.TAG, "onRendered from personalization view manager id-> "+weCampaignData.getTargetViewId());
+        Logger.d(WEGConstants.TAG, "onRendered from personalization view manager id-> " + weCampaignData.getTargetViewId());
         // TODO- Uncommenting below view will fix height issue but navigating back will make the screen to blank
-//        View view = weInlineView.findViewWithTag("INLINE_PERSONALIZATION_TAG");
-
-        if(weInlineView != null) {
-          setupLayout(weInlineView, weCampaignData);
+        View view = weInlineView.findViewWithTag("INLINE_PERSONALIZATION_TAG");
+        if (view != null) {
+          setupLayout(view, weCampaignData);
         }
       }
     });
@@ -207,30 +206,30 @@ public void setupLayout(View view, WECampaignData weCampaignData) {
   }
 
 
-//  TODO - Check with sarthak if it has to be visible at hybrid for the below methods
-   @Override
-   public boolean onCampaignClicked(@NonNull String s, @NonNull String s1, @NonNull WECampaignData weCampaignData) {
-     Logger.d(WEGConstants.TAG, "onCampaignClicked shown ---- "+weCampaignData);
-     weCampaignData.trackClick(null);
-     return false;
-   }
+  //  TODO - Check with sarthak if it has to be visible at hybrid for the below methods
+  @Override
+  public boolean onCampaignClicked(@NonNull String s, @NonNull String s1, @NonNull WECampaignData weCampaignData) {
+    Logger.d(WEGConstants.TAG, "onCampaignClicked shown ---- " + weCampaignData);
+    weCampaignData.trackClick(null);
+    return false;
+  }
 
-   @Override
-   public void onCampaignException(@Nullable String s, @NonNull String s1, @NonNull Exception e) {
-     Logger.d(WEGConstants.TAG, "onCampaignException shown ---- "+e);
-   }
+  @Override
+  public void onCampaignException(@Nullable String s, @NonNull String s1, @NonNull Exception e) {
+    Logger.d(WEGConstants.TAG, "onCampaignException shown ---- " + e);
+  }
 
-   @Nullable
-   @Override
-   public WECampaignData onCampaignPrepared(@NonNull WECampaignData weCampaignData) {
-     Logger.d(WEGConstants.TAG, "onCampaignPrepared shown ---- "+weCampaignData);
-     return null;
-   }
+  @Nullable
+  @Override
+  public WECampaignData onCampaignPrepared(@NonNull WECampaignData weCampaignData) {
+    Logger.d(WEGConstants.TAG, "onCampaignPrepared shown ---- " + weCampaignData);
+    return null;
+  }
 
-   @Override
-   public void onCampaignShown(@NonNull WECampaignData weCampaignData) {
-     Logger.d(WEGConstants.TAG, "Campaign data shown ---- "+weCampaignData);
-   }
+  @Override
+  public void onCampaignShown(@NonNull WECampaignData weCampaignData) {
+    Logger.d(WEGConstants.TAG, "Campaign data shown ---- " + weCampaignData);
+  }
 
   @Override
   public void screenNavigated(String screenName) {
