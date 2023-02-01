@@ -144,6 +144,15 @@ public void setupLayout(View view, WECampaignData weCampaignData) {
     width = widths;
   }
 
+  public void updateProperties(String screenName, String propertyId) {
+   // screenName
+    this.screenName = screenName;
+    Callbacker.setScreenNavigatorCallback(this.screenName, this);
+//    propertyId
+    this.tagName = propertyId;
+    weInlineView.setTag(tagName);
+    loadView(tagName);
+  }
   public  void setScreenName(String screenName) {
     this.screenName = screenName;
     Callbacker.setScreenNavigatorCallback(this.screenName, this);
@@ -154,7 +163,7 @@ public void setupLayout(View view, WECampaignData weCampaignData) {
     Logger.d(WEGConstants.TAG, " updateViewTag is called for "+tagName);
     this.tagName = tagName;
     weInlineView.setTag(tagName);
-//    loadView(tagName);
+    loadView(tagName);
   }
 
   public void loadView(String tagName) {
@@ -225,9 +234,11 @@ public void setupLayout(View view, WECampaignData weCampaignData) {
 
   @Override
   public void screenNavigated(String screenName) {
-      Logger.d(WEGConstants.TAG, "screenNavigated of WEHInline called for screen - "+screenName+" for tagName- "+this.tagName);
+    Logger.d(WEGConstants.TAG, "screenNavigated of WEHInline called for screen - "+screenName+" for tagName- "+this.tagName);
+    // TODO - Adding loadView here will work but onRendered is called twice. Fix this and make it work only once
+    // TODO - Current issue of 2 loadView is bcz one is for direct launch second is for the navigating back
     if(!this.tagName.equals("")) {
-      loadView(this.tagName);
+     loadView(this.tagName);
     }
   }
 
