@@ -9,8 +9,9 @@ const RegularScreen = ({ navigation }) => {
 
   useFocusEffect(
     React.useCallback(() => {
-      webengage.screen('ET_home'); //
-      console.log("ET_home is navigated")
+      // webengage.screen('ET_home'); //
+      webengage.screen('ak_test'); //
+      console.log("ak_test is navigated")
       // WEPersonalization.registerWEPlaceholderCallback("ak_test_2", callback);
       return () => {
         // Perform cleanup on blur
@@ -52,8 +53,8 @@ const RegularScreen = ({ navigation }) => {
       <WEPersonalization
         color="#32a852"
         style={styles.box}
-        screenName="ET_home"
-        propertyId="flutter_text" // ak_test_2 - custom
+        screenName="ak_test"
+        propertyId="ak_test_1" // ak_test_2 - custom
         personalizationCallback={personalizationCallback1}
         // onRendered={onRendered_}
       />

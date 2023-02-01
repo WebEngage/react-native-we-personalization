@@ -16,6 +16,7 @@ import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.common.MapBuilder;
+import com.facebook.react.uimanager.ReactStylesDiffMap;
 import com.facebook.react.uimanager.SimpleViewManager;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.annotations.ReactProp;
@@ -34,6 +35,7 @@ public class WEGPersonalizationViewManager extends SimpleViewManager<ViewGroup> 
 
   private WEHInlineWidget simpleUi;
   int width, height;
+  String screenName, propertyId;
 
   public WEGPersonalizationViewManager(ReactApplicationContext reactContext) {
     super();
@@ -50,6 +52,13 @@ public class WEGPersonalizationViewManager extends SimpleViewManager<ViewGroup> 
   @NonNull
   public String getName() {
     return WEGConstants.REACT_CLASS;
+  }
+
+  @Override
+  public void updateProperties(@NonNull ViewGroup viewToUpdate, ReactStylesDiffMap props) {
+    super.updateProperties(viewToUpdate, props);
+    simpleUi.updateProperties(this.screenName, this.propertyId);
+    Logger.d(WEGConstants.TAG, "Update Properties called");
   }
 
   @Override
@@ -71,6 +80,7 @@ public class WEGPersonalizationViewManager extends SimpleViewManager<ViewGroup> 
 
     if (index == 1) {
       height = value;
+      Logger.d(WEGConstants.TAG, "set Style completed -> ");
     }
     simpleUi.updateStyle(height, width);
   }
@@ -78,15 +88,16 @@ public class WEGPersonalizationViewManager extends SimpleViewManager<ViewGroup> 
   @ReactProp(name = "propertyId")
   public void setPropertyId(View view, String propertyId) {
     Logger.d(WEGConstants.TAG, "PropertyId to register -> "+propertyId);
+    this.propertyId = propertyId;
 
-    simpleUi.updateViewTag(propertyId);
+//    simpleUi.updateViewTag(propertyId);
   }
 
   @ReactProp(name = "screenName")
   public void setScreenName(View view, String screenName) {
     Logger.d(WEGConstants.TAG, "screenName received -> "+screenName);
-
-    simpleUi.setScreenName(screenName);
+    this.screenName = screenName;
+//    simpleUi.setScreenName(screenName);
   }
 
   @ReactMethod
