@@ -38,12 +38,16 @@ public class Callbacker implements WEPropertyRegistryCallback {
 //        ScreenNavigatorCallback callback = mapOfScreenNavigatedCallbacks.get(navigatedScreen);
         Log.d(WEGConstants.TAG, " Map values- key- "+key+ " value- "+value.size());
         ArrayList<ScreenNavigatorCallback> callbacksList = mapOfScreenNavigatedCallbacks.get(navigatedScreen);
-        for(ScreenNavigatorCallback callback : callbacksList) {
-          if(navigatedScreen.equals(key)) {
-            Logger.d(WEGConstants.TAG, key+ " found inside onPropertyCacheCleared list - triggering calback");
-            callback.screenNavigated(navigatedScreen);
-          }
-        }
+       try {
+         for (ScreenNavigatorCallback callback : callbacksList) {
+           if (navigatedScreen.equals(key)) {
+             Logger.d(WEGConstants.TAG, key + " found inside onPropertyCacheCleared list - triggering calback");
+             callback.screenNavigated(navigatedScreen);
+           }
+         }
+       } catch (Exception e) {
+         e.printStackTrace();
+       }
       });
     }
   }
