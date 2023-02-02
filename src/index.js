@@ -3,6 +3,7 @@ import {
   UIManager,
   Platform,
   NativeEventEmitter,
+  NativeModules,
 } from 'react-native';
 import React from 'react';
 
@@ -13,7 +14,9 @@ const LINKING_ERROR =
   '- You are not using Expo Go\n';
 
 const ComponentName = 'WebengagePersonalizationView';
-const eventEmitter = new NativeEventEmitter();
+const eventEmitter = new NativeEventEmitter(
+  NativeModules.PersonalizationBridge
+);
 let listener = null;
 let isListenerAdded = false;
 // const propertyProcessor = [
@@ -55,7 +58,6 @@ export const WEPersonalization = (props) => {
     //   [viewId],
     // );
     console.log('propertyProcessor latest -> ', propertyProcessor);
-
 
     return () => {
       console.log(
@@ -127,6 +129,15 @@ export const WEPersonalization = (props) => {
     // onRendered
     eventEmitter.addListener('onRendered', (event) => {
       console.log('onRendered - Event Listerner called ->', event);
+      propertyProcessor[latestScreenIndex].propertyList?.map((val) => {
+        if (val.propertyId === event.targetViewId) {
+          val?.callbacks?.onRendered && val?.callbacks?.onRendered(event);
+        }
+      });
+    });
+
+    eventEmitter.addListener('testAk', (event) => {
+      console.log('testAk - Event Listerner called ->', event);
       propertyProcessor[latestScreenIndex].propertyList?.map((val) => {
         if (val.propertyId === event.targetViewId) {
           val?.callbacks?.onRendered && val?.callbacks?.onRendered(event);
