@@ -30,7 +30,7 @@ const propertyProcessor = [];
 export const WEPersonalization = (props) => {
   console.log('props in webengage docs - ', props);
   const {
-    propertyId = '',
+    propertyId = 0,
     screenName = '',
     personalizationCallback = null,
     onDataReceived = null,

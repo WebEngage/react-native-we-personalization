@@ -1,25 +1,27 @@
 import * as React from 'react';
 
-import { StyleSheet, View, Text, Dimensions, Button, AppState } from 'react-native';
+import { StyleSheet, View, Text, Dimensions, Button, AppState, ScrollView } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import { WEPersonalization, initializePersonalization } from 'react-native-webengage-personalization';
 import WebEngage from 'react-native-webengage';
 const RegularScreen = ({ navigation }) => {
   var webengage = new WebEngage();
 
-  useFocusEffect(
-    React.useCallback(() => {
-      // webengage.screen('ET_home'); //
-      webengage.screen('ak_test'); //
-      console.log("ak_test is navigated")
-      // WEPersonalization.registerWEPlaceholderCallback("ak_test_2", callback);
-      return () => {
-        // Perform cleanup on blur
-      };
-    }, [])
-  );
+  // useFocusEffect(
+  //   React.useCallback(() => {
+  //     // webengage.screen('ET_home'); //
+  //     webengage.screen('screen1'); //
+  //     console.log("screen1 is navigated")
+  //     // WEPersonalization.registerWEPlaceholderCallback("ak_test_2", callback);
+  //     return () => {
+  //       // Perform cleanup on blur
+  //     };
+  //   }, [])
+  // );
 
   React.useEffect(() => {
+    webengage.screen('screen1'); //
+      console.log("screen1 is navigated")
     return () => {
       console.log('Unmouting from regular screen');
     };
@@ -47,15 +49,17 @@ const RegularScreen = ({ navigation }) => {
   const onPlaceholderException_aktest1 = (d) => {
     console.log('onPlaceholderException_aktest1 triggered for ak_test_1', d);
   };
+  // Android -> propId- ak_test_1 -> screen(ak_test) -> textView
+  // ios -> propId- 12 -> screen(screen1) -> Banner
 
   return (
     <View style={styles.container}>
       <WEPersonalization
-        color="#32a852"
         style={styles.box}
-        screenName="ak_test"
-        propertyId="ak_test_1" // ak_test_2 - custom
-        personalizationCallback={personalizationCallback1}
+        screenName="screen1"
+        propertyId={12} // ak_test_2 - custom
+        color="#32a852"
+        // personalizationCallback={personalizationCallback1}
         // onRendered={onRendered_}
       />
       <Button title={'Scroll screen'} onPress={navigateToScroll} />
@@ -95,9 +99,9 @@ const styles = StyleSheet.create({
   box: {
     width: Dimensions.get('window').width,
     height: 200,
-    borderWidth: 10,
-    borderColor: 'red',
-    padding: 50,
+    // borderWidth: 10,
+    // borderColor: 'red',
+    // padding: 50,
   },
   box2: {
     width: Dimensions.get('window').width,

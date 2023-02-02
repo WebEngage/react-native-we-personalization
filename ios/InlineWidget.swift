@@ -7,17 +7,36 @@ import WEPersonalization
 
 public class WEHInlineView:UIView{
     var campaignData: WEGCampaignData? = nil
-    let TAG = "WebEngage-Hybrid"
-    @objc var screenName: String = "test-screen"
-    @objc var propertyId: String = "" {
+    let TAG = "WER:"
+    @objc var width: CGFloat = 0.1 {
         didSet {
-            print(TAG+"Inside propertyId-- screen-"+screenName+" \n prop-"+propertyId)
+            print("inside Swifts width set  \(width)")
+            setupView()
+        }
+    }
+    @objc var height: CGFloat = 0.1 {
+        didSet {
+            print("inside Swifts height set  \(height)")
+            setupView()
+        }
+    }
+    @objc var screenName: String = "test-screen"{
+        didSet {
+            print(TAG+"Inside screenName-- screen-"+screenName)
+            self.setupView()
+        }
+    }
+
+    @objc var propertyId: Int = 0 {
+        didSet {
+            print(TAG+"Inside propertyId-- prop- \(propertyId)")
+            self.setupView()
         }
     }
 
     @objc var color: String = "" {
         didSet {
-            print(TAG+"Inside color did set screen-"+screenName+" \n prop-"+propertyId)
+            // print(TAG+"Inside color did set screen-"+screenName+" \n prop-"+screenName)
             //          self.backgroundColor = hexStringToUIColor(hexColor: color)
         }
     }
@@ -26,34 +45,46 @@ public class WEHInlineView:UIView{
 
     override init(frame: CGRect) {
         super.init(frame: frame)
+        print(TAG+" called from first init! screen-"+self.screenName+" \n prop-\(self.propertyId)")
         setupView()
 
     }
 
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
+        // print(TAG+" called from second init")
         setupView()
     }
-
     private func setupView(){
-        NSLog("WEP: Inside setupView")
+        //        NSLog("WER: Inside setupView")
+
         // TODO - Below code will send data to listener of react-native
         PersonalizationBridge.emitter.sendEvent(withName: "testAk", body: "body")
-        var inlineView = WEInlineView(frame: CGRect(x: 0, y: 0, width: 300, height: 40))
-        inlineView.tag = 12
 
-        DispatchQueue.main.asyncAfter(deadline: .now()+1, execute: {
-            inlineView.load(tag: 12, callbacks: self)
-            if let scrollview = self.getScrollview(view: self){
-                scrollview.addObserver(self, forKeyPath: #keyPath(UIScrollView.contentOffset), options: [.old, .new], context: nil)
-            }else{
-                print("WEP: Scrollview not found")
+        if(self.height > 0.1 && self.width > 0.1 && propertyId != 0) {
+            print(TAG+" @@@ propertyId-\(self.propertyId) | screenName-"+self.screenName)
+            print(TAG+" @@@ inside setupView height -\(self.height) | width--\(self.width)")
+
+            var inlineView = WEInlineView(frame: CGRect(x: 0, y: 0, width: self.width, height: self.height))
+            inlineView.tag = self.propertyId
+            if(self.propertyId != 0) {
+                inlineView.tag = self.propertyId
+                DispatchQueue.main.asyncAfter(deadline: .now()+1, execute: {
+                    inlineView.load(tag: self.propertyId, callbacks: self)
+                    if let scrollview = self.getScrollview(view: self){
+                        scrollview.addObserver(self, forKeyPath: #keyPath(UIScrollView.contentOffset), options: [.old, .new], context: nil)
+                    }else{
+                        print("WER: Scrollview not found")
+                    }
+                })
             }
-        })
 
-        //        WEPropertyRegistry.shared.register(callback: self, forTag: 13)
-        //        addSubview(headerView)
-        addSubview(inlineView)
+
+            //        WEPropertyRegistry.shared.register(callback: self, forTag: 13)
+            //        addSubview(headerView)
+            addSubview(inlineView)
+
+        }
 
 
     }
@@ -89,30 +120,29 @@ public class WEHInlineView:UIView{
 
 
 extension WEHInlineView : WEPlaceholderCallback{
-
     public func onRendered(data: WEGCampaignData) {
-        print("WEP : onRendered ")
+        print("WERP : onRendered ")
 
     }
     public func onDataReceived(_ data: WEGCampaignData) {
         self.campaignData = data;
-        print("WEP : onDataReceived")
+        print("WERP : onDataReceived")
     }
     public func onPlaceholderException(_ campaignId: String?, _ targetViewId: String, _ exception: Error) {
-        print("WEP : onPlaceholderException")
+        print("WERP : onPlaceholderException")
     }
 }
 
 extension WEHInlineView:WECampaignCallback{
     public func onCampaignPrepared(_ data: WEGCampaignData) -> WEGCampaignData {
-        print("WEP : onCampaignPrepared")
+        print("WERP : onCampaignPrepared")
         return data
     }
     public func onCampaignShown(data: WEGCampaignData) {
-        print("WEP : onCampaignShown")
+        print("WERP : onCampaignShown")
     }
     public func onCampaignException(_ campaignId: String?, _ targetViewId: String, _ exception: Error) {
-        print("WEP : onCampaignException")
+        print("WERP : onCampaignException")
     }
     public func onCampaignClicked(actionId: String, deepLink: String, data: WEGCampaignData) -> Bool {
         //print("WEP : onCampaignClicked \(_inlineView!.isVisibleToUser)")
@@ -130,9 +160,9 @@ extension WEHInlineView {
 
     public override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         if keyPath == #keyPath(UIScrollView.contentOffset) {
-            print("WER above isVisibleToUser @@@@")
+            print("WERP above isVisibleToUser @@@@")
             if self.isVisibleToUser == true{
-                print("WER screen is visible in the port @@@@")
+                print("WERP screen is visible in the port @@@@")
                 if let scrollview = self.getScrollview(view: self){
                     // remove observer added to scrollview
                     scrollview.removeObserver(self, forKeyPath:  #keyPath(UIScrollView.contentOffset))
