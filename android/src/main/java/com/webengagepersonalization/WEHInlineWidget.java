@@ -36,6 +36,7 @@ import java.util.HashMap;
 public class WEHInlineWidget extends FrameLayout implements WECampaignCallback, ScreenNavigatorCallback {
   private static WEHInlineWidget instance = null;
   String TAG = "WebEngage-personalization-Hybrid";
+  boolean autoLoad = true;
   WEInlineView weInlineView;
   private ReactApplicationContext applicationContext = null;
   int height = 0, width = 0;
@@ -72,7 +73,6 @@ public class WEHInlineWidget extends FrameLayout implements WECampaignCallback, 
 
   //  Enforce this to reflect new Changes to the UI
   public void setupLayout(View view, WECampaignData weCampaignData) {
-    Logger.d(WEGConstants.TAG, "Setup layout called");
     Choreographer.getInstance().postFrameCallback(new Choreographer.FrameCallback() {
 
       @Override
@@ -134,7 +134,6 @@ public class WEHInlineWidget extends FrameLayout implements WECampaignCallback, 
 //    Positioning of the view - including the margin
     view.layout(weInlineView.getLeft() + lm, weInlineView.getTop() + tm,
       widthInPixel + rm, heightInPixel + bm);
-    Logger.d(WEGConstants.TAG, "Manual Layout completed");
 
   }
 
@@ -151,7 +150,11 @@ public class WEHInlineWidget extends FrameLayout implements WECampaignCallback, 
 //    propertyId
     this.tagName = propertyId;
     weInlineView.setTag(tagName);
-    loadView(tagName);
+    if(autoLoad) {
+      Logger.d(WEGConstants.TAG, " ========================================== ");
+      Logger.d(WEGConstants.TAG, " updateProperties is executing loadView - " + tagName);
+      loadView(tagName);
+    }
   }
   public  void setScreenName(String screenName) {
     this.screenName = screenName;
@@ -160,10 +163,8 @@ public class WEHInlineWidget extends FrameLayout implements WECampaignCallback, 
 
 
   public void updateViewTag(String tagName) {
-    Logger.d(WEGConstants.TAG, " updateViewTag is called for " + tagName);
     this.tagName = tagName;
-    weInlineView.setTag(tagName);
-    loadView(tagName);
+    // weInlineView.setTag(tagName);
   }
 
   public void loadView(String tagName) {
@@ -191,6 +192,7 @@ public class WEHInlineWidget extends FrameLayout implements WECampaignCallback, 
 
       @Override
       public void onRendered(WECampaignData weCampaignData) {
+        Logger.d(WEGConstants.TAG, " ========================================== ");
         Logger.d(WEGConstants.TAG, "onRendered from personalization view manager id-> " + weCampaignData.getTargetViewId());
         // TODO- Uncommenting below view will fix height issue but navigating back will make the screen to blank
         View view = weInlineView.findViewWithTag("INLINE_PERSONALIZATION_TAG");
@@ -233,11 +235,15 @@ public class WEHInlineWidget extends FrameLayout implements WECampaignCallback, 
 
   @Override
   public void screenNavigated(String screenName) {
-    Logger.d(WEGConstants.TAG, "screenNavigated of WEHInline called for screen - "+screenName+" for tagName- "+this.tagName);
+    Logger.d(WEGConstants.TAG, " ========================================== ");
+    Logger.d(WEGConstants.TAG, "WEHInlineWidget: screenNavigated  called for screen - "+screenName+" for tagName- "+this.tagName);
     // TODO - Adding loadView here will work but onRendered is called twice. Fix this and make it work only once
     // TODO - Current issue of 2 loadView is bcz one is for direct launch second is for the navigating back
     if(!this.tagName.equals("")) {
      loadView(this.tagName);
+     autoLoad = false;
+    } else {
+      autoLoad = true;
     }
   }
 

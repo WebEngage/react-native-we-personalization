@@ -27,12 +27,14 @@ public class Callbacker implements WEPropertyRegistryCallback {
       callbacks.add(screenNavigatedCallback);
       mapOfScreenNavigatedCallbacks.put(screenName, callbacks);
     }
-    Logger.d(WEGConstants.TAG, "setScreenNavigatorCallback called inside callbacker ");
+    Logger.d(WEGConstants.TAG, "Callbacker: setScreenNavigatorCallback called for - "+screenName);
   }
 
   @Override
   public void onPropertyCacheCleared(@NonNull String navigatedScreen) {
-    Logger.d(WEGConstants.TAG, "onPropertyCacheCleared called inside callbacker "+navigatedScreen);
+    Logger.d(WEGConstants.TAG, "\n\n");
+    Logger.d(WEGConstants.TAG, "\n\n################################# \n\n");
+    Logger.d(WEGConstants.TAG, "Screen changed! onPropertyCacheCleared called inside callbacker - "+navigatedScreen);
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
       mapOfScreenNavigatedCallbacks.forEach((key, value) -> {
 //        ScreenNavigatorCallback callback = mapOfScreenNavigatedCallbacks.get(navigatedScreen);

@@ -17,7 +17,9 @@ const ComponentName = 'WebengagePersonalizationView';
 const eventEmitter = new NativeEventEmitter(
   NativeModules.PersonalizationBridge
 );
-let listener = null;
+let dataReceivedListener = null;
+let renderListerner = null;
+let exceptionalListener = null;
 let isListenerAdded = false;
 // const propertyProcessor = [
 //   {
@@ -32,7 +34,7 @@ export const WEPersonalization = (props) => {
   const {
     propertyId = 0,
     screenName = '',
-    personalizationCallback = null,
+    onRendered = null,
     onDataReceived = null,
     onPlaceholderException = null,
   } = props;
@@ -66,9 +68,14 @@ export const WEPersonalization = (props) => {
         ' from screen-',
         screenName
       );
-      if (listener) {
+      if (dataReceivedListener) {
         isListenerAdded = false;
-        listener.remove();
+        dataReceivedListener?.remove();
+        renderListerner?.remove();
+        exceptionalListener?.remove();
+        console.log(
+          ' ################# removing Listeners - onRendered - ' + propertyId
+        );
       }
       removeScreenFromPropertyList();
       console.log('propertyProcessor after slicing -> ', propertyProcessor);
@@ -104,7 +111,7 @@ export const WEPersonalization = (props) => {
     let obj = {};
     obj.propertyId = propertyId;
     obj.callbacks = {
-      onRendered: personalizationCallback,
+      onRendered: onRendered,
       onPlaceholderException: onPlaceholderException,
       onDataReceived: onDataReceived,
     };
@@ -115,35 +122,43 @@ export const WEPersonalization = (props) => {
 
   if (!isListenerAdded) {
     // onDataReceived
-    listener = eventEmitter.addListener('onDataReceived', (event) => {
-      console.log('onDataReceived - Event Listerner called ->', event);
-
-      propertyProcessor[latestScreenIndex].propertyList?.map((val) => {
-        if (val.propertyId === event.targetViewId) {
-          val?.callbacks?.onDataReceived &&
-            val?.callbacks?.onDataReceived(event);
+    dataReceivedListener = eventEmitter.addListener(
+      'onDataReceived',
+      (event) => {
+        console.log('onDataReceived - Event Listerner called ->', event);
+        if (propertyProcessor?.length) {
+          propertyProcessor[latestScreenIndex]?.propertyList?.map((val) => {
+            if (val.propertyId === event.targetViewId) {
+              val?.callbacks?.onDataReceived &&
+                val?.callbacks?.onDataReceived(event);
+            }
+          });
         }
-      });
-    });
+      }
+    );
 
     // onRendered
-    eventEmitter.addListener('onRendered', (event) => {
+    renderListerner = eventEmitter.addListener('onRendered', (event) => {
       console.log('onRendered - Event Listerner called ->', event);
-      propertyProcessor[latestScreenIndex].propertyList?.map((val) => {
-        if (val.propertyId === event.targetViewId) {
-          val?.callbacks?.onRendered && val?.callbacks?.onRendered(event);
-        }
-      });
+      if (propertyProcessor?.length) {
+        propertyProcessor[latestScreenIndex]?.propertyList?.map((val) => {
+          if (val.propertyId === event.targetViewId) {
+            val?.callbacks?.onRendered && val?.callbacks?.onRendered(event);
+          }
+        });
+      }
     });
 
-    eventEmitter.addListener('testAk', (event) => {
-      console.log('testAk - Event Listerner called ->', event);
-      propertyProcessor[latestScreenIndex].propertyList?.map((val) => {
-        if (val.propertyId === event.targetViewId) {
-          val?.callbacks?.onRendered && val?.callbacks?.onRendered(event);
-        }
-      });
-    });
+    //  = eventEmitter.addListener('testAk', (event) => {
+    //   console.log('testAk - propertyProcessor data  ->', propertyProcessor);
+    //   if (propertyProcessor?.length) {
+    //     propertyProcessor[latestScreenIndex]?.propertyList?.map((val) => {
+    //       if (val.propertyId === event.targetViewId) {
+    //         val?.callbacks?.onRendered && val?.callbacks?.onRendered(event);
+    //       }
+    //     });
+    //   }
+    // });
 
     // eventEmitter.addListener('onPropertyCacheCleared', (event) => {
     //   console.log('onPropertyCacheCleared - Event Listerner called ->', event);
@@ -156,15 +171,23 @@ export const WEPersonalization = (props) => {
     // });
 
     // onPlaceholderException
-    eventEmitter.addListener('onPlaceholderException', (event) => {
-      console.log('onPlaceholderException - Event Listerner called ->', event);
-      propertyProcessor[latestScreenIndex].propertyList?.map((val) => {
-        if (val.propertyId === event.targetViewId) {
-          val?.callbacks?.onPlaceholderException &&
-            val?.callbacks?.onPlaceholderException(event);
+    exceptionalListener = eventEmitter.addListener(
+      'onPlaceholderException',
+      (event) => {
+        console.log(
+          'onPlaceholderException - Event Listerner called ->',
+          event
+        );
+        if (propertyProcessor?.length) {
+          propertyProcessor[latestScreenIndex]?.propertyList?.map((val) => {
+            if (val.propertyId === event.targetViewId) {
+              val?.callbacks?.onPlaceholderException &&
+                val?.callbacks?.onPlaceholderException(event);
+            }
+          });
         }
-      });
-    });
+      }
+    );
 
     isListenerAdded = true;
   }

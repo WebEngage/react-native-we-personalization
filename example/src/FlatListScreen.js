@@ -8,6 +8,7 @@ import {
   Text,
   SafeAreaView,
   FlatList,
+  Platform,
 } from 'react-native';
 import WebEngage from 'react-native-webengage';
 import { WEPersonalization } from 'react-native-webengage-personalization';
@@ -15,7 +16,8 @@ const FlatListScreen = () => {
   const webengage = new WebEngage();
 
   React.useEffect(() => {
-    webengage.screen('ET_home1');
+    webengage.screen(flatScreenName);
+    console.log(flatScreenName + ' is navigated');
   }, []);
 
   const personalizationCallback1 = (d) => {
@@ -42,23 +44,27 @@ const FlatListScreen = () => {
     { id: 12, title: 'Twelves item' },
     { id: 13, title: 'Thirteenth item' },
   ];
+  const flatScreenName = 'scroll23';
+  const textProp = Platform.OS === 'android' ? 'banner_prop' : 432;
+  const bannerProp = Platform.OS === 'android' ? 'text_prop' : 532;
+
   const renderItem = ({ item }) => {
     return (
       <View style={styles.itemView}>
         <Text> {item.title} </Text>
-        {item.id === 2 ? (
+        {item.id === 1 ? (
           <WEPersonalization
             style={styles.box}
-            propertyId="flutter_banner"
-            screenName="ET_home1"
+            propertyId={bannerProp}
+            screenName={flatScreenName}
             personalizationCallback={personalizationCallback1}
           />
         ) : null}
-        {item.id === 7 ? (
+        {item.id === 4 ? (
           <WEPersonalization
             style={styles.box2}
-            propertyId="flutter_text"
-            screenName="ET_home1"
+            propertyId={textProp}
+            screenName={flatScreenName}
             personalizationCallback={personalizationCallback2}
           />
         ) : null}
@@ -99,16 +105,12 @@ const styles = StyleSheet.create({
     // width: PixelRatio.getPixelSizeForLayoutSize(Dimensions.get('window').width),
     width: Dimensions.get('window').width,
     height: PixelRatio.getPixelSizeForLayoutSize(80),
-    borderWidth: 10,
-    borderColor: 'red',
     padding: 50,
   },
   box2: {
     // width: PixelRatio.getPixelSizeForLayoutSize(Dimensions.get('window').width),
     width: Dimensions.get('window').width,
-    height: PixelRatio.getPixelSizeForLayoutSize(150),
-    borderWidth: 10,
-    borderColor: 'red',
+    height: PixelRatio.getPixelSizeForLayoutSize(100),
     padding: 50,
   },
   imageStyle: {

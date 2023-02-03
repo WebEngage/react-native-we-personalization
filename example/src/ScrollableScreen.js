@@ -9,15 +9,16 @@ import {
   Image,
   Text,
   Button,
+  Platform,
 } from 'react-native';
 import WebEngage from 'react-native-webengage';
 import { WEPersonalization } from 'react-native-webengage-personalization';
 const ScrollableScreen = ({ navigation }) => {
-const webengage = new WebEngage();
+  const webengage = new WebEngage();
   useFocusEffect(
     React.useCallback(() => {
-      webengage.screen('ET_home'); //
-      console.log("ET_home is navigated")
+      webengage.screen(scrollScreen); //
+      console.log(scrollScreen + ' is navigated');
     }, [])
   );
   const personalizationCallback1 = (d) => {
@@ -32,13 +33,17 @@ const webengage = new WebEngage();
     navigation.navigate('flatlist');
   };
 
+  const scrollScreen = 'scroll';
+  const textProp = Platform.OS === 'android' ? 'text_prop' : 432;
+  const bannerProp = Platform.OS === 'android' ? 'banner_prop' : 532;
+
   return (
     <ScrollView style={styles.container}>
       <ScrollView style={styles.container} horizontal>
-      <WEPersonalization
+        <WEPersonalization
           style={styles.box}
-          screenName="ET_home"
-          propertyId="flutter_text"
+          screenName={scrollScreen}
+          propertyId={textProp}
           personalizationCallback={personalizationCallback1}
         />
         <Text style={styles.textStyle}> Second</Text>
@@ -55,7 +60,6 @@ const webengage = new WebEngage();
       </Text>
 
       <Button title={'Scroll screen'} onPress={navigateToScroll} />
-
 
       <View style={styles.margin50} />
       <Image
@@ -81,8 +85,8 @@ const webengage = new WebEngage();
       </Text>
       <WEPersonalization
         style={styles.box2}
-        screenName="ET_home"
-        propertyId="flutter_banner"
+        screenName={scrollScreen}
+        propertyId={bannerProp}
         personalizationCallback={personalizationCallback2}
       />
       <Text style={styles.nativeText}> Below View is React-Native</Text>

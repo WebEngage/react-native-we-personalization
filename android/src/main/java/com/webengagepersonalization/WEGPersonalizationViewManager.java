@@ -58,7 +58,6 @@ public class WEGPersonalizationViewManager extends SimpleViewManager<ViewGroup> 
   public void updateProperties(@NonNull ViewGroup viewToUpdate, ReactStylesDiffMap props) {
     super.updateProperties(viewToUpdate, props);
     simpleUi.updateProperties(this.screenName, this.propertyId);
-    Logger.d(WEGConstants.TAG, "Update Properties called");
   }
 
   @Override
@@ -67,7 +66,6 @@ public class WEGPersonalizationViewManager extends SimpleViewManager<ViewGroup> 
     HashMap<String, Object> map = new HashMap<String, Object>();
     map.put("height", height);
     map.put("width", width);
-    Logger.d(WEGConstants.TAG, "createViewInstance called for WEGPersonalizationViewManager @@@");
     simpleUi = new WEHInlineWidget(reactContext.getReactApplicationContext(),map,this);
     return simpleUi;
   }
@@ -80,24 +78,19 @@ public class WEGPersonalizationViewManager extends SimpleViewManager<ViewGroup> 
 
     if (index == 1) {
       height = value;
-      Logger.d(WEGConstants.TAG, "set Style completed -> ");
     }
     simpleUi.updateStyle(height, width);
   }
 
   @ReactProp(name = "propertyId")
   public void setPropertyId(View view, String propertyId) {
-    Logger.d(WEGConstants.TAG, "PropertyId to register -> "+propertyId);
     this.propertyId = propertyId;
 
-//    simpleUi.updateViewTag(propertyId);
   }
 
   @ReactProp(name = "screenName")
   public void setScreenName(View view, String screenName) {
-    Logger.d(WEGConstants.TAG, "screenName received -> "+screenName);
     this.screenName = screenName;
-//    simpleUi.setScreenName(screenName);
   }
 
   @ReactMethod

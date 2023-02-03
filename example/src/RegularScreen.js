@@ -1,79 +1,93 @@
 import * as React from 'react';
 
-import { StyleSheet, View, Text, Dimensions, Button, AppState, ScrollView } from 'react-native';
+import {
+  StyleSheet,
+  View,
+  Text,
+  Dimensions,
+  Button,
+  AppState,
+  ScrollView,
+  Platform,
+} from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
-import { WEPersonalization, initializePersonalization } from 'react-native-webengage-personalization';
+import {
+  WEPersonalization,
+  initializePersonalization,
+} from 'react-native-webengage-personalization';
 import WebEngage from 'react-native-webengage';
 const RegularScreen = ({ navigation }) => {
   var webengage = new WebEngage();
 
-  // useFocusEffect(
-  //   React.useCallback(() => {
-  //     // webengage.screen('ET_home'); //
-  //     webengage.screen('screen1'); //
-  //     console.log("screen1 is navigated")
-  //     // WEPersonalization.registerWEPlaceholderCallback("ak_test_2", callback);
-  //     return () => {
-  //       // Perform cleanup on blur
-  //     };
-  //   }, [])
-  // );
+  useFocusEffect(
+    React.useCallback(() => {
+      webengage.screen(regularScreenName);
+      console.log(regularScreenName+ "navigted")
+      // WEPersonalization.registerWEPlaceholderCallback("ak_test_2", callback);
+      return () => {
+        // Perform cleanup on blur
+      };
+    }, [])
+  );
 
-  React.useEffect(() => {
-    webengage.screen('screen1'); //
-      console.log("screen1 is navigated")
-    return () => {
-      console.log('Unmouting from regular screen');
-    };
-  }, []);
-
-  const personalizationCallback1 = (d) => {
-    console.log(
-      'PPersonalization callback1 triggered for ak_test_2 (Custom) -',
-      d
-    );
+  const onRendered_1 = (d) => {
+    console.log('onRendered_1 triggered for -', d);
   };
 
-  const personalizationCallback2 = (d) => {
-    console.log('PPersonalization callback2 triggered for ak_test_1', d);
+  const onDataReceived_1 = (d) => {
+    console.log('onDataReceived_1 triggered for ', d);
+  };
+
+  const onPlaceholderException_1 = (d) => {
+    console.log('onPlaceholderException_1 triggered for ', d);
+  };
+
+  const onRendered_2 = (d) => {
+    console.log('onRendered_2 callback triggered for ', d);
   };
 
   const navigateToScroll = () => {
     navigation.navigate('scrollable');
   };
 
-  const onRendered_ak_test_1 = (d) => {
-    console.log('onRendered_ak_test_1 triggered for ak_test_1', d);
+  const onDataReceived_2 = (d) => {
+    console.log('onDataReceived_2 triggered for ', d);
   };
 
-  const onPlaceholderException_aktest1 = (d) => {
-    console.log('onPlaceholderException_aktest1 triggered for ak_test_1', d);
+  const onPlaceholderException_2 = (d) => {
+    console.log('onPlaceholderException_2 triggered for ', d);
   };
   // Android -> propId- ak_test_1 -> screen(ak_test) -> textView
   // ios -> propId- 12 -> screen(screen1) -> Banner
+
+  // const screen1Properties = Platform.OS === 'android' ? 12 : 12; // screen1
+  const regularScreenName = 'ET_home';
+  const screenHomeProperties = Platform.OS === 'android' ? 'flutter_banner' : 99; // To be tested for iOS
+  const screenProperties = Platform.OS === 'android' ? 'flutter_text' : 1002; // screen_home
 
   return (
     <View style={styles.container}>
       <WEPersonalization
         style={styles.box}
-        screenName="screen1"
-        propertyId={12} // ak_test_2 - custom
+        screenName={regularScreenName}
+        propertyId={screenHomeProperties} // ak_test_2 - custom
         color="#32a852"
-        // personalizationCallback={personalizationCallback1}
-        // onRendered={onRendered_}
+        onRendered={onRendered_1}
+        onDataReceived={onDataReceived_1}
+        onPlaceholderException={onPlaceholderException_1}
       />
       <Button title={'Scroll screen'} onPress={navigateToScroll} />
       <Text>This text is from React Native</Text>
       <Text>But Above and below Views are from WebEngage </Text>
-      {/* <WEPersonalization
+      <WEPersonalization
         color="#12023f"
         style={styles.box2}
-        propertyId="ak_test_1" // ak_test_1 - Text banner
-        screenName="ET_home"
-        personalizationCallback={personalizationCallback2} // onRendered
-        onDataReceived={onRendered_ak_test_1}
-        onPlaceholderException={onPlaceholderException_aktest1}
-      /> */}
+        propertyId={screenProperties}
+        screenName={regularScreenName}
+        onRendered={onRendered_2} // onRendered
+        onDataReceived={onDataReceived_2}
+        onPlaceholderException={onPlaceholderException_2}
+      />
       <View style={styles.margin20} />
 
       <View style={styles.margin20} />

@@ -59,7 +59,7 @@ public class WEHInlineView:UIView{
         //        NSLog("WER: Inside setupView")
 
         // TODO - Below code will send data to listener of react-native
-        PersonalizationBridge.emitter.sendEvent(withName: "testAk", body: "body")
+//        PersonalizationBridge.emitter.sendEvent(withName: "testAk", body: "body")
 
         if(self.height > 0.1 && self.width > 0.1 && propertyId != 0) {
             print(TAG+" @@@ propertyId-\(self.propertyId) | screenName-"+self.screenName)
@@ -69,14 +69,12 @@ public class WEHInlineView:UIView{
             inlineView.tag = self.propertyId
             if(self.propertyId != 0) {
                 inlineView.tag = self.propertyId
-                DispatchQueue.main.asyncAfter(deadline: .now()+1, execute: {
                     inlineView.load(tag: self.propertyId, callbacks: self)
                     if let scrollview = self.getScrollview(view: self){
                         scrollview.addObserver(self, forKeyPath: #keyPath(UIScrollView.contentOffset), options: [.old, .new], context: nil)
                     }else{
                         print("WER: Scrollview not found")
                     }
-                })
             }
 
 
@@ -121,28 +119,36 @@ public class WEHInlineView:UIView{
 
 extension WEHInlineView : WEPlaceholderCallback{
     public func onRendered(data: WEGCampaignData) {
-        print("WERP : onRendered ")
+        print("WERP : onRendered \(self.propertyId)")
+        let campaignData: [String: Any] = ["targetViewId": data.targetViewTag, "campaingId": data.campaignId]
+        print("WERP : Calling onDataReceived for -> \(self.propertyId)")
+        PersonalizationBridge.emitter.sendEvent(withName: "onRendered", body: campaignData)
 
     }
     public func onDataReceived(_ data: WEGCampaignData) {
         self.campaignData = data;
-        print("WERP : onDataReceived")
+        print("WERP : onDataReceived \(self.propertyId)")
+        let campaignData: [String: Any] = ["targetViewId": data.targetViewTag, "campaingId": data.campaignId]
+
+        PersonalizationBridge.emitter.sendEvent(withName: "onDataReceived", body: campaignData)
     }
     public func onPlaceholderException(_ campaignId: String?, _ targetViewId: String, _ exception: Error) {
-        print("WERP : onPlaceholderException")
+        print("WERP : onPlaceholderException \(self.propertyId)")
+        let campaignData: [String: Any] = ["targetViewId": targetViewId, "campaingId": campaignId ?? "", "exception": exception]
+        PersonalizationBridge.emitter.sendEvent(withName: "onPlaceholderException", body: campaignData)
     }
 }
 
 extension WEHInlineView:WECampaignCallback{
     public func onCampaignPrepared(_ data: WEGCampaignData) -> WEGCampaignData {
-        print("WERP : onCampaignPrepared")
+        print("WERP : onCampaignPrepared \(self.propertyId)")
         return data
     }
     public func onCampaignShown(data: WEGCampaignData) {
-        print("WERP : onCampaignShown")
+        print("WERP : onCampaignShown \(self.propertyId)")
     }
     public func onCampaignException(_ campaignId: String?, _ targetViewId: String, _ exception: Error) {
-        print("WERP : onCampaignException")
+        print("WERP : onCampaignException \(self.propertyId)")
     }
     public func onCampaignClicked(actionId: String, deepLink: String, data: WEGCampaignData) -> Bool {
         //print("WEP : onCampaignClicked \(_inlineView!.isVisibleToUser)")

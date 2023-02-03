@@ -11,10 +11,10 @@ import {
 import WebEngage from 'react-native-webengage';
 const ListScreen = ({ navigation }) => {
   var webengage = new WebEngage();
-  // React.useEffect(() => {
-  //   webengage.screen('1234');
-  //   consol.log("1234 is navigated")
-  // })
+  React.useEffect(() => {
+    webengage.screen('ak_test');
+    console.log("1234 is navigated")
+  })
   return (
     <SafeAreaView style={styles.mainContainer}>
       <Text style={{ marginTop: 20, marginBottom: 50 }}>
