@@ -1,4 +1,5 @@
 package com.webengagepersonalization;
+
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Color;
@@ -36,12 +37,11 @@ import java.util.HashMap;
 public class WEHInlineWidget extends FrameLayout implements WECampaignCallback, ScreenNavigatorCallback {
   private static WEHInlineWidget instance = null;
   String TAG = "WebEngage-personalization-Hybrid";
-  boolean autoLoad = true;
   WEInlineView weInlineView;
   private ReactApplicationContext applicationContext = null;
   int height = 0, width = 0;
   String tagName = "", screenName = "";
-
+  boolean isAlreadyLoaded = false;
 //  @Override
 //  protected void onDetachedFromWindow() {
 //    super.onDetachedFromWindow();
@@ -50,6 +50,19 @@ public class WEHInlineWidget extends FrameLayout implements WECampaignCallback, 
 ////  TODO -  Detach ->variable to null
 ////    TODO - This is not being called might be overriden from WeInlineView
 //  }
+
+
+  @Override
+  protected void onAttachedToWindow() {
+    super.onAttachedToWindow();
+  }
+
+  @Override
+  protected void onDetachedFromWindow() {
+    super.onDetachedFromWindow();
+    isAlreadyLoaded = false;
+    Logger.d(TAG, "Load view: onDetachedFromWindow: " + tagName);
+  }
 
   public WEHInlineWidget(@NonNull ReactApplicationContext context, HashMap<String, Object> map, WEGPersonalizationViewManager ref) {
     super(context);
@@ -140,23 +153,27 @@ public class WEHInlineWidget extends FrameLayout implements WECampaignCallback, 
     width = widths;
   }
 
+  //This will be called on init
   public void updateProperties(String screenName, String propertyId) {
-   // screenName
+    // screenName
+    Logger.d(TAG,"Load view: updateProperties called: "  + tagName );
     this.screenName = screenName;
     Callbacker.setScreenNavigatorCallback(this.screenName, this);
 //    propertyId
     this.tagName = propertyId;
     weInlineView.setTag(tagName);
-    if(this.autoLoad) {
+    if (!this.isAlreadyLoaded) {
+      Logger.d(TAG,"Load view: updateProperties called inside and calling loadView: "  + tagName);
       Logger.d(WEGConstants.TAG, " ========================================== ");
       Logger.d(WEGConstants.TAG, " updateProperties is executing loadView - " + tagName);
-      Logger.d(WEGConstants.TAG, "WEHInlineWidget: updateProperties  called for screen - "+screenName+" for tagName- "+this.tagName);
+      Logger.d(WEGConstants.TAG, "WEHInlineWidget: updateProperties  called for screen - " + screenName + " for tagName- " + this.tagName);
       loadView(tagName);
-      // this.autoLoad = false;
+      this.isAlreadyLoaded = true;
     }
     // Callbacker.setScreenNavigatorCallback(this.screenName, this);
   }
-  public  void setScreenName(String screenName) {
+
+  public void setScreenName(String screenName) {
     this.screenName = screenName;
     Callbacker.setScreenNavigatorCallback(this.screenName, this);
   }
@@ -195,6 +212,7 @@ public class WEHInlineWidget extends FrameLayout implements WECampaignCallback, 
 
       @Override
       public void onRendered(WECampaignData weCampaignData) {
+        Logger.d(TAG,"Load view: onRendered called " + tagName );
         Logger.d(WEGConstants.TAG, " ========================================== ");
         Logger.d(WEGConstants.TAG, "onRendered from personalization view manager id-> " + weCampaignData.getTargetViewId());
         WritableMap params = Arguments.createMap();
@@ -242,18 +260,18 @@ public class WEHInlineWidget extends FrameLayout implements WECampaignCallback, 
 
   @Override
   public void screenNavigated(String screenName) {
+    Logger.d(TAG,"Load view: screenNavigated called: " + tagName );
     Logger.d(WEGConstants.TAG, " ========================================== ");
-    Logger.d(WEGConstants.TAG, "WEHInlineWidget: screenNavigated  called for screen - "+screenName+" for tagName- "+this.tagName);
-    Logger.d(WEGConstants.TAG, "autoLoad value inisde screenNavigated -> "+this.autoLoad);
+    Logger.d(WEGConstants.TAG, "WEHInlineWidget: screenNavigated  called for screen - " + screenName + " for tagName- " + this.tagName);
+    Logger.d(WEGConstants.TAG, "autoLoad value inisde screenNavigated -> " + this.isAlreadyLoaded);
     // TODO - Adding loadView here will work but onRendered is called twice. Fix this and make it work only once
     // TODO - Current issue of 2 loadView is bcz one is for direct launch second is for the navigating back
-    if(!this.tagName.equals("")) {
-      Logger.d(WEGConstants.TAG, "Turning off autoLoad Value -------- "+this.autoLoad+ " || this.tagName "+this.tagName.equals(""));
+    if (!isAlreadyLoaded && !this.tagName.equals("")) {
+      Logger.d(TAG,"Load view: screenNavigated called inside and calling loadView" );
+      Logger.d(WEGConstants.TAG, "Turning off autoLoad Value -------- " + this.isAlreadyLoaded + " || this.tagName " + this.tagName.equals(""));
       loadView(this.tagName);
-     this.autoLoad = false;
-      // Toast.makeText(applicationContext, "Auto Load value converted to false", Toast.LENGTH_SHORT).show();
     } else {
-      this.autoLoad = true;
+      Logger.d(TAG, "Load view: Screen navigated: already loaded hence not loading: "  + tagName);
     }
   }
 
