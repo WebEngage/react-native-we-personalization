@@ -9,23 +9,75 @@ import {
   SafeAreaView,
   FlatList,
   Platform,
+  Button,
 } from 'react-native';
 import WebEngage from 'react-native-webengage';
 import { WEPersonalization } from 'react-native-webengage-personalization';
-const FlatListScreen = () => {
+const FlatListScreen = ({ navigation }) => {
   const webengage = new WebEngage();
 
   React.useEffect(() => {
     webengage.screen(flatScreenName);
     console.log(flatScreenName + ' is navigated');
-  }, []);
 
+    return () => {
+      console.log('@@@@ flatlist screen unmounted with empty depency');
+    };
+  }, []);
   const personalizationCallback1 = (d) => {
     console.log('PPersonalization callback1 triggered-', d);
   };
 
   const personalizationCallback2 = (d) => {
     console.log('PPersonalization callback2 triggered-', d);
+  };
+
+  const onRendered_1 = (d) => {
+    console.log(
+      'WER: Flatlist onRendered_1 triggered for -',
+      d?.targetViewId,
+      d
+    );
+  };
+
+  const onDataReceived_1 = (d) => {
+    console.log(
+      'WER: Flatlist onDataReceived_1 triggered for ',
+      d?.targetViewId,
+      d
+    );
+  };
+
+  const onPlaceholderException_1 = (d) => {
+    console.log(
+      'WER: Flatlist onPlaceholderException_1 triggered for ',
+      d?.targetViewId,
+      d
+    );
+  };
+
+  const onRendered_2 = (d) => {
+    console.log(
+      'WER: Flatlist onRendered_2 callback triggered for ',
+      d?.targetViewId,
+      d
+    );
+  };
+
+  const onDataReceived_2 = (d) => {
+    console.log(
+      'WER: Flatlist onDataReceived_2 triggered for ',
+      d?.targetViewId,
+      d
+    );
+  };
+
+  const onPlaceholderException_2 = (d) => {
+    console.log(
+      'WER: Flatlist onPlaceholderException_2 triggered for ',
+      d?.targetViewId,
+      d
+    );
   };
 
   const data = [
@@ -48,6 +100,10 @@ const FlatListScreen = () => {
   const textProp = Platform.OS === 'android' ? 'banner_prop' : 432;
   const bannerProp = Platform.OS === 'android' ? 'text_prop' : 532;
 
+  const navigateToRegular = () => {
+    navigation.navigate('regular');
+  };
+
   const renderItem = ({ item }) => {
     return (
       <View style={styles.itemView}>
@@ -57,15 +113,23 @@ const FlatListScreen = () => {
             style={styles.box}
             propertyId={bannerProp}
             screenName={flatScreenName}
-            personalizationCallback={personalizationCallback1}
+            // personalizationCallback={personalizationCallback1}
+            onRendered={onRendered_1}
+            onDataReceived={onDataReceived_1}
+            onPlaceholderException={onPlaceholderException_1}
           />
         ) : null}
+        <Button title={'Scroll screen'} onPress={navigateToRegular} />
+
         {item.id === 4 ? (
           <WEPersonalization
             style={styles.box2}
             propertyId={textProp}
             screenName={flatScreenName}
-            personalizationCallback={personalizationCallback2}
+            onRendered={onRendered_2}
+            onDataReceived={onDataReceived_2}
+            onPlaceholderException={onPlaceholderException_2}
+            // personalizationCallback={personalizationCallback2}
           />
         ) : null}
       </View>
@@ -74,7 +138,13 @@ const FlatListScreen = () => {
 
   return (
     <SafeAreaView>
-      <FlatList data={data} renderItem={renderItem} />
+      <FlatList
+        keyExtractor={(item) => item.id}
+        // initialNumToRender={5}
+        data={data}
+        // extraData={data}
+        renderItem={renderItem}
+      />
     </SafeAreaView>
   );
 };

@@ -22,7 +22,7 @@ const RegularScreen = ({ navigation }) => {
   useFocusEffect(
     React.useCallback(() => {
       webengage.screen(regularScreenName);
-      console.log(regularScreenName+ "navigted")
+      console.log(regularScreenName + 'navigted');
       // WEPersonalization.registerWEPlaceholderCallback("ak_test_2", callback);
       return () => {
         // Perform cleanup on blur
@@ -31,38 +31,61 @@ const RegularScreen = ({ navigation }) => {
   );
 
   const onRendered_1 = (d) => {
-    console.log('onRendered_1 triggered for -', d);
+    console.log(
+      'WER: Regular onRendered_1 triggered for -',
+      d?.targetViewId,
+      d
+    );
   };
 
   const onDataReceived_1 = (d) => {
-    console.log('onDataReceived_1 triggered for ', d);
+    console.log(
+      'WER: Regular onDataReceived_1 triggered for ',
+      d?.targetViewId,
+      d
+    );
   };
 
   const onPlaceholderException_1 = (d) => {
-    console.log('onPlaceholderException_1 triggered for ', d);
+    console.log(
+      'WER: Regular onPlaceholderException_1 triggered for ',
+      d?.targetViewId,
+      d
+    );
   };
 
   const onRendered_2 = (d) => {
-    console.log('onRendered_2 callback triggered for ', d);
+    console.log(
+      'WER: Regular onRendered_2 callback triggered for ',
+      d?.targetViewId,
+      d
+    );
+  };
+
+  const onDataReceived_2 = (d) => {
+    console.log(
+      'WER: Regular onDataReceived_2 triggered for ',
+      d?.targetViewId,
+      d
+    );
+  };
+
+  const onPlaceholderException_2 = (d) => {
+    console.log(
+      'WER: Regular onPlaceholderException_2 triggered for ',
+      d?.targetViewId,
+      d
+    );
   };
 
   const navigateToScroll = () => {
     navigation.navigate('scrollable');
   };
 
-  const onDataReceived_2 = (d) => {
-    console.log('onDataReceived_2 triggered for ', d);
-  };
-
-  const onPlaceholderException_2 = (d) => {
-    console.log('onPlaceholderException_2 triggered for ', d);
-  };
-  // Android -> propId- ak_test_1 -> screen(ak_test) -> textView
-  // ios -> propId- 12 -> screen(screen1) -> Banner
-
   // const screen1Properties = Platform.OS === 'android' ? 12 : 12; // screen1
   const regularScreenName = 'ET_home';
-  const screenHomeProperties = Platform.OS === 'android' ? 'flutter_banner' : 99; // To be tested for iOS
+  const screenHomeProperties =
+    Platform.OS === 'android' ? 'flutter_banner' : 99;
   const screenProperties = Platform.OS === 'android' ? 'flutter_text' : 1002; // screen_home
 
   return (

@@ -54,7 +54,6 @@ public class WEHInlineWidget extends FrameLayout implements WECampaignCallback, 
   public WEHInlineWidget(@NonNull ReactApplicationContext context, HashMap<String, Object> map, WEGPersonalizationViewManager ref) {
     super(context);
     this.applicationContext = context;
-    Log.d("WebEngage", "INside WEHInlineWidget @@@");
     init(context);
   }
 
@@ -62,7 +61,6 @@ public class WEHInlineWidget extends FrameLayout implements WECampaignCallback, 
     View view = LayoutInflater.from(context).inflate(R.layout.view_inlinewidget, this, false);
     weInlineView = view.findViewById(R.id.weinline_widget);
     addView(view);
-
   }
 
   @Override
@@ -74,7 +72,6 @@ public class WEHInlineWidget extends FrameLayout implements WECampaignCallback, 
   //  Enforce this to reflect new Changes to the UI
   public void setupLayout(View view, WECampaignData weCampaignData) {
     Choreographer.getInstance().postFrameCallback(new Choreographer.FrameCallback() {
-
       @Override
       public void doFrame(long frameTimeNanos) {
         manuallyLayoutChildren(view, weCampaignData);
@@ -150,11 +147,14 @@ public class WEHInlineWidget extends FrameLayout implements WECampaignCallback, 
 //    propertyId
     this.tagName = propertyId;
     weInlineView.setTag(tagName);
-    if(autoLoad) {
+    if(this.autoLoad) {
       Logger.d(WEGConstants.TAG, " ========================================== ");
       Logger.d(WEGConstants.TAG, " updateProperties is executing loadView - " + tagName);
+      Logger.d(WEGConstants.TAG, "WEHInlineWidget: updateProperties  called for screen - "+screenName+" for tagName- "+this.tagName);
       loadView(tagName);
+      // this.autoLoad = false;
     }
+    // Callbacker.setScreenNavigatorCallback(this.screenName, this);
   }
   public  void setScreenName(String screenName) {
     this.screenName = screenName;
@@ -186,6 +186,9 @@ public class WEHInlineWidget extends FrameLayout implements WECampaignCallback, 
       public void onPlaceholderException(String s, String s1, Exception e) {
         Logger.d(WEGConstants.TAG, "onPlaceholderException from personalization view manager-> \ns- " + s + "\ns1- " + s1 + "\nerror-" + e);
         WritableMap params = Arguments.createMap();
+        params.putString("targetViewId", s1);
+        params.putString("campaignId", s);
+        params.putString("exception", e.toString());
         Utils.sendEvent(applicationContext, "onPlaceholderException", params);
 
       }
@@ -194,6 +197,10 @@ public class WEHInlineWidget extends FrameLayout implements WECampaignCallback, 
       public void onRendered(WECampaignData weCampaignData) {
         Logger.d(WEGConstants.TAG, " ========================================== ");
         Logger.d(WEGConstants.TAG, "onRendered from personalization view manager id-> " + weCampaignData.getTargetViewId());
+        WritableMap params = Arguments.createMap();
+        params.putString("targetViewId", weCampaignData.getTargetViewId());
+        params.putString("campaignId", weCampaignData.getCampaignId());
+        Utils.sendEvent(applicationContext, "onRendered", params);
         // TODO- Uncommenting below view will fix height issue but navigating back will make the screen to blank
         View view = weInlineView.findViewWithTag("INLINE_PERSONALIZATION_TAG");
         if (view != null) {
@@ -237,13 +244,16 @@ public class WEHInlineWidget extends FrameLayout implements WECampaignCallback, 
   public void screenNavigated(String screenName) {
     Logger.d(WEGConstants.TAG, " ========================================== ");
     Logger.d(WEGConstants.TAG, "WEHInlineWidget: screenNavigated  called for screen - "+screenName+" for tagName- "+this.tagName);
+    Logger.d(WEGConstants.TAG, "autoLoad value inisde screenNavigated -> "+this.autoLoad);
     // TODO - Adding loadView here will work but onRendered is called twice. Fix this and make it work only once
     // TODO - Current issue of 2 loadView is bcz one is for direct launch second is for the navigating back
     if(!this.tagName.equals("")) {
-     loadView(this.tagName);
-     autoLoad = false;
+      Logger.d(WEGConstants.TAG, "Turning off autoLoad Value -------- "+this.autoLoad+ " || this.tagName "+this.tagName.equals(""));
+      loadView(this.tagName);
+     this.autoLoad = false;
+      // Toast.makeText(applicationContext, "Auto Load value converted to false", Toast.LENGTH_SHORT).show();
     } else {
-      autoLoad = true;
+      this.autoLoad = true;
     }
   }
 

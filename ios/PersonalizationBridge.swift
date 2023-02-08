@@ -12,6 +12,7 @@ class PersonalizationBridge: RCTEventEmitter {
     PersonalizationBridge.emitter = self
       print("Inside PersonalizationBridge")
       WEPersonalization.shared.initialise()
+      UserDefaults.standard.setValue(false, forKey: WEPersonalization.Constants.KEY_SHOULD_AUTO_TRACK_IMPRESSIONS)
   }
 
   open override func supportedEvents() -> [String] {

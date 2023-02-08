@@ -33,6 +33,30 @@ const ScrollableScreen = ({ navigation }) => {
     navigation.navigate('flatlist');
   };
 
+  const onRendered_1 = (d) => {
+    console.log('WER: Scrollable onRendered_1 triggered for -', d?.targetViewId, d);
+  };
+
+  const onDataReceived_1 = (d) => {
+    console.log('WER: Scrollable onDataReceived_1 triggered for ', d?.targetViewId, d);
+  };
+
+  const onPlaceholderException_1 = (d) => {
+    console.log('WER: Scrollable onPlaceholderException_1 triggered for ', d?.targetViewId, d);
+  };
+
+  const onRendered_2 = (d) => {
+    console.log('WER: Scrollable onRendered_2 callback triggered for ', d?.targetViewId, d);
+  };
+
+  const onDataReceived_2 = (d) => {
+    console.log('WER: Scrollable onDataReceived_2 triggered for ', d?.targetViewId, d);
+  };
+
+  const onPlaceholderException_2 = (d) => {
+    console.log('WER: Scrollable onPlaceholderException_2 triggered for ', d?.targetViewId, d);
+  };
+
   const scrollScreen = 'scroll';
   const textProp = Platform.OS === 'android' ? 'text_prop' : 432;
   const bannerProp = Platform.OS === 'android' ? 'banner_prop' : 532;
@@ -44,7 +68,10 @@ const ScrollableScreen = ({ navigation }) => {
           style={styles.box}
           screenName={scrollScreen}
           propertyId={textProp}
-          personalizationCallback={personalizationCallback1}
+          onRendered={onRendered_1}
+          onDataReceived={onDataReceived_1}
+          onPlaceholderException={onPlaceholderException_1}
+          // personalizationCallback={personalizationCallback1}
         />
         <Text style={styles.textStyle}> Second</Text>
         <Text style={styles.textStyle}> Second</Text>
@@ -87,7 +114,10 @@ const ScrollableScreen = ({ navigation }) => {
         style={styles.box2}
         screenName={scrollScreen}
         propertyId={bannerProp}
-        personalizationCallback={personalizationCallback2}
+        onRendered={onRendered_2}
+        onDataReceived={onDataReceived_2}
+        onPlaceholderException={onPlaceholderException_2}
+        // personalizationCallback={personalizationCallback2}
       />
       <Text style={styles.nativeText}> Below View is React-Native</Text>
       <Image

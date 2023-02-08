@@ -70,11 +70,6 @@ public class WEHInlineView:UIView{
             if(self.propertyId != 0) {
                 inlineView.tag = self.propertyId
                     inlineView.load(tag: self.propertyId, callbacks: self)
-                    if let scrollview = self.getScrollview(view: self){
-                        scrollview.addObserver(self, forKeyPath: #keyPath(UIScrollView.contentOffset), options: [.old, .new], context: nil)
-                    }else{
-                        print("WER: Scrollview not found")
-                    }
             }
 
 
@@ -121,8 +116,17 @@ extension WEHInlineView : WEPlaceholderCallback{
     public func onRendered(data: WEGCampaignData) {
         print("WERP : onRendered \(self.propertyId)")
         let campaignData: [String: Any] = ["targetViewId": data.targetViewTag, "campaingId": data.campaignId]
-        print("WERP : Calling onDataReceived for -> \(self.propertyId)")
+        print("WERP : Calling onRendered for -> \(self.propertyId)")
         PersonalizationBridge.emitter.sendEvent(withName: "onRendered", body: campaignData)
+        if(self.isVisibleToUser) {
+            data.trackImpression(attributes: nil)
+        } else {
+            if let scrollview = self.getScrollview(view: self){
+                scrollview.addObserver(self, forKeyPath: #keyPath(UIScrollView.contentOffset), options: [.old, .new], context: nil)
+            }else{
+                print("WER: Scrollview not found")
+            }
+        }
 
     }
     public func onDataReceived(_ data: WEGCampaignData) {
