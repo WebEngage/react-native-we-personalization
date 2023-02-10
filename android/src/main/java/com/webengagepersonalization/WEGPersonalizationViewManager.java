@@ -22,6 +22,7 @@ import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.annotations.ReactProp;
 //import android.os.Handler.Callback;
 import com.facebook.react.uimanager.annotations.ReactPropGroup;
+import com.webengage.personalization.WEInlineView;
 import com.webengage.personalization.WEPersonalization;
 //import  androidx.annotation..widget.CardView;
 import com.webengage.personalization.callbacks.WEPropertyRegistryCallback;
@@ -33,7 +34,6 @@ import android.view.ViewGroup;
 public class WEGPersonalizationViewManager extends SimpleViewManager<ViewGroup> {
   private ReactApplicationContext applicationContext = null;
 
-  private WEHInlineWidget simpleUi;
   int width, height;
   String screenName, propertyId;
 
@@ -57,6 +57,8 @@ public class WEGPersonalizationViewManager extends SimpleViewManager<ViewGroup> 
   @Override
   public void updateProperties(@NonNull ViewGroup viewToUpdate, ReactStylesDiffMap props) {
     super.updateProperties(viewToUpdate, props);
+    Logger.d(WEGConstants.TAG, "updateProperties called for View manager "+ (viewToUpdate instanceof WEHInlineWidget));
+    WEHInlineWidget simpleUi = ((WEHInlineWidget) viewToUpdate);
     simpleUi.updateProperties(this.screenName, this.propertyId);
   }
 
@@ -66,6 +68,7 @@ public class WEGPersonalizationViewManager extends SimpleViewManager<ViewGroup> 
     HashMap<String, Object> map = new HashMap<String, Object>();
     map.put("height", height);
     map.put("width", width);
+    WEHInlineWidget simpleUi;
     simpleUi = new WEHInlineWidget(reactContext.getReactApplicationContext(),map,this);
     return simpleUi;
   }
@@ -79,6 +82,7 @@ public class WEGPersonalizationViewManager extends SimpleViewManager<ViewGroup> 
     if (index == 1) {
       height = value;
     }
+    WEHInlineWidget simpleUi = ((WEHInlineWidget) view);
     simpleUi.updateStyle(height, width);
   }
 

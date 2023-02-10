@@ -132,6 +132,7 @@ extension WEHInlineView : WEPlaceholderCallback{
     public func onDataReceived(_ data: WEGCampaignData) {
         self.campaignData = data;
         print("WERP : onDataReceived \(self.propertyId)")
+//        TODO - add WEGCampaignData
         let campaignData: [String: Any] = ["targetViewId": data.targetViewTag, "campaingId": data.campaignId]
 
         PersonalizationBridge.emitter.sendEvent(withName: "onDataReceived", body: campaignData)

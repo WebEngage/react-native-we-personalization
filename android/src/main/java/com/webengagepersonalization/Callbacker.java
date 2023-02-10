@@ -16,41 +16,55 @@ import java.util.HashMap;
 import java.util.List;
 
 public class Callbacker implements WEPropertyRegistryCallback {
-  static HashMap<String, ArrayList<ScreenNavigatorCallback>> mapOfScreenNavigatedCallbacks = new HashMap<>();
+  private static String currentScreen = null;
+  static HashMap<String, HashMap<String, ScreenNavigatorCallback>> mapOfScreenNavigatedCallbacks = new HashMap<>();
 
-  public static void setScreenNavigatorCallback(String screenName, ScreenNavigatorCallback screenNavigatedCallback) {
+  public static void setScreenNavigatorCallback(String screenName, String propertyId, ScreenNavigatorCallback screenNavigatedCallback) {
+    HashMap<String, ScreenNavigatorCallback> callback = new HashMap<>();
     if (mapOfScreenNavigatedCallbacks.containsKey(screenName)) {
-      ArrayList<ScreenNavigatorCallback> callbacks = mapOfScreenNavigatedCallbacks.get(screenName);
-      callbacks.add(screenNavigatedCallback);
+      callback = mapOfScreenNavigatedCallbacks.get(screenName);
+      if(!callback.containsKey(propertyId)) {
+        callback.put(propertyId, screenNavigatedCallback);
+      }
     } else {
-      ArrayList<ScreenNavigatorCallback> callbacks = new ArrayList<>();
-      callbacks.add(screenNavigatedCallback);
-      mapOfScreenNavigatedCallbacks.put(screenName, callbacks);
+      callback.put(propertyId, screenNavigatedCallback);
     }
-    Logger.d(WEGConstants.TAG, "Callbacker: setScreenNavigatorCallback called for - "+screenName);
+    if(screenName.equals(currentScreen)){
+      screenNavigatedCallback.screenNavigated(screenName);
+    }
+
+    mapOfScreenNavigatedCallbacks.put(screenName, callback);
+    Logger.d(WEGConstants.TAG, "Callbacker: setScreenNavigatorCallback called for screen- "+screenName+" propertyName "+propertyId);
+  }
+
+  public static void removeScreenNavigatorCallback(String screenName, ScreenNavigatorCallback screenNavigatedCallback) {
+    if(mapOfScreenNavigatedCallbacks.containsKey(screenName)) {
+      Logger.d(WEGConstants.TAG, "mapOfScreenNavigatedCallbacks contains screenKey going to remove it");
+      mapOfScreenNavigatedCallbacks.remove(screenName);
+    }
   }
 
   @Override
   public void onPropertyCacheCleared(@NonNull String navigatedScreen) {
     Logger.d(WEGConstants.TAG, "\n\n");
     Logger.d(WEGConstants.TAG, "\n\n################################# \n\n");
-    Logger.d(WEGConstants.TAG, "Screen changed! onPropertyCacheCleared called inside callbacker - "+navigatedScreen);
+    Logger.d(WEGConstants.TAG, "onPropertyCacheCleared: Screen changed! onPropertyCacheCleared called inside callbacker - "+navigatedScreen);
+    currentScreen = navigatedScreen;
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-      mapOfScreenNavigatedCallbacks.forEach((key, value) -> {
-//        ScreenNavigatorCallback callback = mapOfScreenNavigatedCallbacks.get(navigatedScreen);
-        Log.d(WEGConstants.TAG, " Map values- key- "+key+ " value- "+value.size());
-        ArrayList<ScreenNavigatorCallback> callbacksList = mapOfScreenNavigatedCallbacks.get(navigatedScreen);
-       try {
-         for (ScreenNavigatorCallback callback : callbacksList) {
-           if (navigatedScreen.equals(key)) {
-             Logger.d(WEGConstants.TAG, key + " found inside onPropertyCacheCleared list - triggering calback");
-             callback.screenNavigated(navigatedScreen);
-           }
-         }
-       } catch (Exception e) {
-         e.printStackTrace();
-       }
-      });
+        HashMap<String, ScreenNavigatorCallback> callbacksList = mapOfScreenNavigatedCallbacks.get(navigatedScreen);
+        try {
+          if(callbacksList != null) {
+            for (String propertyKey : callbacksList.keySet()) {
+              Logger.d(WEGConstants.TAG, "PropertyKey - " + propertyKey);
+              ScreenNavigatorCallback propertyCallback = callbacksList.get(propertyKey);
+              propertyCallback.screenNavigated(navigatedScreen);
+            }
+          } else {
+            Logger.d(WEGConstants.TAG, "No Properties registered for the screen name - "+navigatedScreen);
+          }
+        } catch (Exception e) {
+          Logger.d(WEGConstants.TAG, "Exception caught - "+e.toString());
+        }
     }
   }
 }

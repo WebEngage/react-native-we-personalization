@@ -15,6 +15,7 @@ import com.webengage.personalization.data.WECampaignData;
 public class Utils {
   public static  void sendEvent(ReactApplicationContext reactContext,
                                 String eventName, @Nullable WritableMap params) {
+    Log.d("WebEngage", "SendEvent triggered for "+eventName+" for "+params.getString("targetViewId"));
     reactContext
       .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
       .emit(eventName, params);
