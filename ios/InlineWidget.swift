@@ -6,6 +6,7 @@ import WEPersonalization
 
 
 public class WEHInlineView:UIView{
+    var inlineView: WEInlineView? = nil
     var campaignData: WEGCampaignData? = nil
     let TAG = "WER:"
     @objc var width: CGFloat = 0.1 {
@@ -14,6 +15,8 @@ public class WEHInlineView:UIView{
             setupView()
         }
     }
+
+
     @objc var height: CGFloat = 0.1 {
         didSet {
             print("inside Swifts height set  \(height)")
@@ -42,13 +45,33 @@ public class WEHInlineView:UIView{
     }
 
 
+    @objc func reloadViews(){
+        DispatchQueue.main.async {
+            if let viewToreload = self.inlineView,
+                  viewToreload.superview != nil{
+                self.inlineView?.load(tag: self.propertyId, callbacks: self)
+                }
+            }
+
+    }
+
+
 
     override init(frame: CGRect) {
         super.init(frame: frame)
         print(TAG+" called from first init! screen-"+self.screenName+" \n prop-\(self.propertyId)")
         setupView()
+        NotificationCenter.default.addObserver(self, selector: #selector(reloadViews), name: Notification.Name("screenNavigated"), object: nil)
 
     }
+
+    deinit{
+            NotificationCenter.default.removeObserver(self)
+        if let scrollview = self.getScrollview(view: self){
+            scrollview.removeObserver(self, forKeyPath:  #keyPath(UIScrollView.contentOffset))
+        }
+        }
+
 
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -65,17 +88,17 @@ public class WEHInlineView:UIView{
             print(TAG+" @@@ propertyId-\(self.propertyId) | screenName-"+self.screenName)
             print(TAG+" @@@ inside setupView height -\(self.height) | width--\(self.width)")
 
-            var inlineView = WEInlineView(frame: CGRect(x: 0, y: 0, width: self.width, height: self.height))
-            inlineView.tag = self.propertyId
+            inlineView = WEInlineView(frame: CGRect(x: 0, y: 0, width: self.width, height: self.height))
+            inlineView?.tag = self.propertyId
             if(self.propertyId != 0) {
-                inlineView.tag = self.propertyId
-                    inlineView.load(tag: self.propertyId, callbacks: self)
+                inlineView?.tag = self.propertyId
+                    inlineView?.load(tag: self.propertyId, callbacks: self)
             }
 
 
             //        WEPropertyRegistry.shared.register(callback: self, forTag: 13)
             //        addSubview(headerView)
-            addSubview(inlineView)
+            addSubview(inlineView!)
 
         }
 
