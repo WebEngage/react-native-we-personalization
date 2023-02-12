@@ -1,4 +1,4 @@
-package com.webengagepersonalization;
+package com.webengagepersonalization.Utils;
 
 import android.content.res.Resources;
 import android.graphics.Rect;
@@ -21,6 +21,7 @@ public class Utils {
       .emit(eventName, params);
   }
 
+//  Checks if view is visible in the current viewport for the user
   public static boolean isVisible(final View view) {
     if (view == null) {
       return false;
@@ -28,7 +29,6 @@ public class Utils {
     if (!view.isShown()) {
       return false;
     }
-
     final Rect actualPosition = new Rect();
     view.getGlobalVisibleRect(actualPosition);
     final Rect screen = new Rect(0, 0, Resources.getSystem().getDisplayMetrics().widthPixels, Resources.getSystem().getDisplayMetrics().heightPixels);
