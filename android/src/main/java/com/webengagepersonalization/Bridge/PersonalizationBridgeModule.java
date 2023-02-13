@@ -52,5 +52,6 @@ public class PersonalizationBridgeModule extends ReactContextBaseJavaModule impl
   @Override
   public void onRendered(WECampaignData weCampaignData) {
     Log.d("WebEngage1", "onRendered from personalization view manager");
+
   }
 }

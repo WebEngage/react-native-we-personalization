@@ -29,11 +29,7 @@ const ScrollableScreen = ({ navigation }) => {
     console.log('Personalization callback2 triggered for flutter_text-', d);
   };
 
-  const navigateToRegular = () => {
-    navigation.navigate('regular');
-  };
-
-  const navigateToFlatList = () => {
+  const navigateToScroll = () => {
     navigation.navigate('flatlist');
   };
 
@@ -90,10 +86,7 @@ const ScrollableScreen = ({ navigation }) => {
         Above View is from Native - Android (flutter_banner)
       </Text>
 
-      <Button title={'FlatList screen'} onPress={navigateToFlatList} />
-      <View style={styles.margin50} />
-
-      <Button title={'Regular screen'} onPress={navigateToRegular} />
+      <Button title={'Scroll screen'} onPress={navigateToScroll} />
 
       <View style={styles.margin50} />
       <Image

@@ -8,11 +8,10 @@ import com.webengage.personalization.callbacks.WEPropertyRegistryCallback;
 import com.webengagepersonalization.Utils.Logger;
 import com.webengagepersonalization.Utils.WEGConstants;
 import com.webengagepersonalization.model.ScreenNavigatorCallback;
-import com.webengagepersonalization.regisrty.DataRegistry;
 
 import java.util.HashMap;
 
-public class CallbackHandler implements WEPropertyRegistryCallback {
+public class Callbacker implements WEPropertyRegistryCallback {
   private static String currentScreen = null;
   static HashMap<String, HashMap<String, ScreenNavigatorCallback>> mapOfScreenNavigatedCallbacks = new HashMap<>();
 
@@ -40,9 +39,8 @@ public class CallbackHandler implements WEPropertyRegistryCallback {
 
   @Override
   public void onPropertyCacheCleared(@NonNull String navigatedScreen) {
-    Logger.d(WEGConstants.TAG, "WEHInlineWidget: onPropertyCacheCleared: Screen changed! to "+navigatedScreen);
+    Logger.d(WEGConstants.TAG, "onPropertyCacheCleared: Screen changed! to "+navigatedScreen);
     currentScreen = navigatedScreen;
-    DataRegistry.get().clearCacheData();
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
         HashMap<String, ScreenNavigatorCallback> callbacksList = mapOfScreenNavigatedCallbacks.get(navigatedScreen);
         try {
@@ -51,6 +49,8 @@ public class CallbackHandler implements WEPropertyRegistryCallback {
               ScreenNavigatorCallback propertyCallback = callbacksList.get(propertyKey);
               propertyCallback.screenNavigated(navigatedScreen);
             }
+          } else {
+            Logger.d(WEGConstants.TAG, "No Properties registered yet for the screen - "+navigatedScreen);
           }
         } catch (Exception e) {
           e.printStackTrace();
