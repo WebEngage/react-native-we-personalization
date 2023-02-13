@@ -82,6 +82,10 @@ const RegularScreen = ({ navigation }) => {
     navigation.navigate('scrollable');
   };
 
+  const navigateToFlatList = () => {
+    navigation.navigate('flatlist');
+  };
+
   // const screen1Properties = Platform.OS === 'android' ? 12 : 12; // screen1
   const regularScreenName = 'ET_home';
   const screenHomeProperties =
@@ -100,6 +104,8 @@ const RegularScreen = ({ navigation }) => {
         onPlaceholderException={onPlaceholderException_1}
       />
       <Button title={'Scroll screen'} onPress={navigateToScroll} />
+      <View style={styles.margin50} />
+      <Button title={'Flatlist screen'} onPress={navigateToFlatList} />
       <Text>This text is from React Native</Text>
       <Text>But Above and below Views are from WebEngage </Text>
       <WEPersonalization

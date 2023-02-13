@@ -20,12 +20,13 @@ import com.webengage.personalization.WEInlineView;
 import com.webengage.personalization.callbacks.WECampaignCallback;
 import com.webengage.personalization.callbacks.WEPlaceholderCallback;
 import com.webengage.personalization.data.WECampaignData;
-import com.webengagepersonalization.handler.Callbacker;
+import com.webengagepersonalization.handler.CallbackHandler;
 import com.webengagepersonalization.R;
 import com.webengagepersonalization.Utils.Logger;
 import com.webengagepersonalization.Utils.Utils;
 import com.webengagepersonalization.Utils.WEGConstants;
 import com.webengagepersonalization.model.ScreenNavigatorCallback;
+import com.webengagepersonalization.regisrty.DataRegistry;
 
 import org.json.JSONObject;
 
@@ -34,7 +35,6 @@ import java.util.HashMap;
 public class WEHInlineWidget extends FrameLayout implements WECampaignCallback, ScreenNavigatorCallback {
   private static WEHInlineWidget instance = null;
   WEInlineView weInlineView;
-  private boolean isImpressionTracked = false;
   private ReactApplicationContext applicationContext = null;
   int height = 0, width = 0;
   String tagName = "", screenName = "";
@@ -43,14 +43,13 @@ public class WEHInlineWidget extends FrameLayout implements WECampaignCallback, 
   protected void onAttachedToWindow() {
     super.onAttachedToWindow();
     Logger.d(WEGConstants.TAG, "WEHInlineWidget: onAttachedToWindow: " + tagName);
-    Callbacker.setScreenNavigatorCallback(this.screenName, this.tagName, this);
+    CallbackHandler.setScreenNavigatorCallback(this.screenName, this.tagName, this);
   }
 
   @Override
   protected void onDetachedFromWindow() {
     super.onDetachedFromWindow();
-    Callbacker.removeScreenNavigatorCallback(this.screenName, this);
-    Logger.d(WEGConstants.TAG, "WEHInlineWidget: onDetachedFromWindow: " + tagName);
+    CallbackHandler.removeScreenNavigatorCallback(this.screenName, this);
     View view = weInlineView.findViewWithTag("INLINE_PERSONALIZATION_TAG");
     if (view != null) {
       weInlineView.removeView(view);
@@ -66,6 +65,7 @@ public class WEHInlineWidget extends FrameLayout implements WECampaignCallback, 
   public void init(Context context) {
     View view = LayoutInflater.from(context).inflate(R.layout.view_inlinewidget, this, false);
     weInlineView = view.findViewById(R.id.weinline_widget);
+    Logger.d(WEGConstants.TAG, "WEHInlineWidget: Init called " + tagName);
     addView(view);
   }
 
@@ -83,25 +83,33 @@ public class WEHInlineWidget extends FrameLayout implements WECampaignCallback, 
         ViewTreeObserver viewTreeObserver = view.getViewTreeObserver();
         viewTreeObserver.dispatchOnGlobalLayout();
         boolean isScreenVisible = Utils.isVisible(view);
-        Logger.d(WEGConstants.TAG, "Processed event: app_personalization_view  isImpressionTracked- "+isImpressionTracked+" for - "+tagName);
-        if (!isScreenVisible && !isImpressionTracked) {
+        if (!isScreenVisible) {
           viewTreeObserver.addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
             @Override
             public void onScrollChanged() {
               boolean isUserScreenVisible = Utils.isVisible(view);
               if (isUserScreenVisible) {
-                weCampaignData.trackImpression(null);
+                trackImpression(weCampaignData);
+                Logger.d(WEGConstants.TAG, "WEHInlineWidget: Impression tracked1 for  " + tagName);
                 view.getViewTreeObserver().removeOnScrollChangedListener(this);
               }
             }
           });
         } else {
-          if(!isImpressionTracked) {
-            weCampaignData.trackImpression(null);
-          }
+            trackImpression(weCampaignData);
         }
       }
     });
+  }
+
+  public void trackImpression(WECampaignData weCampaignData) {
+    String targetViewId = weCampaignData.getTargetViewId();
+    String campaignId = weCampaignData.getCampaignId();
+    if(!DataRegistry.get().isImpressionAlreadyTracked(targetViewId, campaignId)) {
+      weCampaignData.trackImpression(null);
+      DataRegistry.get().setImpressionTrackedDetails(targetViewId, campaignId);
+      Logger.d(WEGConstants.TAG, "trackImpression: tracked "+targetViewId);
+    }
   }
 
   public void manuallyLayoutChildren(View view, WECampaignData weCampaignData) {
@@ -157,20 +165,15 @@ public class WEHInlineWidget extends FrameLayout implements WECampaignCallback, 
       public void onDataReceived(WECampaignData weCampaignData) {
         Logger.d(WEGConstants.TAG,"WEHInlineWidget: onDataReceived called " + weCampaignData.getTargetViewId() );
         WritableMap params = Arguments.createMap();
-//        TODO - Yet to Add weCampaignData.content should use parse to JSON
-        JSONObject jsonObject = new JSONObject();
-        params.putString("targetViewId", weCampaignData.getTargetViewId());
-        params.putString("campaignId", weCampaignData.getCampaignId());
+        params = Utils.generateParams(weCampaignData);
         Utils.sendEvent(applicationContext, "onDataReceived", params);
       }
 
       @Override
-      public void onPlaceholderException(String s, String s1, Exception e) {
-        Logger.d(WEGConstants.TAG, "WEHInlineWidget: onPlaceholderException from personalization view manager-> \ns- " + s + "\ns1- " + s1 + "\nerror-" + e);
+      public void onPlaceholderException(String campaignId, String targetViewId, Exception e) {
+        Logger.d(WEGConstants.TAG, "WEHInlineWidget: onPlaceholderException from personalization view manager-> \ncampaignId- " + campaignId + "\ntargetViewId- " + targetViewId + "\nerror-" + e);
         WritableMap params = Arguments.createMap();
-        params.putString("targetViewId", s1);
-        params.putString("campaignId", s);
-        params.putString("exception", e.toString());
+        params = Utils.generateParams(campaignId, targetViewId, e);
         Utils.sendEvent(applicationContext, "onPlaceholderException", params);
 
       }
@@ -179,8 +182,7 @@ public class WEHInlineWidget extends FrameLayout implements WECampaignCallback, 
       public void onRendered(WECampaignData weCampaignData) {
         Logger.d(WEGConstants.TAG,"WEHInlineWidget: onRendered called " + weCampaignData.getTargetViewId() );
         WritableMap params = Arguments.createMap();
-        params.putString("targetViewId", weCampaignData.getTargetViewId());
-        params.putString("campaignId", weCampaignData.getCampaignId());
+        params = Utils.generateParams(weCampaignData);
         Utils.sendEvent(applicationContext, "onRendered", params);
         View view = weInlineView.findViewWithTag("INLINE_PERSONALIZATION_TAG");
         if (view != null) {
@@ -223,9 +225,10 @@ public class WEHInlineWidget extends FrameLayout implements WECampaignCallback, 
 
   @Override
   public void screenNavigated(String screenName) {
-    Logger.d(WEGConstants.TAG, "WEHInlineWidget: screenNavigated  called for screen - " + screenName + " for tagName- " + this.tagName);
+    Logger.d(WEGConstants.TAG, "WEHInlineWidget1: screenNavigated  called for screen - " + screenName + " for tagName- " + this.tagName);
     if (!this.tagName.equals("")) {
       loadView(this.tagName);
     }
   }
+
 }
