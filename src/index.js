@@ -60,7 +60,7 @@ export const registerCustomPlaceHolder = (
       'onCustomPlaceholderException',
       (data) => {
         console.log('onCustomPlaceholderException list', data);
-        sendOnException(customPropertyList, data);
+        sendOnExceptionEvent(customPropertyList, data);
       }
     );
     isCustomListenerAdded = true;
@@ -117,7 +117,7 @@ const sendOnDataReceivedEvent = (list, data) => {
 };
 
 
-const sendOnRendered = (list ,data) => {
+const sendOnRenderedEvent = (list ,data) => {
   const { targetViewId = '', campaignId = '', payloadData } = data;
       const payload = JSON.parse(payloadData);
       const weCampaignData = {
@@ -136,7 +136,7 @@ const sendOnRendered = (list ,data) => {
         }
 }
 
-const sendOnException = (list, data) => {
+const sendOnExceptionEvent = (list, data) => {
   console.log(
     'onPlaceholderException - Event Listerner called ->',
     data
@@ -243,14 +243,14 @@ export const WEPersonalization = (props) => {
     );
 
     renderListerner = eventEmitter.addListener('onRendered', (data) => {
-      sendOnRendered(propertyProcessor, data)
+      sendOnRenderedEvent(propertyProcessor, data)
     });
 
     // onPlaceholderException
     exceptionalListener = eventEmitter.addListener(
       'onPlaceholderException',
       (data) => {
-        sendOnException(propertyProcessor, data)
+        sendOnExceptionEvent(propertyProcessor, data)
       }
     );
     console.log(
