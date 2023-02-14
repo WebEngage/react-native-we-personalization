@@ -33,6 +33,9 @@ export const WEPersonalization = (props) => {
     onPlaceholderException = null,
   } = props;
 
+  // TODO - user Init ();
+  // register campaignCallback -> flutter_text
+
   var myRef = React.createRef();
 
   React.useEffect(() => {
@@ -79,12 +82,6 @@ export const WEPersonalization = (props) => {
       isListenerAdded = false;
     }
   };
-  const latestScreenIndex = getLatestScreenIndex(screenName);
-  console.log(
-    '$$$ propertyProcessor ------------',
-    propertyProcessor,
-    latestScreenIndex
-  );
 
   if (
     !propertyProcessor[propertyProcessor.length - 1]?.propertyList
@@ -106,13 +103,23 @@ export const WEPersonalization = (props) => {
     dataReceivedListener = eventEmitter.addListener(
       'onDataReceived',
       (event) => {
-        console.log('onDataReceived - Event Listerner called ->', event);
+        const { targetViewId = '', campaignId = '' } = event;
+        const payload = JSON.parse(event.payloadData);
+        const weCampaignData = {
+          targetViewId,
+          campaignId,
+          payload,
+        };
+        console.log(
+          'onDataReceived - Event Listerner called ->',
+          weCampaignData
+        );
         if (propertyProcessor?.length) {
           propertyProcessor[propertyProcessor.length - 1]?.propertyList?.map(
             (val) => {
               if (val.propertyId === event.targetViewId) {
                 if (val?.callbacks?.onDataReceived) {
-                  val?.callbacks?.onDataReceived(event);
+                  val?.callbacks?.onDataReceived(weCampaignData);
                 }
               }
             }
@@ -123,18 +130,24 @@ export const WEPersonalization = (props) => {
 
     // onRendered
     renderListerner = eventEmitter.addListener('onRendered', (event) => {
-      // const propertyProcessor.length - 1 = getLatestScreenIndex(screenName);
-      console.log('index -onRendered - Event Listerner called ->', event);
+      const { targetViewId = '', campaignId = '', payloadData } = event;
+      const payload = JSON.parse(payloadData);
+      const weCampaignData = {
+        targetViewId,
+        campaignId,
+        payload,
+      };
       console.log(
-        'index - onRendered - propertyProcessor ->',
-        propertyProcessor,
-        propertyProcessor.length - 1
+        'index -onRendered - Event Listerner called ->',
+        weCampaignData
       );
+
       if (propertyProcessor?.length) {
         propertyProcessor[propertyProcessor.length - 1]?.propertyList?.map(
           (val) => {
-            if (val.propertyId === event.targetViewId) {
-              val?.callbacks?.onRendered && val?.callbacks?.onRendered(event);
+            if (val.propertyId === targetViewId) {
+              val?.callbacks?.onRendered &&
+                val?.callbacks?.onRendered(weCampaignData);
             }
           }
         );
@@ -149,10 +162,12 @@ export const WEPersonalization = (props) => {
           'onPlaceholderException - Event Listerner called ->',
           event
         );
+        const { targetViewId = '' } = event;
+
         if (propertyProcessor?.length) {
           propertyProcessor[propertyProcessor.length - 1]?.propertyList?.map(
             (val) => {
-              if (val.propertyId === event.targetViewId) {
+              if (val.propertyId === targetViewId) {
                 val?.callbacks?.onPlaceholderException &&
                   val?.callbacks?.onPlaceholderException(event);
               }

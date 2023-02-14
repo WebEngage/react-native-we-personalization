@@ -104,6 +104,10 @@ const FlatListScreen = ({ navigation }) => {
     navigation.navigate('regular');
   };
 
+  const navigateToScroll = () => {
+    navigation.navigate('scrollable');
+  };
+
   const renderItem = ({ item }) => {
     return (
       <View style={styles.itemView}>
@@ -119,7 +123,9 @@ const FlatListScreen = ({ navigation }) => {
             onPlaceholderException={onPlaceholderException_1}
           />
         ) : null}
-        <Button title={'Scroll screen'} onPress={navigateToRegular} />
+        <Button title={'Regular screen'} onPress={navigateToRegular} />
+        <View style={styles.margin50} />
+        <Button title={'Scroll screen'} onPress={navigateToScroll} />
 
         {item.id === 4 ? (
           <WEPersonalization
@@ -140,9 +146,9 @@ const FlatListScreen = ({ navigation }) => {
     <SafeAreaView>
       <FlatList
         keyExtractor={(item) => item.id}
-        // initialNumToRender={5}
+        initialNumToRender={5}
         data={data}
-        // extraData={data}
+        extraData={data}
         renderItem={renderItem}
       />
     </SafeAreaView>

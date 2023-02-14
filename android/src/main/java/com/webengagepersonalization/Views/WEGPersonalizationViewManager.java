@@ -22,7 +22,7 @@ import com.webengage.personalization.utils.ConstantsKt;
 import com.webengagepersonalization.Utils.Logger;
 import com.webengagepersonalization.Utils.WEGConstants;
 import com.webengagepersonalization.Views.WEHInlineWidget;
-import com.webengagepersonalization.handler.Callbacker;
+import com.webengagepersonalization.handler.CallbackHandler;
 
 import android.view.ViewGroup;
 
@@ -37,7 +37,7 @@ public class WEGPersonalizationViewManager extends SimpleViewManager<ViewGroup> 
     SharedPreferences sharedPrefsManager = applicationContext.getSharedPreferences(ConstantsKt.WE_SHARED_STORAGE, Context.MODE_PRIVATE);
     sharedPrefsManager.edit().putBoolean(ConstantsKt.KEY_SHOULD_AUTO_TRACK_IMPRESSIONS, false).apply();
     WEPersonalization.Companion.get().init();
-    WEPersonalization.Companion.get().registerPropertyRegistryCallback(new Callbacker());
+    WEPersonalization.Companion.get().registerPropertyRegistryCallback(new CallbackHandler());
   }
 
   @Override
