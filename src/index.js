@@ -22,11 +22,87 @@ let renderListerner = null;
 let exceptionalListener = null;
 let isListenerAdded = false;
 let isCustomListenerAdded = false;
+let isCampaignListenerAdded = false;
 const propertyProcessor = [];
 const customPropertyList = [];
 
 let customOnRenderedListener = null;
 let customExceptionListener = null;
+let campaignPreparedListener = null;
+let campaignClickedListener = null;
+let campaignExceptionListener = null;
+let campaignShownListener = null;
+
+// TODO - pass callback from component to add here
+export const registerForCampaigns = (campaignCallbackList) => {
+  console.log('campaignCallbackList - ', campaignCallbackList);
+  const {
+    onCampaignPrepared = null,
+    onCampaignShown = null,
+    onCampaignClicked = null,
+    onCampaignException = null,
+  } = campaignCallbackList;
+  // onCampaignPrepared
+
+  // registerCampaignCallback
+  if (!isCampaignListenerAdded) {
+    console.log('registerForCampaigns ', isCampaignListenerAdded);
+    PersonalizationBridge.registerCampaignCallback();
+    if (onCampaignPrepared) {
+      campaignPreparedListener = eventEmitter.addListener(
+        'onCampaignPrepared',
+        (data) => {
+          console.log('WEC: onCampaignPrepared list', data);
+          onCampaignPrepared(data);
+          // sendOnExceptionEvent(customPropertyList, data);
+        }
+      );
+    }
+
+    if (onCampaignClicked) {
+      campaignClickedListener = eventEmitter.addListener(
+        'onCampaignClicked',
+        (data) => {
+          console.log('WEC: onCampaignClicked list', data);
+          onCampaignClicked(data);
+          // sendOnExceptionEvent(customPropertyList, data);
+        }
+      );
+    }
+
+    if (onCampaignException) {
+      campaignExceptionListener = eventEmitter.addListener(
+        'onCampaignException',
+        (data) => {
+          console.log('WEC: onCampaignException list', data);
+          onCampaignException(data);
+          // sendOnExceptionEvent(customPropertyList, data);
+        }
+      );
+    }
+  }
+
+  if (onCampaignShown) {
+    campaignShownListener = eventEmitter.addListener(
+      'onCampaignShown',
+      (data) => {
+        console.log('WEC: onCampaignShown list', data);
+        // sendOnExceptionEvent(customPropertyList, data);
+        onCampaignShown(data);
+      }
+    );
+    isCampaignListenerAdded = true;
+  }
+};
+
+export const unRegisterForCampaigns = () => {
+  PersonalizationBridge.unRegisterCampaignCallback();
+  campaignPreparedListener?.remove();
+  campaignClickedListener?.remove();
+  campaignExceptionListener?.remove();
+  campaignShownListener?.remove();
+  isCampaignListenerAdded = false;
+};
 
 export const registerCustomPlaceHolder = (
   propertyId,
@@ -87,18 +163,16 @@ const removeScreenFromPropertyList = (list, screenName) => {
 
 const getPropertyDetails = (list, weCampaignData) => {
   let res = null;
-  const { targetViewId = '' }  = weCampaignData
-      if (list?.length) {
-        list[list.length - 1]?.propertyList?.map(
-          (val) => {
-            if (val.propertyId === targetViewId) {
-              res = val;
-            }
-          }
-        );
+  const { targetViewId = '' } = weCampaignData;
+  if (list?.length) {
+    list[list.length - 1]?.propertyList?.map((val) => {
+      if (val.propertyId === targetViewId) {
+        res = val;
       }
-      return res;
-}
+    });
+  }
+  return res;
+};
 
 const sendOnDataReceivedEvent = (list, data) => {
   const { targetViewId = '', campaignId = '', payloadData = '' } = data;
@@ -111,45 +185,38 @@ const sendOnDataReceivedEvent = (list, data) => {
   const propertyItem = getPropertyDetails(list, weCampaignData);
   console.log('onDataReceived! - Event Listener called ->', weCampaignData);
 
-        if(propertyItem?.callbacks?.onDataReceived) {
-          propertyItem?.callbacks?.onDataReceived(weCampaignData);
-        }
+  if (propertyItem?.callbacks?.onDataReceived) {
+    propertyItem?.callbacks?.onDataReceived(weCampaignData);
+  }
 };
 
-
-const sendOnRenderedEvent = (list ,data) => {
+const sendOnRenderedEvent = (list, data) => {
   const { targetViewId = '', campaignId = '', payloadData } = data;
-      const payload = JSON.parse(payloadData);
-      const weCampaignData = {
-        targetViewId,
-        campaignId,
-        payload,
-      };
-      console.log(
-        'onRendered - Event Listener called ->',
-        weCampaignData
-      );
+  const payload = JSON.parse(payloadData);
+  const weCampaignData = {
+    targetViewId,
+    campaignId,
+    payload,
+  };
+  console.log('onRendered - Event Listener called ->', weCampaignData);
 
-      const propertyItem = getPropertyDetails(list, weCampaignData);
-        if(propertyItem?.callbacks?.onRendered) {
-          propertyItem?.callbacks?.onRendered(weCampaignData);
-        }
-}
+  const propertyItem = getPropertyDetails(list, weCampaignData);
+  if (propertyItem?.callbacks?.onRendered) {
+    propertyItem?.callbacks?.onRendered(weCampaignData);
+  }
+};
 
 const sendOnExceptionEvent = (list, data) => {
-  console.log(
-    'onPlaceholderException - Event Listerner called ->',
-    data
-  );
+  console.log('onPlaceholderException - Event Listerner called ->', data);
   const { targetViewId = '' } = data;
   const weCampaignData = {
-    targetViewId
+    targetViewId,
   };
   const propertyItem = getPropertyDetails(list, weCampaignData);
-        if(propertyItem?.callbacks?.onPlaceholderException) {
-          propertyItem?.callbacks?.onPlaceholderException(data);
-        }
-}
+  if (propertyItem?.callbacks?.onPlaceholderException) {
+    propertyItem?.callbacks?.onPlaceholderException(data);
+  }
+};
 
 export const unRegisterCustomPlaceHolder = (propertyId, screen) => {
   console.log('unRegisterCustomPlaceHolder! - Event Listener called ->');
@@ -209,7 +276,6 @@ export const WEPersonalization = (props) => {
   // TODO - user Init ();
   // register campaignCallback -> flutter_text
 
-
   React.useEffect(() => {
     console.log('propertyProcessor latest -> ', propertyProcessor);
 
@@ -243,14 +309,14 @@ export const WEPersonalization = (props) => {
     );
 
     renderListerner = eventEmitter.addListener('onRendered', (data) => {
-      sendOnRenderedEvent(propertyProcessor, data)
+      sendOnRenderedEvent(propertyProcessor, data);
     });
 
     // onPlaceholderException
     exceptionalListener = eventEmitter.addListener(
       'onPlaceholderException',
       (data) => {
-        sendOnExceptionEvent(propertyProcessor, data)
+        sendOnExceptionEvent(propertyProcessor, data);
       }
     );
     console.log(

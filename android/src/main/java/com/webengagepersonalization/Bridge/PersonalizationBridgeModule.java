@@ -12,6 +12,7 @@ import com.facebook.react.modules.core.DeviceEventManagerModule;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.bridge.Arguments;
 import com.webengage.personalization.WEPersonalization;
+import com.webengage.personalization.callbacks.WECampaignCallback;
 import com.webengage.personalization.callbacks.WEPlaceholderCallback;
 import com.webengage.personalization.data.WECampaignData;
 import com.webengage.sdk.android.WebEngage;
@@ -27,7 +28,7 @@ import android.util.Log;
 
 // TODO - This might be required for custom part
 @ReactModule(name = WEGConstants.PERSONALIZATION_BRIDGE)
-public class PersonalizationBridgeModule extends ReactContextBaseJavaModule implements WEPlaceholderCallback {
+public class PersonalizationBridgeModule extends ReactContextBaseJavaModule implements WEPlaceholderCallback, WECampaignCallback {
   private ReactApplicationContext applicationContext = null;
 
   public PersonalizationBridgeModule(ReactApplicationContext reactContext) {
@@ -46,6 +47,55 @@ public class PersonalizationBridgeModule extends ReactContextBaseJavaModule impl
   public void unRegisterCallback(String tagName) {
     Logger.d(WEGConstants.TAG,"PersonalizationBridgeModule: unRegistercallback "+tagName);
     WEPersonalization.Companion.get().unregisterWEPlaceholderCallback(tagName);
+  }
+
+
+  @ReactMethod
+  public void registerCampaignCallback() {
+//    WEPersonalization.get().registerWECampaignCallback(this)''
+    Logger.d(WEGConstants.TAG,"PersonalizationBridgeModule: registerCampaignCallback ");
+    WEPersonalization.Companion.get().registerWECampaignCallback(this);
+  }
+
+  @ReactMethod
+  public void unRegisterCampaignCallback() {
+    Logger.d(WEGConstants.TAG,"PersonalizationBridgeModule: unRegisterCampaignCallback ");
+    WEPersonalization.Companion.get().unregisterWECampaignCallback(this);
+  }
+
+  @Override
+  public boolean onCampaignClicked(@NonNull String actionId, @NonNull String deepLink, @NonNull WECampaignData weCampaignData) {
+    Logger.d(WEGConstants.TAG,"PersonalizationBridgeModule: onCampaignClicked actionId- "+actionId+ " \n deepLink- "+deepLink);
+    WritableMap params = Arguments.createMap();
+    params = Utils.generateParams(actionId, deepLink, weCampaignData);
+    Utils.sendEvent(applicationContext, "onCampaignClicked", params);
+    return false;
+  }
+
+  @Override
+  public void onCampaignException(@Nullable String campaignId, @NonNull String targetViewId, @NonNull Exception e) {
+    Logger.d(WEGConstants.TAG,"PersonalizationBridgeModule: onCampaignException "+targetViewId);
+    WritableMap params = Arguments.createMap();
+    params = Utils.generateParams(campaignId, targetViewId, e);
+    Utils.sendEvent(applicationContext, "onCampaignException", params);
+  }
+
+  @Nullable
+  @Override
+  public WECampaignData onCampaignPrepared(@NonNull WECampaignData weCampaignData) {
+    Logger.d(WEGConstants.TAG,"PersonalizationBridgeModule: onCampaignPrepared "+weCampaignData.getTargetViewId());
+    WritableMap params = Arguments.createMap();
+    params = Utils.generateParams(weCampaignData);
+    Utils.sendEvent(applicationContext, "onCampaignPrepared", params);
+    return null;
+  }
+
+  @Override
+  public void onCampaignShown(@NonNull WECampaignData weCampaignData) {
+    Logger.d(WEGConstants.TAG,"PersonalizationBridgeModule: onCampaignShown "+weCampaignData.getTargetViewId());
+    WritableMap params = Arguments.createMap();
+    params = Utils.generateParams(weCampaignData);
+    Utils.sendEvent(applicationContext, "onCampaignShown", params);
   }
 
   @Override

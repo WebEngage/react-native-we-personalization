@@ -45,8 +45,18 @@ public class Utils {
     return params;
   }
 
+  public static WritableMap generateParams(String actionId, String deepLink, WECampaignData weCampaignData) {
+    WritableMap params = Arguments.createMap();
+    params.putString("targetViewId", weCampaignData.getTargetViewId());
+    params.putString("campaignId", weCampaignData.getCampaignId());
+    params.putString("payloadData", weCampaignData.toJSONString());
+    params.putString("actionId", actionId);
+    params.putString("deepLink", deepLink);
+    return params;
+  }
 
-//  Checks if view is visible in the current viewport for the user
+
+  //  Checks if view is visible in the current viewport for the user
   public static boolean isVisible(final View view) {
     if (view == null) {
       return false;
