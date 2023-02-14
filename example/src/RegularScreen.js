@@ -16,6 +16,10 @@ import {
   initializePersonalization,
 } from 'react-native-webengage-personalization';
 import WebEngage from 'react-native-webengage';
+import {
+  registerCustomPlaceHolder,
+  unRegisterCustomPlaceHolder,
+} from '../../src';
 const RegularScreen = ({ navigation }) => {
   var webengage = new WebEngage();
 
@@ -29,6 +33,28 @@ const RegularScreen = ({ navigation }) => {
       };
     }, [])
   );
+
+  React.useEffect(() => {
+    const propertyId = 'flutter_text';
+    registerCustomPlaceHolder(
+      propertyId,
+      regularScreenName,
+      custom_onRendered,
+      custom_onPlaceholderException
+    );
+
+    return () => {
+      unRegisterCustomPlaceHolder(propertyId, regularScreenName);
+    };
+  }, []);
+
+  const custom_onRendered = (d) => {
+    console.log('WER: Custom onDataReceived for-', d?.targetViewId, d);
+  };
+
+  const custom_onPlaceholderException = (d) => {
+    console.log('WER: Custom onPlaceholderException  for ', d?.targetViewId, d);
+  };
 
   const onRendered_1 = (d) => {
     console.log(
@@ -92,6 +118,9 @@ const RegularScreen = ({ navigation }) => {
     Platform.OS === 'android' ? 'flutter_banner' : 99;
   const screenProperties = Platform.OS === 'android' ? 'flutter_text' : 1002; // screen_home
 
+  // registerForCampaigns(clickCb, shownCb)
+  // add for custom callback
+
   return (
     <View style={styles.container}>
       <WEPersonalization
@@ -108,7 +137,7 @@ const RegularScreen = ({ navigation }) => {
       <Button title={'Flatlist screen'} onPress={navigateToFlatList} />
       <Text>This text is from React Native</Text>
       <Text>But Above and below Views are from WebEngage </Text>
-      <WEPersonalization
+      {/* <WEPersonalization
         color="#12023f"
         style={styles.box2}
         propertyId={screenProperties}
@@ -116,7 +145,7 @@ const RegularScreen = ({ navigation }) => {
         onRendered={onRendered_2} // onRendered
         onDataReceived={onDataReceived_2}
         onPlaceholderException={onPlaceholderException_2}
-      />
+      /> */}
       <View style={styles.margin20} />
 
       <View style={styles.margin20} />

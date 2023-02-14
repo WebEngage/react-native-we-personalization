@@ -96,9 +96,22 @@ const FlatListScreen = ({ navigation }) => {
     { id: 12, title: 'Twelves item' },
     { id: 13, title: 'Thirteenth item' },
   ];
-  const flatScreenName = 'scroll23';
-  const textProp = Platform.OS === 'android' ? 'banner_prop' : 432;
-  const bannerProp = Platform.OS === 'android' ? 'text_prop' : 532;
+  // const flatScreenName = 'scroll23';
+  // const textProp = Platform.OS === 'android' ? 'banner_prop' : 432;
+  // const bannerProp = Platform.OS === 'android' ? 'text_prop' : 532;
+
+  const flatScreenName = 'ET_home';
+  const textProp =
+    Platform.OS === 'android' ? 'flutter_banner' : 99;
+  const bannerProp = Platform.OS === 'android' ? 'flutter_text' : 1002; // screen_home
+
+
+  // Created this properties but not reflecting
+  // const flatScreenName = 'react_screen';
+  // const textProp =
+  //   Platform.OS === 'android' ? 'react_text' : 888;
+  // const bannerProp = Platform.OS === 'android' ? 'react_banner' : 777; // screen_home
+
 
   const navigateToRegular = () => {
     navigation.navigate('regular');

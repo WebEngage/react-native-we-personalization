@@ -14,14 +14,187 @@ const LINKING_ERROR =
   '- You are not using Expo Go\n';
 
 const ComponentName = 'WebengagePersonalizationView';
-const eventEmitter = new NativeEventEmitter(
-  NativeModules.PersonalizationBridge
-);
+const PersonalizationBridge = NativeModules.PersonalizationBridge;
+
+const eventEmitter = new NativeEventEmitter(PersonalizationBridge);
 let dataReceivedListener = null;
 let renderListerner = null;
 let exceptionalListener = null;
 let isListenerAdded = false;
+let isCustomListenerAdded = false;
 const propertyProcessor = [];
+const customPropertyList = [];
+
+let customOnRenderedListener = null;
+let customExceptionListener = null;
+
+export const registerCustomPlaceHolder = (
+  propertyId,
+  screenName,
+  onDataReceivedCb,
+  onPlaceholderExceptionCb
+) => {
+  PersonalizationBridge.registerCallback(propertyId);
+  registerPropertyList(
+    customPropertyList,
+    screenName,
+    propertyId,
+    onDataReceivedCb,
+    null,
+    onPlaceholderExceptionCb
+  );
+
+  console.log(
+    'registerCustomPlaceHolder registered customPropertyList',
+    customPropertyList
+  );
+  if (!isCustomListenerAdded) {
+    customOnRenderedListener = eventEmitter.addListener(
+      'onCustomDataReceived',
+      (data) => {
+        console.log('onCustomDataReceived list', data);
+        sendOnDataReceivedEvent(customPropertyList, data);
+      }
+    );
+    customExceptionListener = eventEmitter.addListener(
+      'onCustomPlaceholderException',
+      (data) => {
+        console.log('onCustomPlaceholderException list', data);
+        sendOnException(customPropertyList, data);
+      }
+    );
+    isCustomListenerAdded = true;
+  }
+};
+
+const removeScreenFromPropertyList = (list, screenName) => {
+  list?.map((val, index) => {
+    if (val.screenName === screenName) {
+      list.splice(index, 1);
+    }
+  });
+  if (!list.length && isListenerAdded) {
+    dataReceivedListener?.remove();
+    renderListerner?.remove();
+    exceptionalListener?.remove();
+    console.log(
+      '\n---------------------------------------------------------\n'
+    );
+    console.log('@@@@ All the Listeners are removed ');
+    isListenerAdded = false;
+  }
+};
+
+const getPropertyDetails = (list, weCampaignData) => {
+  let res = null;
+  const { targetViewId = '' }  = weCampaignData
+      if (list?.length) {
+        list[list.length - 1]?.propertyList?.map(
+          (val) => {
+            if (val.propertyId === targetViewId) {
+              res = val;
+            }
+          }
+        );
+      }
+      return res;
+}
+
+const sendOnDataReceivedEvent = (list, data) => {
+  const { targetViewId = '', campaignId = '', payloadData = '' } = data;
+  const payload = JSON.parse(payloadData);
+  const weCampaignData = {
+    targetViewId,
+    campaignId,
+    payload,
+  };
+  const propertyItem = getPropertyDetails(list, weCampaignData);
+  console.log('onDataReceived! - Event Listener called ->', weCampaignData);
+
+        if(propertyItem?.callbacks?.onDataReceived) {
+          propertyItem?.callbacks?.onDataReceived(weCampaignData);
+        }
+};
+
+
+const sendOnRendered = (list ,data) => {
+  const { targetViewId = '', campaignId = '', payloadData } = data;
+      const payload = JSON.parse(payloadData);
+      const weCampaignData = {
+        targetViewId,
+        campaignId,
+        payload,
+      };
+      console.log(
+        'onRendered - Event Listener called ->',
+        weCampaignData
+      );
+
+      const propertyItem = getPropertyDetails(list, weCampaignData);
+        if(propertyItem?.callbacks?.onRendered) {
+          propertyItem?.callbacks?.onRendered(weCampaignData);
+        }
+}
+
+const sendOnException = (list, data) => {
+  console.log(
+    'onPlaceholderException - Event Listerner called ->',
+    data
+  );
+  const { targetViewId = '' } = data;
+  const weCampaignData = {
+    targetViewId
+  };
+  const propertyItem = getPropertyDetails(list, weCampaignData);
+        if(propertyItem?.callbacks?.onPlaceholderException) {
+          propertyItem?.callbacks?.onPlaceholderException(data);
+        }
+}
+
+export const unRegisterCustomPlaceHolder = (propertyId, screen) => {
+  console.log('unRegisterCustomPlaceHolder! - Event Listener called ->');
+
+  PersonalizationBridge.unRegisterCallback(propertyId);
+  removeScreenFromPropertyList(customPropertyList, screen);
+  customOnRenderedListener?.remove();
+  customExceptionListener?.remove();
+  isCustomListenerAdded = false;
+};
+
+function getLatestScreenIndex(screen, list) {
+  return list?.findIndex((obj) => obj.screenName === screen);
+}
+
+const registerPropertyList = (
+  list,
+  screenName,
+  propertyId,
+  onDataReceived = null,
+  onRendered = null,
+  onPlaceholderException = null
+) => {
+  const screenIndex = getLatestScreenIndex(screenName, list);
+  if (screenIndex === -1) {
+    list.push({
+      screenName: screenName,
+      propertyList: [],
+    });
+  }
+  if (
+    !list[list.length - 1]?.propertyList
+      .flatMap((curr) => curr.propertyId)
+      .includes(propertyId)
+  ) {
+    let obj = {};
+    obj.propertyId = propertyId;
+    obj.callbacks = {
+      onRendered: onRendered,
+      onPlaceholderException: onPlaceholderException,
+      onDataReceived: onDataReceived,
+    };
+    list[list.length - 1].propertyList.push(obj);
+  }
+};
 
 export const WEPersonalization = (props) => {
   console.log('props in webengage docs - ', props);
@@ -36,7 +209,6 @@ export const WEPersonalization = (props) => {
   // TODO - user Init ();
   // register campaignCallback -> flutter_text
 
-  var myRef = React.createRef();
 
   React.useEffect(() => {
     console.log('propertyProcessor latest -> ', propertyProcessor);
@@ -48,132 +220,37 @@ export const WEPersonalization = (props) => {
         ' from screen-',
         screenName
       );
-      removeScreenFromPropertyList();
+      removeScreenFromPropertyList(propertyProcessor, screenName);
       console.log('propertyProcessor after slicing -> ', propertyProcessor);
     };
   });
 
-  const screenIndex = getLatestScreenIndex(screenName);
-  if (screenIndex === -1) {
-    propertyProcessor.push({
-      screenName: screenName,
-      propertyList: [],
-    });
-  }
-
-  function getLatestScreenIndex(screen) {
-    return propertyProcessor?.findIndex((obj) => obj.screenName === screen);
-  }
-
-  const removeScreenFromPropertyList = () => {
-    propertyProcessor?.map((val, index) => {
-      if (val.screenName === screenName) {
-        propertyProcessor.splice(index, 1);
-      }
-    });
-    if (!propertyProcessor.length && isListenerAdded) {
-      dataReceivedListener?.remove();
-      renderListerner?.remove();
-      exceptionalListener?.remove();
-      console.log(
-        '\n---------------------------------------------------------\n'
-      );
-      console.log('@@@@ All the Listeners are removed ');
-      isListenerAdded = false;
-    }
-  };
-
-  if (
-    !propertyProcessor[propertyProcessor.length - 1]?.propertyList
-      .flatMap((curr) => curr.screenName)
-      .includes(propertyId)
-  ) {
-    let obj = {};
-    obj.propertyId = propertyId;
-    obj.callbacks = {
-      onRendered: onRendered,
-      onPlaceholderException: onPlaceholderException,
-      onDataReceived: onDataReceived,
-    };
-    propertyProcessor[propertyProcessor.length - 1].propertyList.push(obj);
-  }
+  registerPropertyList(
+    propertyProcessor,
+    screenName,
+    propertyId,
+    onDataReceived,
+    onRendered,
+    onPlaceholderException
+  );
 
   if (!isListenerAdded) {
-    // onDataReceived
     dataReceivedListener = eventEmitter.addListener(
       'onDataReceived',
-      (event) => {
-        const { targetViewId = '', campaignId = '' } = event;
-        const payload = JSON.parse(event.payloadData);
-        const weCampaignData = {
-          targetViewId,
-          campaignId,
-          payload,
-        };
-        console.log(
-          'onDataReceived - Event Listerner called ->',
-          weCampaignData
-        );
-        if (propertyProcessor?.length) {
-          propertyProcessor[propertyProcessor.length - 1]?.propertyList?.map(
-            (val) => {
-              if (val.propertyId === event.targetViewId) {
-                if (val?.callbacks?.onDataReceived) {
-                  val?.callbacks?.onDataReceived(weCampaignData);
-                }
-              }
-            }
-          );
-        }
+      (data) => {
+        sendOnDataReceivedEvent(propertyProcessor, data);
       }
     );
 
-    // onRendered
-    renderListerner = eventEmitter.addListener('onRendered', (event) => {
-      const { targetViewId = '', campaignId = '', payloadData } = event;
-      const payload = JSON.parse(payloadData);
-      const weCampaignData = {
-        targetViewId,
-        campaignId,
-        payload,
-      };
-      console.log(
-        'index -onRendered - Event Listerner called ->',
-        weCampaignData
-      );
-
-      if (propertyProcessor?.length) {
-        propertyProcessor[propertyProcessor.length - 1]?.propertyList?.map(
-          (val) => {
-            if (val.propertyId === targetViewId) {
-              val?.callbacks?.onRendered &&
-                val?.callbacks?.onRendered(weCampaignData);
-            }
-          }
-        );
-      }
+    renderListerner = eventEmitter.addListener('onRendered', (data) => {
+      sendOnRendered(propertyProcessor, data)
     });
 
     // onPlaceholderException
     exceptionalListener = eventEmitter.addListener(
       'onPlaceholderException',
-      (event) => {
-        console.log(
-          'onPlaceholderException - Event Listerner called ->',
-          event
-        );
-        const { targetViewId = '' } = event;
-
-        if (propertyProcessor?.length) {
-          propertyProcessor[propertyProcessor.length - 1]?.propertyList?.map(
-            (val) => {
-              if (val.propertyId === targetViewId) {
-                val?.callbacks?.onPlaceholderException &&
-                  val?.callbacks?.onPlaceholderException(event);
-              }
-            }
-          );
-        }
+      (data) => {
+        sendOnException(propertyProcessor, data)
       }
     );
     console.log(

@@ -36,7 +36,6 @@ public class WEGPersonalizationViewManager extends SimpleViewManager<ViewGroup> 
     this.applicationContext = reactContext;
     SharedPreferences sharedPrefsManager = applicationContext.getSharedPreferences(ConstantsKt.WE_SHARED_STORAGE, Context.MODE_PRIVATE);
     sharedPrefsManager.edit().putBoolean(ConstantsKt.KEY_SHOULD_AUTO_TRACK_IMPRESSIONS, false).apply();
-    WEPersonalization.Companion.get().init();
     WEPersonalization.Companion.get().registerPropertyRegistryCallback(new CallbackHandler());
   }
 

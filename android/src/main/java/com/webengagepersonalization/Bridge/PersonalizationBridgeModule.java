@@ -15,7 +15,10 @@ import com.webengage.personalization.WEPersonalization;
 import com.webengage.personalization.callbacks.WEPlaceholderCallback;
 import com.webengage.personalization.data.WECampaignData;
 import com.webengage.sdk.android.WebEngage;
+import com.webengagepersonalization.Utils.Logger;
+import com.webengagepersonalization.Utils.Utils;
 import com.webengagepersonalization.Utils.WEGConstants;
+import com.webengagepersonalization.handler.CallbackHandler;
 
 import androidx.annotation.Nullable;
 
@@ -30,6 +33,19 @@ public class PersonalizationBridgeModule extends ReactContextBaseJavaModule impl
   public PersonalizationBridgeModule(ReactApplicationContext reactContext) {
     super(reactContext);
     this.applicationContext = reactContext;
+    Logger.d("AKC", "PersonalizationBridgeModule");
+    WEPersonalization.Companion.get().init();
+  }
+  @ReactMethod
+  public void registerCallback(String tagName) {
+    Logger.d(WEGConstants.TAG,"PersonalizationBridgeModule: registercallback "+tagName);
+    WEPersonalization.Companion.get().registerWEPlaceholderCallback(tagName, this);
+  }
+
+  @ReactMethod
+  public void unRegisterCallback(String tagName) {
+    Logger.d(WEGConstants.TAG,"PersonalizationBridgeModule: unRegistercallback "+tagName);
+    WEPersonalization.Companion.get().unregisterWEPlaceholderCallback(tagName);
   }
 
   @Override
@@ -41,17 +57,21 @@ public class PersonalizationBridgeModule extends ReactContextBaseJavaModule impl
   @Override
   public void onDataReceived(WECampaignData weCampaignData) {
     Log.d("WebEngage1", "OnDataReceived from personalization view manager - "+weCampaignData);
+    WritableMap params = Arguments.createMap();
+    params = Utils.generateParams(weCampaignData);
+    Utils.sendEvent(applicationContext, "onCustomDataReceived", params);
   }
 
   @Override
-  public void onPlaceholderException(String s, String s1, Exception e) {
-    Log.d("WebEngage1", "onPlaceholderException from personalization view manager-> \ns- "+s+"\ns1- "+s1 + "\nerror-"+e);
-
+  public void onPlaceholderException(String campaignId, String targetViewId, Exception e) {
+    WritableMap params = Arguments.createMap();
+    params = Utils.generateParams(campaignId, targetViewId, e);
+    Utils.sendEvent(applicationContext, "onCustomPlaceholderException", params);
+    Log.d("WebEngage1", "onCustomPlaceholderException from personalization view manager-> \ncampaignId- "+campaignId+"\ntargetViewId- "+targetViewId + "\nerror-"+e);
   }
 
   @Override
   public void onRendered(WECampaignData weCampaignData) {
     Log.d("WebEngage1", "onRendered from personalization view manager");
-
   }
 }

@@ -13,6 +13,7 @@ import {
 } from 'react-native';
 import WebEngage from 'react-native-webengage';
 import { WEPersonalization } from 'react-native-webengage-personalization';
+import { registerCustomPlaceHolder, unRegisterCustomPlaceHolder } from '../../src';
 const ScrollableScreen = ({ navigation }) => {
   const webengage = new WebEngage();
   useFocusEffect(
@@ -21,6 +22,29 @@ const ScrollableScreen = ({ navigation }) => {
       console.log(scrollScreen + ' is navigated');
     }, [])
   );
+
+  React.useEffect(() => {
+    // banner_prop
+    const propertyId = 'banner_prop';
+    registerCustomPlaceHolder(
+      propertyId,
+      scrollScreen,
+      custom_onDataReceived,
+      custom_onPlaceholderException
+    );
+
+    return () => {
+      unRegisterCustomPlaceHolder(propertyId, scrollScreen);
+    };
+  });
+
+  const custom_onDataReceived = (d) => {
+    console.log('WER: Custom onDataReceived for-', d?.targetViewId, d);
+  };
+
+  const custom_onPlaceholderException = (d) => {
+    console.log('WER: Custom onPlaceholderException2 for ', d?.targetViewId, d);
+  };
   const personalizationCallback1 = (d) => {
     console.log('PPersonalization callback1 triggered for flutter_banner-', d);
   };
@@ -29,7 +53,11 @@ const ScrollableScreen = ({ navigation }) => {
     console.log('Personalization callback2 triggered for flutter_text-', d);
   };
 
-  const navigateToScroll = () => {
+  const navigateToRegular = () => {
+    navigation.navigate('regular');
+  };
+
+  const navigateToFlatList = () => {
     navigation.navigate('flatlist');
   };
 
@@ -86,7 +114,10 @@ const ScrollableScreen = ({ navigation }) => {
         Above View is from Native - Android (flutter_banner)
       </Text>
 
-      <Button title={'Scroll screen'} onPress={navigateToScroll} />
+      <Button title={'FlatList screen'} onPress={navigateToFlatList} />
+      <View style={styles.margin50} />
+
+      <Button title={'Regular screen'} onPress={navigateToRegular} />
 
       <View style={styles.margin50} />
       <Image
@@ -110,7 +141,7 @@ const ScrollableScreen = ({ navigation }) => {
       <Text style={styles.nativeText}>
         Below View is from Native - Android (flutter_text)
       </Text>
-      <WEPersonalization
+      {/* <WEPersonalization
         style={styles.box2}
         screenName={scrollScreen}
         propertyId={bannerProp}
@@ -118,7 +149,7 @@ const ScrollableScreen = ({ navigation }) => {
         onDataReceived={onDataReceived_2}
         onPlaceholderException={onPlaceholderException_2}
         // personalizationCallback={personalizationCallback2}
-      />
+      /> */}
       <Text style={styles.nativeText}> Below View is React-Native</Text>
       <Image
         source={{ uri: 'https://picsum.photos/200/300/?blur=2' }}
