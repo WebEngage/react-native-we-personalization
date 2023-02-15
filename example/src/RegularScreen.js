@@ -12,14 +12,11 @@ import {
 } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import {
-  WEPersonalization,
-  initializePersonalization,
+  WEInlineView,
+  registerCustomPlaceHolder,
+  unRegisterCustomPlaceHolder
 } from 'react-native-webengage-personalization';
 import WebEngage from 'react-native-webengage';
-import {
-  registerCustomPlaceHolder,
-  unRegisterCustomPlaceHolder,
-} from '../../src';
 const RegularScreen = ({ navigation }) => {
   var webengage = new WebEngage();
 
@@ -27,7 +24,6 @@ const RegularScreen = ({ navigation }) => {
     React.useCallback(() => {
       webengage.screen(regularScreenName);
       console.log(regularScreenName + 'navigted');
-      // WEPersonalization.registerWEPlaceholderCallback("ak_test_2", callback);
       return () => {
         // Perform cleanup on blur
       };
@@ -42,7 +38,6 @@ const RegularScreen = ({ navigation }) => {
       custom_onRendered,
       custom_onPlaceholderException
     );
-
     return () => {
       unRegisterCustomPlaceHolder(propertyId, regularScreenName);
     };
@@ -112,7 +107,6 @@ const RegularScreen = ({ navigation }) => {
     navigation.navigate('flatlist');
   };
 
-  // const screen1Properties = Platform.OS === 'android' ? 12 : 12; // screen1
   const regularScreenName = 'ET_home';
   const screenHomeProperties =
     Platform.OS === 'android' ? 'flutter_banner' : 99;
@@ -123,7 +117,7 @@ const RegularScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <WEPersonalization
+      <WEInlineView
         style={styles.box}
         screenName={regularScreenName}
         propertyId={screenHomeProperties} // ak_test_2 - custom
@@ -137,7 +131,7 @@ const RegularScreen = ({ navigation }) => {
       <Button title={'Flatlist screen'} onPress={navigateToFlatList} />
       <Text>This text is from React Native</Text>
       <Text>But Above and below Views are from WebEngage </Text>
-      {/* <WEPersonalization
+      {/* <WEInlineView
         color="#12023f"
         style={styles.box2}
         propertyId={screenProperties}

@@ -1,10 +1,7 @@
 import * as React from 'react';
-import WebEngagePlugin from 'react-native-webengage';
-import { registerCustomPlaceHolder, registerForCampaigns, unRegisterForCampaigns } from '../../src';
+import { registerForCampaigns, unRegisterForCampaigns } from 'react-native-webengage-personalization';
 import LoginScreen from './LoginScreen';
 import Navigation from './Navigation';
-import RegularScreen from './RegularScreen';
-import ScrollableScreen from './ScrollableScreen';
 import { getValueFromAsyncStorage } from './Utils';
 
 export default function App() {
@@ -23,7 +20,6 @@ export default function App() {
   }
   registerForCampaigns(callbacks)
   return () => {
-    // unre
     unRegisterForCampaigns();
   }
   }, [userName]);
@@ -56,7 +52,4 @@ export default function App() {
       <LoginScreen isUserLoggedIn updateLoginDetails={updateLoginDetails} />
     );
   }
-
-  // return <RegularScreen />;
-  // return <ScrollableScreen />;
 }

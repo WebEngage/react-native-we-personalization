@@ -12,19 +12,20 @@ import {
   Platform,
 } from 'react-native';
 import WebEngage from 'react-native-webengage';
-import { WEPersonalization } from 'react-native-webengage-personalization';
-import { registerCustomPlaceHolder, unRegisterCustomPlaceHolder } from '../../src';
+import { WEInlineView,
+  registerCustomPlaceHolder,
+  unRegisterCustomPlaceHolder
+   } from 'react-native-webengage-personalization';
 const ScrollableScreen = ({ navigation }) => {
   const webengage = new WebEngage();
   useFocusEffect(
     React.useCallback(() => {
-      webengage.screen(scrollScreen); //
+      webengage.screen(scrollScreen);
       console.log(scrollScreen + ' is navigated');
     }, [])
   );
 
   React.useEffect(() => {
-    // banner_prop
     const propertyId = 'banner_prop';
     registerCustomPlaceHolder(
       propertyId,
@@ -92,23 +93,22 @@ const ScrollableScreen = ({ navigation }) => {
   return (
     <ScrollView style={styles.container}>
       <ScrollView style={styles.container} horizontal>
-        <WEPersonalization
+        <WEInlineView
           style={styles.box}
           screenName={scrollScreen}
           propertyId={textProp}
           onRendered={onRendered_1}
           onDataReceived={onDataReceived_1}
           onPlaceholderException={onPlaceholderException_1}
-          // personalizationCallback={personalizationCallback1}
         />
+        <Text style={styles.textStyle}> First</Text>
         <Text style={styles.textStyle}> Second</Text>
-        <Text style={styles.textStyle}> Second</Text>
-        <Text style={styles.textStyle}> Second</Text>
-        <Text style={styles.textStyle}> Second</Text>
-        <Text style={styles.textStyle}> Second</Text>
+        <Text style={styles.textStyle}> Third</Text>
+        <Text style={styles.textStyle}> Four</Text>
+        <Text style={styles.textStyle}> Five</Text>
 
-        <Text style={styles.textStyle}> Second</Text>
-        <Text style={styles.textStyle}> Second</Text>
+        <Text style={styles.textStyle}> Six</Text>
+        <Text style={styles.textStyle}> Seven</Text>
       </ScrollView>
       <Text style={styles.nativeText}>
         Above View is from Native - Android (flutter_banner)

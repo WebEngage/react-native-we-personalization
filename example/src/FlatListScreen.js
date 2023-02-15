@@ -12,7 +12,7 @@ import {
   Button,
 } from 'react-native';
 import WebEngage from 'react-native-webengage';
-import { WEPersonalization } from 'react-native-webengage-personalization';
+import { WEInlineView } from 'react-native-webengage-personalization';
 const FlatListScreen = ({ navigation }) => {
   const webengage = new WebEngage();
 
@@ -100,17 +100,17 @@ const FlatListScreen = ({ navigation }) => {
   // const textProp = Platform.OS === 'android' ? 'banner_prop' : 432;
   // const bannerProp = Platform.OS === 'android' ? 'text_prop' : 532;
 
-  const flatScreenName = 'ET_home';
-  const textProp =
-    Platform.OS === 'android' ? 'flutter_banner' : 99;
-  const bannerProp = Platform.OS === 'android' ? 'flutter_text' : 1002; // screen_home
+  // const flatScreenName = 'ET_home_2';
+  // const textProp =
+  //   Platform.OS === 'android' ? 'flutter_banner' : 99;
+  // const bannerProp = Platform.OS === 'android' ? 'flutter_text' : 1002; // screen_home
 
 
   // Created this properties but not reflecting
-  // const flatScreenName = 'react_screen';
-  // const textProp =
-  //   Platform.OS === 'android' ? 'react_text' : 888;
-  // const bannerProp = Platform.OS === 'android' ? 'react_banner' : 777; // screen_home
+  const flatScreenName = 'react_screen';
+  const textProp =
+    Platform.OS === 'android' ? 'react_text' : 888;
+  const bannerProp = Platform.OS === 'android' ? 'react_banner' : 777; // screen_home
 
 
   const navigateToRegular = () => {
@@ -126,7 +126,7 @@ const FlatListScreen = ({ navigation }) => {
       <View style={styles.itemView}>
         <Text> {item.title} </Text>
         {item.id === 1 ? (
-          <WEPersonalization
+          <WEInlineView
             style={styles.box}
             propertyId={bannerProp}
             screenName={flatScreenName}
@@ -141,7 +141,7 @@ const FlatListScreen = ({ navigation }) => {
         <Button title={'Scroll screen'} onPress={navigateToScroll} />
 
         {item.id === 4 ? (
-          <WEPersonalization
+          <WEInlineView
             style={styles.box2}
             propertyId={textProp}
             screenName={flatScreenName}

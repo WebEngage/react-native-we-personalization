@@ -52,7 +52,6 @@ public class PersonalizationBridgeModule extends ReactContextBaseJavaModule impl
 
   @ReactMethod
   public void registerCampaignCallback() {
-//    WEPersonalization.get().registerWECampaignCallback(this)''
     Logger.d(WEGConstants.TAG,"PersonalizationBridgeModule: registerCampaignCallback ");
     WEPersonalization.Companion.get().registerWECampaignCallback(this);
   }
