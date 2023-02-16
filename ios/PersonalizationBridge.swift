@@ -6,6 +6,8 @@ import WEPersonalization
 class PersonalizationBridge: RCTEventEmitter {
 
   public static var emitter: RCTEventEmitter!
+    var doesUserHandelCallbacks = false;
+
 
   override init() {
     super.init()
@@ -13,33 +15,46 @@ class PersonalizationBridge: RCTEventEmitter {
       print("Inside PersonalizationBridge")
       WEPersonalization.shared.initialise()
       UserDefaults.standard.setValue(false, forKey: WEPersonalization.Constants.KEY_SHOULD_AUTO_TRACK_IMPRESSIONS)
-      WEPersonalization.shared.registerWECampaignCallback(CallbackHandler.shared)
-            WEPersonalization.shared.registerPropertyRegistryCallbacks(CallbackHandler.shared)
+      WEPersonalization.shared.registerPropertyRegistryCallbacks(CallbackHandler.shared)
+
   }
 
+    @objc func registerCampaignCallback(doesUserHandelCallback: Bool) -> Void {
+        print("WET: registerCampaignCallback called")
+        WEPersonalization.shared.registerWECampaignCallback(CallbackHandler.shared)
+        self.doesUserHandelCallbacks = doesUserHandelCallback
+    }
+
   open override func supportedEvents() -> [String] {
-    ["onDataReceived", "onRendered", "onPropertyCacheCleared", "onPlaceholderException", "testAk"]
+    ["onDataReceived", "onRendered", "onPropertyCacheCleared", "onPlaceholderException", "testAk", "onCampaignPrepared", "onCampaignClicked", "onCampaignException", "onCampaignShown"]
   }
 }
 
 class CallbackHandler:WECampaignCallback{
     static let shared = CallbackHandler()
-    
+
     func onCampaignPrepared(_ data: WEGCampaignData) -> WEGCampaignData {
         print("WEP CC: onCampaignPrepared for \(data.targetViewTag)")
+        let campaignData: [String: Any] = ["targetViewId": data.targetViewTag, "campaingId": data.campaignId]
+        PersonalizationBridge.emitter.sendEvent(withName: "onCampaignPrepared", body: campaignData)
         return data
     }
-    
+
     func onCampaignShown(data: WEGCampaignData) {
         print("WEP CC: onCampaignShown for \(data.targetViewTag)")
+        let campaignData: [String: Any] = ["targetViewId": data.targetViewTag, "campaingId": data.campaignId]
+        PersonalizationBridge.emitter.sendEvent(withName: "onCampaignShown", body: campaignData)
     }
-    
+
     func onCampaignException(_ campaignId: String?, _ targetViewId: String, _ exception: Error) {
         print("WEP CC: onCampaignException for \(targetViewId) error: \(exception.localizedDescription)")
+        let campaignData: [String: Any] = ["targetViewId": targetViewId, "campaingId": campaignId ?? "", "exception": exception]
+        PersonalizationBridge.emitter.sendEvent(withName: "onCampaignException", body: campaignData)
     }
-    
+
     func onCampaignClicked(actionId: String, deepLink: String, data: WEGCampaignData) -> Bool {
         print("WEP CC: onCampaignClicked for \(data.targetViewTag)")
+//        TODO - Access value of doesUserHandelCallbacks here
         return false
     }
 }
@@ -48,7 +63,7 @@ class CallbackHandler:WECampaignCallback{
 extension CallbackHandler:PropertyRegistryCallback{
     func onPropertyCacheCleared(for screenDetails: [AnyHashable : Any]) {
         NotificationCenter.default.post(name: Notification.Name("screenNavigated"), object: nil)
-        
+
     }
 }
 

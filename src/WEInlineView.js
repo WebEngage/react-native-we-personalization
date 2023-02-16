@@ -7,6 +7,7 @@ import {
   registerPropertyList,
   removeScreenFromPropertyList,
   sendOnDataReceivedEvent,
+  sendOnExceptionEvent,
   sendOnRenderedEvent,
 } from './PropertyListUtils';
 

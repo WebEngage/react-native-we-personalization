@@ -1,5 +1,8 @@
 import * as React from 'react';
-import { registerForCampaigns, unRegisterForCampaigns } from 'react-native-webengage-personalization';
+import {
+  registerForCampaigns,
+  unRegisterForCampaigns,
+} from 'react-native-webengage-personalization';
 import LoginScreen from './LoginScreen';
 import Navigation from './Navigation';
 import { getValueFromAsyncStorage } from './Utils';
@@ -12,34 +15,34 @@ export default function App() {
     if (userName) {
       setIsUserLoggedIn(true);
     }
-  const callbacks = {
-    onCampaignPrepared,
-    onCampaignShown,
-    onCampaignClicked,
-    onCampaignException
-  }
-  registerForCampaigns(callbacks)
-  return () => {
-    unRegisterForCampaigns();
-  }
+    const callbacks = {
+      onCampaignPrepared,
+      onCampaignShown,
+      onCampaignClicked,
+      onCampaignException,
+    };
+    const doesUserHandelCallbacks = true;
+    registerForCampaigns(callbacks, doesUserHandelCallbacks);
+    return () => {
+      unRegisterForCampaigns();
+    };
   }, [userName]);
 
-
   const onCampaignClicked = (data) => {
-    console.log("App: onCampaignClicked ",data)
-  }
+    console.log('App: onCampaignClicked ', data);
+  };
 
   const onCampaignPrepared = (data) => {
-    console.log("App: onCampaignPrepared ",data)
-  }
+    console.log('App: onCampaignPrepared ', data);
+  };
 
   const onCampaignShown = (data) => {
-    console.log("App: onCampaignShown ",data)
-  }
+    console.log('App: onCampaignShown ', data);
+  };
 
   const onCampaignException = (data) => {
-    console.log("App: onCampaignException ",data)
-  }
+    console.log('App: onCampaignException ', data);
+  };
 
   const updateLoginDetails = (loginState) => {
     console.log('user login state updated', loginState);

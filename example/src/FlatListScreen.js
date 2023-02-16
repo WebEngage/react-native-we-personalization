@@ -107,11 +107,9 @@ const FlatListScreen = ({ navigation }) => {
 
 
   // Created this properties but not reflecting
-  const flatScreenName = 'react_screen';
-  const textProp =
-    Platform.OS === 'android' ? 'react_text' : 888;
-  const bannerProp = Platform.OS === 'android' ? 'react_banner' : 777; // screen_home
-
+  const flatScreenName = Platform.OS === 'android' ? 'react_screen' : 'screen1';
+  const textProp = Platform.OS === 'android' ? 'react_text' : 21;
+  const bannerProp = Platform.OS === 'android' ? 'react_banner' : 11; // screen_home
 
   const navigateToRegular = () => {
     navigation.navigate('regular');

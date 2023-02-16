@@ -25,19 +25,19 @@ const ScrollableScreen = ({ navigation }) => {
     }, [])
   );
 
-  React.useEffect(() => {
-    const propertyId = 'banner_prop';
-    registerCustomPlaceHolder(
-      propertyId,
-      scrollScreen,
-      custom_onDataReceived,
-      custom_onPlaceholderException
-    );
+  // React.useEffect(() => {
+  //   const propertyId = 'banner_prop';
+  //   registerCustomPlaceHolder(
+  //     propertyId,
+  //     scrollScreen,
+  //     custom_onDataReceived,
+  //     custom_onPlaceholderException
+  //   );
 
-    return () => {
-      unRegisterCustomPlaceHolder(propertyId, scrollScreen);
-    };
-  });
+  //   return () => {
+  //     unRegisterCustomPlaceHolder(propertyId, scrollScreen);
+  //   };
+  // });
 
   const custom_onDataReceived = (d) => {
     console.log('WER: Custom onDataReceived for-', d?.targetViewId, d);
@@ -141,7 +141,7 @@ const ScrollableScreen = ({ navigation }) => {
       <Text style={styles.nativeText}>
         Below View is from Native - Android (flutter_text)
       </Text>
-      {/* <WEPersonalization
+      <WEInlineView
         style={styles.box2}
         screenName={scrollScreen}
         propertyId={bannerProp}
@@ -149,7 +149,7 @@ const ScrollableScreen = ({ navigation }) => {
         onDataReceived={onDataReceived_2}
         onPlaceholderException={onPlaceholderException_2}
         // personalizationCallback={personalizationCallback2}
-      /> */}
+      />
       <Text style={styles.nativeText}> Below View is React-Native</Text>
       <Image
         source={{ uri: 'https://picsum.photos/200/300/?blur=2' }}
