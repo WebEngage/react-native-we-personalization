@@ -8,7 +8,16 @@
 
 RCT_EXTERN_METHOD(supportedEvents)
 
-RCT_EXTERN_METHOD(registerCampaignCallback)
+//RCT_EXTERN_METHOD(registerCampaignCallback)
+
+RCT_EXTERN_METHOD(registerCampaignCallback:(BOOL)doesUserHandleCallbacks)
+//unRegisterForCampaigns
+RCT_EXTERN_METHOD(unRegisterForCampaigns)
+
+RCT_EXTERN_METHOD(registerCallback:(int)propertyId)
+//unRegisterCallback
+RCT_EXTERN_METHOD(unRegisterCallback:(int)propertyId)
+
 
 
 //RCT_EXTERN_METHOD(multiply:(float)a withB:(float)b

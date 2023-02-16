@@ -30,18 +30,18 @@ const RegularScreen = ({ navigation }) => {
     }, [])
   );
 
-  // React.useEffect(() => {
-  //   const propertyId = 'flutter_text';
-  //   registerCustomPlaceHolder(
-  //     propertyId,
-  //     regularScreenName,
-  //     custom_onRendered,
-  //     custom_onPlaceholderException
-  //   );
-  //   return () => {
-  //     unRegisterCustomPlaceHolder(propertyId, regularScreenName);
-  //   };
-  // }, []);
+  React.useEffect(() => {
+    const propertyId = 1002;
+    registerCustomPlaceHolder(
+      propertyId,
+      regularScreenName,
+      custom_onRendered,
+      custom_onPlaceholderException
+    );
+    return () => {
+      unRegisterCustomPlaceHolder(propertyId, regularScreenName);
+    };
+  }, []);
 
   const custom_onRendered = (d) => {
     console.log('WER: Custom onDataReceived for-', d?.targetViewId, d);
@@ -132,7 +132,7 @@ const RegularScreen = ({ navigation }) => {
       <Button title={'Flatlist screen'} onPress={navigateToFlatList} />
       <Text>This text is from React Native</Text>
       <Text>But Above and below Views are from WebEngage </Text>
-      <WEInlineView
+      {/* <WEInlineView
         color="#12023f"
         style={styles.box2}
         propertyId={screenProperties}
@@ -140,7 +140,7 @@ const RegularScreen = ({ navigation }) => {
         onRendered={onRendered_2} // onRendered
         onDataReceived={onDataReceived_2}
         onPlaceholderException={onPlaceholderException_2}
-      />
+      /> */}
       <View style={styles.margin20} />
 
       <View style={styles.margin20} />
