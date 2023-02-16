@@ -7,7 +7,10 @@ let campaignClickedListener = null;
 let campaignExceptionListener = null;
 let campaignShownListener = null;
 
-export const registerForCampaigns = (campaignCallbackList) => {
+export const registerForCampaigns = (
+  campaignCallbackList,
+  doesUserHandelCallbacks
+) => {
   console.log('campaignCallbackList - ', campaignCallbackList);
   const {
     onCampaignPrepared = null,
@@ -18,7 +21,7 @@ export const registerForCampaigns = (campaignCallbackList) => {
 
   if (!isCampaignListenerAdded) {
     console.log('registerForCampaigns ', isCampaignListenerAdded);
-    PersonalizationBridge.registerCampaignCallback();
+    PersonalizationBridge.registerCampaignCallback(doesUserHandelCallbacks);
     if (onCampaignPrepared) {
       campaignPreparedListener = eventEmitter.addListener(
         'onCampaignPrepared',
@@ -48,17 +51,17 @@ export const registerForCampaigns = (campaignCallbackList) => {
         }
       );
     }
-  }
 
-  if (onCampaignShown) {
-    campaignShownListener = eventEmitter.addListener(
-      'onCampaignShown',
-      (data) => {
-        console.log('WECa: onCampaignShown list', data);
-        onCampaignShown(data);
-      }
-    );
-    isCampaignListenerAdded = true;
+    if (onCampaignShown) {
+      campaignShownListener = eventEmitter.addListener(
+        'onCampaignShown',
+        (data) => {
+          console.log('WECa: onCampaignShown list', data);
+          onCampaignShown(data);
+        }
+      );
+      isCampaignListenerAdded = true;
+    }
   }
 };
 

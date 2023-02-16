@@ -30,6 +30,7 @@ import android.util.Log;
 @ReactModule(name = WEGConstants.PERSONALIZATION_BRIDGE)
 public class PersonalizationBridgeModule extends ReactContextBaseJavaModule implements WEPlaceholderCallback, WECampaignCallback {
   private ReactApplicationContext applicationContext = null;
+  Boolean doesUserHandelCallbacks = false;
 
   public PersonalizationBridgeModule(ReactApplicationContext reactContext) {
     super(reactContext);
@@ -51,9 +52,9 @@ public class PersonalizationBridgeModule extends ReactContextBaseJavaModule impl
 
 
   @ReactMethod
-  public void registerCampaignCallback() {
-    Logger.d(WEGConstants.TAG,"PersonalizationBridgeModule: registerCampaignCallback ");
+  public void registerCampaignCallback(Boolean doesUserHandelCallback) {
     WEPersonalization.Companion.get().registerWECampaignCallback(this);
+    this.doesUserHandelCallbacks = doesUserHandelCallback;
   }
 
   @ReactMethod
@@ -68,7 +69,7 @@ public class PersonalizationBridgeModule extends ReactContextBaseJavaModule impl
     WritableMap params = Arguments.createMap();
     params = Utils.generateParams(actionId, deepLink, weCampaignData);
     Utils.sendEvent(applicationContext, "onCampaignClicked", params);
-    return false;
+    return this.doesUserHandelCallbacks;
   }
 
   @Override
