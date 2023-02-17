@@ -2,6 +2,7 @@ import * as React from 'react';
 import {
   registerForCampaigns,
   unRegisterForCampaigns,
+  userWillHandleDeepLink,
 } from 'react-native-webengage-personalization';
 import LoginScreen from './LoginScreen';
 import Navigation from './Navigation';
@@ -22,7 +23,8 @@ export default function App() {
       onCampaignException,
     };
     const doesUserHandelCallbacks = true;
-    registerForCampaigns(callbacks, doesUserHandelCallbacks);
+    registerForCampaigns(callbacks);
+    userWillHandleDeepLink(doesUserHandelCallbacks);
     return () => {
       unRegisterForCampaigns();
     };

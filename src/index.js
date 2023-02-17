@@ -1,5 +1,9 @@
 import WEInlineView from './WEInlineView';
-import { registerForCampaigns, unRegisterForCampaigns } from './WECampaigns';
+import {
+  registerForCampaigns,
+  unRegisterForCampaigns,
+  userWillHandleDeepLink,
+} from './WECampaigns';
 import {
   registerCustomPlaceHolder,
   unRegisterCustomPlaceHolder,
@@ -11,4 +15,5 @@ export {
   unRegisterForCampaigns,
   registerCustomPlaceHolder,
   unRegisterCustomPlaceHolder,
+  userWillHandleDeepLink,
 };

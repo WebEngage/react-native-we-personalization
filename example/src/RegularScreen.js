@@ -30,18 +30,18 @@ const RegularScreen = ({ navigation }) => {
     }, [])
   );
 
-  React.useEffect(() => {
-    const propertyId = 1002;
-    registerCustomPlaceHolder(
-      propertyId,
-      regularScreenName,
-      custom_onRendered,
-      custom_onPlaceholderException
-    );
-    return () => {
-      unRegisterCustomPlaceHolder(propertyId, regularScreenName);
-    };
-  }, []);
+  // React.useEffect(() => {
+  //   const propertyId = 1002;
+  //   registerCustomPlaceHolder(
+  //     propertyId,
+  //     regularScreenName,
+  //     custom_onRendered,
+  //     custom_onPlaceholderException
+  //   );
+  //   return () => {
+  //     unRegisterCustomPlaceHolder(propertyId, regularScreenName);
+  //   };
+  // }, []);
 
   const custom_onRendered = (d) => {
     console.log('WER: Custom onDataReceived for-', d?.targetViewId, d);

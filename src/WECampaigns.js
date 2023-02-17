@@ -7,10 +7,7 @@ let campaignClickedListener = null;
 let campaignExceptionListener = null;
 let campaignShownListener = null;
 
-export const registerForCampaigns = (
-  campaignCallbackList,
-  doesUserHandleCallbacks
-) => {
+export const registerForCampaigns = (campaignCallbackList) => {
   console.log('campaignCallbackList - ', campaignCallbackList);
   const {
     onCampaignPrepared = null,
@@ -21,7 +18,7 @@ export const registerForCampaigns = (
 
   if (!isCampaignListenerAdded) {
     console.log('registerForCampaigns ', isCampaignListenerAdded);
-    PersonalizationBridge.registerCampaignCallback(doesUserHandleCallbacks);
+    PersonalizationBridge.registerCampaignCallback();
     if (onCampaignPrepared) {
       campaignPreparedListener = eventEmitter.addListener(
         'onCampaignPrepared',
@@ -63,6 +60,10 @@ export const registerForCampaigns = (
       isCampaignListenerAdded = true;
     }
   }
+};
+
+export const userWillHandleDeepLink = (doesUserHandleCallbacks) => {
+  PersonalizationBridge.userWillHandleDeepLink(doesUserHandleCallbacks);
 };
 
 export const unRegisterForCampaigns = () => {

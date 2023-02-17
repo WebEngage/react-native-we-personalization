@@ -28,6 +28,8 @@ const WEInlineView = (props) => {
 
   React.useEffect(() => {
     return () => {
+      console.log('$$$$ WEInlineView: unmounting ', propertyId);
+
       const listenersList = [
         dataReceivedListener,
         renderListerner,
@@ -77,4 +79,5 @@ const WEInlineView = (props) => {
   return <WebengagePersonalizationView {...props} />;
 };
 
+// export default WEInlineView;
 export default React.memo(WEInlineView);

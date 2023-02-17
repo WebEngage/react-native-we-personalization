@@ -15,12 +15,11 @@ public class CustomCallbackHandler:WEPlaceholderCallback{
         print("customPH: onRendered \(data.targetViewTag)")
         let campaignData: [String: Any] = ["targetViewId": data.targetViewTag, "campaingId": data.campaignId, "payloadData": data.toJSONString()]
         print("customPH: Calling onRendered for -> \(data.targetViewTag)")
-
     }
     public func onDataReceived(_ data: WEGCampaignData) {
 //        let campaignData = data;
         print("customPH: onCustomDataReceived \(data.targetViewTag)")
-//        TODO - add WEGCampaignData
+
         let campaignData: [String: Any] = ["targetViewId": data.targetViewTag, "campaingId": data.campaignId, "payloadData": data.toJSONString()]
 
         PersonalizationBridge.emitter.sendEvent(withName: "onCustomDataReceived", body: campaignData)

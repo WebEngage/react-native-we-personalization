@@ -49,6 +49,8 @@ public class WEHInlineWidget extends FrameLayout implements WECampaignCallback, 
   @Override
   protected void onDetachedFromWindow() {
     super.onDetachedFromWindow();
+    Logger.d(WEGConstants.TAG, "WEHInlineWidget: onDetachedFromWindow: " + tagName);
+
     CallbackHandler.removeScreenNavigatorCallback(this.screenName, this);
     View view = weInlineView.findViewWithTag("INLINE_PERSONALIZATION_TAG");
     if (view != null) {

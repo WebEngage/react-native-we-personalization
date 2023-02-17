@@ -80,12 +80,12 @@ export const getPropertyDetails = (list, weCampaignData) => {
 };
 
 export const sendOnDataReceivedEvent = (list, data) => {
-  const { targetViewId = '', campaignId = '', payloadData = '' } = data;
-  // const payload = JSON.parse(payloadData);
+  const { targetViewId = '', campaignId = '', payloadData = '{}' } = data;
+  const payload = JSON.parse(payloadData);
   const weCampaignData = {
     targetViewId,
     campaignId,
-    // payload,
+    payload,
   };
   const propertyItem = getPropertyDetails(list, weCampaignData);
   console.log('onDataReceived! - Event Listener called ->', weCampaignData);
@@ -96,14 +96,13 @@ export const sendOnDataReceivedEvent = (list, data) => {
 };
 
 export const sendOnRenderedEvent = (list, data) => {
-  const { targetViewId = '', campaignId = '', payloadData } = data;
-  // const payload = JSON.parse(payloadData);
+  const { targetViewId = '', campaignId = '', payloadData = '{}' } = data;
+  const payload = JSON.parse(payloadData);
   const weCampaignData = {
     targetViewId,
     campaignId,
-    // payload,
+    payload,
   };
-  // TODO payload json issue
   console.log('onRendered - Event Listener called ->', weCampaignData);
 
   const propertyItem = getPropertyDetails(list, weCampaignData);
@@ -113,7 +112,7 @@ export const sendOnRenderedEvent = (list, data) => {
 };
 
 export const sendOnExceptionEvent = (list, data) => {
-  console.log('onPlaceholderException - Event Listerner called ->', data);
+  console.log('onPlaceholderException - Event Listener called ->', data);
   const { targetViewId = '' } = data;
   const weCampaignData = {
     targetViewId,

@@ -52,8 +52,12 @@ public class PersonalizationBridgeModule extends ReactContextBaseJavaModule impl
 
 
   @ReactMethod
-  public void registerCampaignCallback(Boolean doesUserHandelCallback) {
+  public void registerCampaignCallback() {
     WEPersonalization.Companion.get().registerWECampaignCallback(this);
+  }
+
+  @ReactMethod
+  public void userWillHandleDeepLink(Boolean doesUserHandelCallback) {
     this.doesUserHandelCallbacks = doesUserHandelCallback;
   }
 
@@ -65,7 +69,7 @@ public class PersonalizationBridgeModule extends ReactContextBaseJavaModule impl
 
   @Override
   public boolean onCampaignClicked(@NonNull String actionId, @NonNull String deepLink, @NonNull WECampaignData weCampaignData) {
-    Logger.d(WEGConstants.TAG,"PersonalizationBridgeModule: onCampaignClicked actionId- "+actionId+ " \n deepLink- "+deepLink);
+    Logger.d(WEGConstants.TAG,"PersonalizationBridgeModule: onCampaignClicked actionId- "+actionId+ " \n deepLink- "+deepLink+" \nreturning - "+this.doesUserHandelCallbacks);
     WritableMap params = Arguments.createMap();
     params = Utils.generateParams(actionId, deepLink, weCampaignData);
     Utils.sendEvent(applicationContext, "onCampaignClicked", params);
