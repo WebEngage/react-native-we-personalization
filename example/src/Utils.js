@@ -25,3 +25,11 @@ export const getValueFromAsyncStorage = async (key) => {
   }
   return retVal;
 };
+
+export const removeItem = async (key) => {
+  try {
+    await AsyncStorage.removeItem(key);
+  } catch (error) {
+    console.log(error);
+  }
+};

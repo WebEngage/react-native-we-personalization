@@ -203,7 +203,7 @@ public class WEHInlineWidget extends FrameLayout implements WECampaignCallback, 
   //  TODO - Check with  Milind if it has to be visible at hybrid for the below methods
   @Override
   public boolean onCampaignClicked(@NonNull String s, @NonNull String s1, @NonNull WECampaignData weCampaignData) {
-    Logger.d(WEGConstants.TAG, "onCampaignClicked shown ---- " + weCampaignData);
+    Logger.d(WEGConstants.TAG, "onCampaignClicked called ---- " + weCampaignData);
     weCampaignData.trackClick(null);
     return false;
   }

@@ -12,7 +12,7 @@ import WebEngage from 'react-native-webengage';
 const ListScreen = ({ navigation }) => {
   var webengage = new WebEngage();
   React.useEffect(() => {
-    webengage.screen('ak_test');
+    webengage.screen('test');
     console.log("1234 is navigated")
   })
   return (
@@ -39,6 +39,13 @@ const ListScreen = ({ navigation }) => {
         onPress={() => navigation.navigate('flatlist')}
       >
         <Text style={styles.textStyle}> Flatlist </Text>
+      </Pressable>
+
+      <Pressable
+        style={styles.button}
+        onPress={() => navigation.navigate('customScreens')}
+      >
+        <Text style={styles.textStyle}> Custom Screens </Text>
       </Pressable>
     </SafeAreaView>
   );

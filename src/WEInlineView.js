@@ -27,8 +27,10 @@ const WEInlineView = (props) => {
   } = props;
 
   React.useEffect(() => {
+    console.log('$$$$ WEInlineView: Attached/Mounted ', propertyId);
+
     return () => {
-      console.log('$$$$ WEInlineView: unmounting ', propertyId);
+      console.log('$$$$ WEInlineView: Destroyed/UnMounted ', propertyId);
 
       const listenersList = [
         dataReceivedListener,
@@ -44,7 +46,7 @@ const WEInlineView = (props) => {
       isListenerAdded = listenerFlag;
       propertyProcessor = updatedList;
     };
-  });
+  },[]);
 
   propertyProcessor = registerPropertyList(
     propertyProcessor,

@@ -249,7 +249,7 @@ android {
 }
 
 dependencies {
-    implementation fileTree(dir: "libs", include: ["*.jar", "*.aar"])
+    // implementation fileTree(dir: "libs", include: ["*.jar", "*.aar"])
 
 
     // Google API error fix

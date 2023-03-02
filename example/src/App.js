@@ -7,31 +7,40 @@ import {
 import LoginScreen from './LoginScreen';
 import Navigation from './Navigation';
 import { getValueFromAsyncStorage } from './Utils';
+import { initWebEngage } from './Utils/WebEngageManager';
 
 export default function App() {
   const [isUserLoggedIn, setIsUserLoggedIn] = React.useState(false);
   const userName = getValueFromAsyncStorage('userName');
+  initWebEngage();
 
   React.useEffect(() => {
     if (userName) {
       setIsUserLoggedIn(true);
     }
-    const callbacks = {
-      onCampaignPrepared,
-      onCampaignShown,
-      onCampaignClicked,
-      onCampaignException,
-    };
-    const doesUserHandelCallbacks = true;
-    registerForCampaigns(callbacks);
-    userWillHandleDeepLink(doesUserHandelCallbacks);
-    return () => {
-      unRegisterForCampaigns();
-    };
+    // const callbacks = {
+    //   onCampaignPrepared,
+    //   onCampaignShown,
+    //   onCampaignClicked,
+    //   onCampaignException,
+    // };
+    // const doesUserHandelCallbacks = true;
+    // registerForCampaigns(callbacks);
+    // userWillHandleDeepLink(doesUserHandelCallbacks);
+    // return () => {
+    //   unRegisterForCampaigns();
+    // };
   }, [userName]);
 
   const onCampaignClicked = (data) => {
     console.log('App: onCampaignClicked ', data);
+    const { deepLink = '' } = data;
+    const deepLinkArr = deepLink.split('/');
+    console.log('App: deepLinkArr ', deepLinkArr);
+    if (deepLinkArr.length > 3 && deepLinkArr[3] === 'www.webengage.com') {
+      const navigateScreen = deepLinkArr[4];
+      // Navigation.naviagteTo(navigateScreen);
+    }
   };
 
   const onCampaignPrepared = (data) => {

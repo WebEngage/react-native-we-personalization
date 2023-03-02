@@ -80,22 +80,10 @@ const FlatListScreen = ({ navigation }) => {
     );
   };
 
-  const data = [
-    { id: 0, title: 'zeroth item' },
-    { id: 1, title: 'First item' },
-    { id: 2, title: 'Second item' },
-    { id: 3, title: 'Third item' },
-    { id: 4, title: 'Fourth item' },
-    { id: 5, title: 'Fifth item' },
-    { id: 6, title: 'Sixth item' },
-    { id: 7, title: 'Seventh item' },
-    { id: 8, title: 'Eighth item' },
-    { id: 9, title: 'Ninth item' },
-    { id: 10, title: 'Tenth item' },
-    { id: 11, title: 'Eleventh item' },
-    { id: 12, title: 'Twelves item' },
-    { id: 13, title: 'Thirteenth item' },
-  ];
+  const data1 = [];
+  for (let i = 0; i < 100; i++) {
+    data1.push({ id: i, title: `${i}th item` });
+  }
   // const flatScreenName = 'scroll23';
   // const textProp = Platform.OS === 'android' ? 'banner_prop' : 432;
   // const bannerProp = Platform.OS === 'android' ? 'text_prop' : 532;
@@ -104,7 +92,6 @@ const FlatListScreen = ({ navigation }) => {
   // const textProp =
   //   Platform.OS === 'android' ? 'flutter_banner' : 99;
   // const bannerProp = Platform.OS === 'android' ? 'flutter_text' : 1002; // screen_home
-
 
   // Created this properties but not reflecting
   const flatScreenName = Platform.OS === 'android' ? 'react_screen' : 'screen1';
@@ -138,7 +125,7 @@ const FlatListScreen = ({ navigation }) => {
         <View style={styles.margin50} />
         <Button title={'Scroll screen'} onPress={navigateToScroll} />
 
-        {item.id === 4 ? (
+        {item.id === 30 ? (
           <WEInlineView
             style={styles.box2}
             propertyId={textProp}
@@ -157,10 +144,14 @@ const FlatListScreen = ({ navigation }) => {
     <SafeAreaView>
       <FlatList
         keyExtractor={(item) => item.id}
-        initialNumToRender={5}
-        data={data}
-        extraData={data}
+        data={data1}
+        // initialNumToRender={5}
+        // extraData={data}
+        // bouncesZoom
+        // overScrollMode="always"
+        pagingEnabled
         renderItem={renderItem}
+        removeClippedSubviews={true} //most imp => without this it(DidMoveToWindow - iOS) won't work
       />
     </SafeAreaView>
   );

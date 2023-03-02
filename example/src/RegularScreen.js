@@ -23,15 +23,23 @@ const RegularScreen = ({ navigation }) => {
   useFocusEffect(
     React.useCallback(() => {
       webengage.screen(regularScreenName);
+      const propertyId = "flutter_text";
+    // registerCustomPlaceHolder(
+    //   propertyId,
+    //   regularScreenName,
+    //   custom_onRendered,
+    //   custom_onPlaceholderException
+    // );
       console.log(regularScreenName + 'navigted');
       return () => {
+        // unRegisterCustomPlaceHolder(propertyId, regularScreenName);
         // Perform cleanup on blur
       };
     }, [])
   );
 
   // React.useEffect(() => {
-  //   const propertyId = 1002;
+  //   const propertyId = "flutter_text";
   //   registerCustomPlaceHolder(
   //     propertyId,
   //     regularScreenName,
@@ -107,10 +115,10 @@ const RegularScreen = ({ navigation }) => {
     navigation.navigate('flatlist');
   };
 
-  const regularScreenName = Platform.OS === 'android' ? 'ET_home' : 'ET_home';
+  const regularScreenName = Platform.OS === 'android' ? 'screendark' : 'ET_home';
   // 'ET_home';
   const screenHomeProperties =
-    Platform.OS === 'android' ? 'flutter_banner' : 99;
+    Platform.OS === 'android' ? 'dm2' : 99;
   const screenProperties = Platform.OS === 'android' ? 'flutter_text' : 1002; // screen_home
 
   // registerForCampaigns(clickCb, shownCb)

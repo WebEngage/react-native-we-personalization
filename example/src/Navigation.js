@@ -5,6 +5,9 @@ import RegularScreen from './RegularScreen';
 import ScrollableScreen from './ScrollableScreen';
 import FlatListScreen from './FlatListScreen';
 import ListScreen from './ListScreen';
+import CustomScreens from './Custom/CustomScreens';
+import ScreenDetails from './Custom/ScreenDetails';
+import DynamicScreen from './Custom/DynamicScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -24,6 +27,13 @@ const Navigation = () => {
         />
         <Stack.Screen name="scrollable" component={ScrollableScreen} />
         <Stack.Screen name="flatlist" component={FlatListScreen} />
+        <Stack.Screen name="customScreens" component={CustomScreens} />
+        <Stack.Screen name="screenDetails" component={ScreenDetails} />
+        <Stack.Screen
+          name="dynamicScreen"
+          component={DynamicScreen}
+          options={({ route }) => ({ title: route.params.item.screenName })}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -6,7 +6,6 @@
   android:orientation="horizontal">
   <com.webengage.personalization.WEInlineView
     android:id="@+id/weinline_widget"
-    android:background="#377E5E5E"
     android:layout_width="match_parent"
     android:layout_height="match_parent"/>
 </LinearLayout>
