@@ -10,6 +10,11 @@ import WEPersonalization
 class CampaignCallbackHandler:WECampaignCallback{
     static let shared = CampaignCallbackHandler()
     var autoHandleClick = true
+    var latestScreenName = ""
+    
+    func getLatestScreenName() -> String {
+        return self.latestScreenName
+    }
     func onCampaignPrepared(_ data: WEGCampaignData) -> WEGCampaignData {
         print(WEGConstants.TAG+" WEP CC: onCampaignPrepared for \(data.targetViewTag)")
 //        let campaignData: [String: Any] = generateParams(data: data)
@@ -45,7 +50,15 @@ class CampaignCallbackHandler:WECampaignCallback{
 
 extension CampaignCallbackHandler:PropertyRegistryCallback{
     func onPropertyCacheCleared(for screenDetails: [AnyHashable : Any]) {
-        print(WEGConstants.TAG+" WERP screen changed to \(screenDetails)")
-        NotificationCenter.default.post(name: Notification.Name(WEGConstants.SCREEN_NAVIGATED), object: nil)
+        print(WEGConstants.TAG+" WERP screen changed!!!")
+        let message = "From CampaignCallbackHandler!"
+        self.latestScreenName = screenDetails["screen_name"] as! String
+        
+        if let screenName = screenDetails["screen_name"] as? String{
+            print(WEGConstants.TAG+" WERP screen changed to \(screenName)")
+            NotificationCenter.default.post(name: Notification.Name(WEGConstants.SCREEN_NAVIGATED), object: nil, userInfo: ["screenName": screenName]
+            )
+        }
+       
     }
 }

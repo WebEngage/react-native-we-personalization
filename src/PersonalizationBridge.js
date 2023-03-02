@@ -15,5 +15,5 @@ export const WebengagePersonalizationView =
   UIManager.getViewManagerConfig(COMPONENT_NAME) != null
     ? requireNativeComponent(COMPONENT_NAME)
     : () => {
-        throw new Error(LINKING_ERROR);
+        throw new Error('LINKING_ERROR');
       };
