@@ -49,7 +49,7 @@ public class WEHInlineView: UICollectionViewCell{
         print(WEGConstants.TAG+"WER: init called for inlineWidget")
         super.init(frame: frame)
         setupView()
-        NotificationCenter.default.addObserver(self, selector: #selector(reloadViews(_:)), name: Notification.Name(WEGConstants.SCREEN_NAVIGATED), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(reloadViews), name: Notification.Name(WEGConstants.SCREEN_NAVIGATED), object: nil)
 
     }
 
