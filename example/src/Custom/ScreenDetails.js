@@ -103,7 +103,6 @@ export default function ScreenDetails(props) {
     let isDuplicate = false;
 
     for (const viewItem of viewList) {
-
       if (
         viewItem.propertyId === data.propertyId ||
         viewItem.position === data.position ||
@@ -182,6 +181,8 @@ export default function ScreenDetails(props) {
           <TextInput
             style={styles.textViewStyle}
             onChangeText={onScreenChange}
+            autoCapitalize="none"
+            autoCorrect={false}
             value={screenName}
           />
         </View>
@@ -213,15 +214,18 @@ export default function ScreenDetails(props) {
           addViewListData={addViewListData}
         />
         <View style={styles.rowBtn}>
-        <Pressable onPress={addViewData} style={[styles.button, styles.btnAdd]}>
-          <Text style={styles.btnTxt}> Add View </Text>
-        </Pressable>
-        <Pressable
-          onPress={addScreenDetails}
-          style={[styles.button, styles.btnSave]}
-        >
-          <Text style={styles.btnTxt}> Save Screen </Text>
-        </Pressable>
+          <Pressable
+            onPress={addViewData}
+            style={[styles.button, styles.btnAdd]}
+          >
+            <Text style={styles.btnTxt}> Add View </Text>
+          </Pressable>
+          <Pressable
+            onPress={addScreenDetails}
+            style={[styles.button, styles.btnSave]}
+          >
+            <Text style={styles.btnTxt}> Save Screen </Text>
+          </Pressable>
         </View>
         {viewListDisplay()}
       </View>

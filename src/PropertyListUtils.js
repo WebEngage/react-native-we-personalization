@@ -1,3 +1,4 @@
+let propertyProcessorList = []
 export const registerPropertyList = (
   list,
   screenName,
@@ -27,7 +28,8 @@ export const registerPropertyList = (
     };
     list[list?.length - 1].propertyList.push(obj);
   }
-
+  console.log("@@@ list after updation ",list)
+  propertyProcessorList = [...list];
   return list;
 };
 
@@ -35,20 +37,45 @@ export function getLatestScreenIndex(screen, list) {
   return list?.findIndex((obj) => obj.screenName === screen);
 }
 
-export const removeScreenFromPropertyList = (
+export const removePropertyFromPropertyList = (
   list,
   screenName,
+  propertyId,
   listenersList,
   listenerFlag
 ) => {
   let updatedList = list;
+  console.log('@@@ updated list - ', updatedList, screenName, propertyId);
+  console.log('@@@ propertyProcessorList - ', propertyProcessorList);
+
   updatedList?.map((val, index) => {
     if (val.screenName === screenName) {
-      updatedList.splice(index, 1);
+      // updatedList.splice(index, 1);
+      val.propertyList.forEach((item) => {
+        if (val.screenName === screenName) {
+          console.log(
+            '@@@ updated list - ',
+            updatedList,
+            screenName,
+            propertyId
+          );
+          val?.propertyList?.forEach((property, propertyIndex) => {
+            if (property?.propertyId === propertyId) {
+              updatedList[index].propertyList.splice(propertyIndex, 1);
+            }
+          });
+          console.log(
+            '@@@ updated list after removing property- ',
+            updatedList,
+            screenName,
+            propertyId
+          );
+        }
+      });
     }
   });
   console.log(
-    'listener individual removeScreenFromPropertyList ',
+    'listener individual removePropertyFromPropertyList ',
     list,
     listenerFlag
   );

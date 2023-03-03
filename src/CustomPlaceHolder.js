@@ -1,7 +1,7 @@
 import PersonalizationBridge, { eventEmitter } from './PersonalizationBridge';
 import {
   registerPropertyList,
-  removeScreenFromPropertyList,
+  removePropertyFromPropertyList,
   sendOnDataReceivedEvent,
   sendOnExceptionEvent,
 } from './PropertyListUtils';
@@ -56,9 +56,10 @@ export const unRegisterCustomPlaceHolder = (propertyId, screen) => {
 
   PersonalizationBridge.unRegisterCallback(propertyId);
   const listenersList = [customOnRenderedListener, customExceptionListener];
-  const { updatedList, listenerFlag } = removeScreenFromPropertyList(
+  const { updatedList, listenerFlag } = removePropertyFromPropertyList(
     customPropertyList,
     screen,
+    propertyId,
     listenersList,
     isCustomListenerAdded
   );

@@ -35,6 +35,8 @@ const MyModal = (props) => {
       alert('Add valid Data');
     }
   };
+  const propertyIdLabel =
+    Platform.OS === 'ios' ? 'Property Id:(Numeric)' : 'PropertyId: ';
 
   return (
     <View style={{ flex: 1 }}>
@@ -82,7 +84,7 @@ const MyModal = (props) => {
             </View>
 
             <View style={styles.ViewLine}>
-              <Text>Property Id: </Text>
+              <Text>{propertyIdLabel} </Text>
               <TextInput
                 style={styles.textViewStyle}
                 onChangeText={(val) => setPropertyId(val)}

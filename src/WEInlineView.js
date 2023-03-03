@@ -5,7 +5,7 @@ import {
 } from './PersonalizationBridge';
 import {
   registerPropertyList,
-  removeScreenFromPropertyList,
+  removePropertyFromPropertyList,
   sendOnDataReceivedEvent,
   sendOnExceptionEvent,
   sendOnRenderedEvent,
@@ -26,6 +26,7 @@ const WEInlineView = (props) => {
     onPlaceholderException = null,
   } = props;
 
+
   React.useEffect(() => {
     console.log('$$$$ WEInlineView: Attached/Mounted ', propertyId);
 
@@ -37,9 +38,12 @@ const WEInlineView = (props) => {
         renderListerner,
         exceptionalListener,
       ];
-      const { updatedList, listenerFlag } = removeScreenFromPropertyList(
+  console.log("@@@ List before removing",propertyProcessor)
+
+      const { updatedList, listenerFlag } = removePropertyFromPropertyList(
         propertyProcessor,
         screenName,
+        propertyId,
         listenersList,
         isListenerAdded
       );
@@ -48,7 +52,7 @@ const WEInlineView = (props) => {
     };
   },[]);
 
-  propertyProcessor = registerPropertyList(
+  const propList = registerPropertyList(
     propertyProcessor,
     screenName,
     propertyId,
@@ -56,7 +60,8 @@ const WEInlineView = (props) => {
     onRendered,
     onPlaceholderException
   );
-
+  propertyProcessor = [...propList];
+  console.log("@@@ registerPropertyList",propertyProcessor)
   if (!isListenerAdded) {
     dataReceivedListener = eventEmitter.addListener(
       'onDataReceived',

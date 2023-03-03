@@ -5,13 +5,11 @@ import React
 import WEPersonalization
 
 
-public class WEHInlineView:UIView{
+public class WEHInlineView: UICollectionViewCell{
     var inlineView: WEInlineView? = nil
     var campaignData: WEGCampaignData? = nil
-    let TAG = "WER:"
     @objc var width: CGFloat = 0.1 {
         didSet {
-            print("inside Swifts width set  \(width)")
             setupView()
         }
     }
@@ -19,31 +17,24 @@ public class WEHInlineView:UIView{
 
     @objc var height: CGFloat = 0.1 {
         didSet {
-            print("inside Swifts height set  \(height)")
             setupView()
         }
     }
-    @objc var screenName: String = "test-screen"{
+
+
+    @objc var screenName: String = ""{
         didSet {
-            print(TAG+"Inside screenName-- screen-"+screenName)
+            print(WEGConstants.TAG+" Initialization for screenName- \(screenName)")
             self.setupView()
         }
     }
 
     @objc var propertyId: Int = 0 {
         didSet {
-            print(TAG+"Inside propertyId-- prop- \(propertyId)")
+            print(WEGConstants.TAG+" Initialization for propertyId - \(propertyId)")
             self.setupView()
         }
     }
-
-    @objc var color: String = "" {
-        didSet {
-            // print(TAG+"Inside color did set screen-"+screenName+" \n prop-"+screenName)
-            //          self.backgroundColor = hexStringToUIColor(hexColor: color)
-        }
-    }
-
 
     @objc func reloadViews(){
         DispatchQueue.main.async {
@@ -54,136 +45,77 @@ public class WEHInlineView:UIView{
             }
 
     }
-
-
-
     override init(frame: CGRect) {
+        print(WEGConstants.TAG+"WER: init called for inlineWidget")
         super.init(frame: frame)
-        print(TAG+" called from first init! screen-"+self.screenName+" \n prop-\(self.propertyId)")
         setupView()
-        NotificationCenter.default.addObserver(self, selector: #selector(reloadViews), name: Notification.Name("screenNavigated"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(reloadViews(_:)), name: Notification.Name(WEGConstants.SCREEN_NAVIGATED), object: nil)
 
     }
 
     deinit{
-            NotificationCenter.default.removeObserver(self)
+        print(WEGConstants.TAG+"WER2: deInit called for \(self.propertyId)")
+           NotificationCenter.default.removeObserver(self)
         if let scrollview = self.getScrollview(view: self){
             scrollview.removeObserver(self, forKeyPath:  #keyPath(UIScrollView.contentOffset))
         }
-        }
+        WEPersonalization.shared.unregisterWEPlaceholderCallback(self.propertyId)
+    }
 
 
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-        // print(TAG+" called from second init")
         setupView()
     }
+
+
     private func setupView(){
-        //        NSLog("WER: Inside setupView")
-
-        // TODO - Below code will send data to listener of react-native
-//        PersonalizationBridge.emitter.sendEvent(withName: "testAk", body: "body")
-        print(TAG+" @@@ propertyId-\(self.propertyId) | screenName-"+self.screenName)
         if(self.height > 0.1 && self.width > 0.1 && propertyId != 0) {
-            print(TAG+" @@@ propertyId-\(self.propertyId) | screenName-"+self.screenName)
-            print(TAG+" @@@ inside setupView height -\(self.height) | width--\(self.width)")
-
             inlineView = WEInlineView(frame: CGRect(x: 0, y: 0, width: self.width, height: self.height))
             inlineView?.tag = self.propertyId
             if(self.propertyId != 0) {
-                inlineView?.tag = self.propertyId
-                    inlineView?.load(tag: self.propertyId, callbacks: self)
+                print(WEGConstants.TAG+" WERL: LoadView called for - \(self.propertyId)")
+//                inlineView?.tag = self.propertyId
+                 inlineView?.load(tag: self.propertyId, callbacks: self)
+//                PlaceHolderCallbackHandler
             }
-
-
-            //        WEPropertyRegistry.shared.register(callback: self, forTag: 13)
-            //        addSubview(headerView)
+//            print(WEGConstants.TAG+" Yay! Adding subview for - \(self.propertyId)")
             addSubview(inlineView!)
-
-        }
-
-
+       }
     }
-
-    func hexStringToUIColor(hexColor: String) -> UIColor {
-        let stringScanner = Scanner(string: hexColor)
-
-        if(hexColor.hasPrefix("#")) {
-            stringScanner.scanLocation = 1
-        }
-        var color: UInt32 = 0
-        stringScanner.scanHexInt32(&color)
-
-        let r = CGFloat(Int(color >> 16) & 0x000000FF)
-        let g = CGFloat(Int(color >> 8) & 0x000000FF)
-        let b = CGFloat(Int(color) & 0x000000FF)
-
-        return UIColor(red: r / 255.0, green: g / 255.0, blue: b / 255.0, alpha: 1)
-    }
-
-    lazy var headerView: UIView = {
-        // WEInlineView()
-        let headerView = UIView(frame: CGRect(x: 0, y: 0, width: 300, height: 40))
-        headerView.backgroundColor = UIColor(red: 22/255, green: 160/255, blue: 133/255, alpha: 0.5)
-        headerView.layer.shadowColor = UIColor.gray.cgColor
-        headerView.layer.shadowOffset = CGSize(width: 0, height: 10)
-        headerView.layer.shadowOpacity = 1
-        headerView.layer.shadowRadius = 5
-        return headerView
-    }()
-
 }
 
 
 extension WEHInlineView : WEPlaceholderCallback{
     public func onRendered(data: WEGCampaignData) {
-        print("WERP : onRendered \(self.propertyId)")
-        let campaignData: [String: Any] = ["targetViewId": data.targetViewTag, "campaingId": data.campaignId, "payloadData": data.toJSONString()]
-        print("WERP : Calling onRendered for -> \(self.propertyId)")
-        PersonalizationBridge.emitter.sendEvent(withName: "onRendered", body: campaignData)
+        print(WEGConstants.TAG+" WERP : onRendered \(self.propertyId)")
+        let campaignData: [String: Any] = [WEGConstants.PAYLOAD_TARGET_VIEW_ID: data.targetViewTag, WEGConstants.PAYLOAD_CAMPAIGN_ID: data.campaignId ?? "", WEGConstants.PAYLOAD: data.toJSONString()]
+        PersonalizationBridge.emitter.sendEvent(withName: WEGConstants.METHOD_NAME_ON_RENDERED, body: campaignData)
         if(self.isVisibleToUser) {
             data.trackImpression(attributes: nil)
         } else {
             if let scrollview = self.getScrollview(view: self){
                 scrollview.addObserver(self, forKeyPath: #keyPath(UIScrollView.contentOffset), options: [.old, .new], context: nil)
+                print(WEGConstants.TAG+" WERS: Scrollview  found")
             }else{
-                print("WER: Scrollview not found")
+                print(WEGConstants.TAG+" WERS: Scrollview not found")
             }
         }
 
     }
     public func onDataReceived(_ data: WEGCampaignData) {
         self.campaignData = data;
-        print("WERP : onDataReceived \(self.propertyId)")
-//        TODO - add WEGCampaignData
-        let campaignData: [String: Any] = ["targetViewId": data.targetViewTag, "campaingId": data.campaignId, "payloadData": data.toJSONString()]
+        print(WEGConstants.TAG+" WERP : onDataReceived \(self.propertyId)")
+        let campaignData: [String: Any] = [WEGConstants.PAYLOAD_TARGET_VIEW_ID: data.targetViewTag, WEGConstants.PAYLOAD_CAMPAIGN_ID: data.campaignId, WEGConstants.PAYLOAD: data.toJSONString()]
 
-        PersonalizationBridge.emitter.sendEvent(withName: "onDataReceived", body: campaignData)
+        PersonalizationBridge.emitter.sendEvent(withName: WEGConstants.METHOD_NAME_ON_DATA_RECEIVED, body: campaignData)
     }
     public func onPlaceholderException(_ campaignId: String?, _ targetViewId: Int, _ exception: Error) {
-        print("WERP : onPlaceholderException \(self.propertyId)")
-        let campaignData: [String: Any] = ["targetViewId": targetViewId, "campaingId": campaignId ?? "", "exception": exception]
-        PersonalizationBridge.emitter.sendEvent(withName: "onPlaceholderException", body: campaignData)
+        print(WEGConstants.TAG+" WERP : onPlaceholderException \(self.propertyId)")
+        let campaignData: [String: Any] = [WEGConstants.PAYLOAD_TARGET_VIEW_ID: targetViewId, WEGConstants.PAYLOAD_CAMPAIGN_ID: campaignId ?? "", WEGConstants.EXCEPTION: exception]
+        PersonalizationBridge.emitter.sendEvent(withName: WEGConstants.METHOD_NAME_ON_PLACEHOLDER_EXCEPTION, body: campaignData)
     }
 }
-
-// TODO Is it required? we are using it in PersonalizationBridge
-// extension WEHInlineView:WECampaignCallback{
-//     public func onCampaignPrepared(_ data: WEGCampaignData) -> WEGCampaignData {
-//         print("WERP : onCampaignPrepared \(self.propertyId)")
-//         return data
-//     }
-//     public func onCampaignShown(data: WEGCampaignData) {
-//         print("WERP : onCampaignShown \(self.propertyId)")
-//     }
-//     public func onCampaignException(_ campaignId: String?, _ targetViewId: String, _ exception: Error) {
-//         print("WERP : onCampaignException \(self.propertyId)")
-//     }
-//     public func onCampaignClicked(actionId: String, deepLink: String, data: WEGCampaignData) -> Bool {
-//         //print("WEP : onCampaignClicked \(_inlineView!.isVisibleToUser)")
-//         return false
-//     }
-// }
 
 extension WEHInlineView {
     func getScrollview(view:UIView)->UIScrollView?{
@@ -195,9 +127,9 @@ extension WEHInlineView {
 
     public override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         if keyPath == #keyPath(UIScrollView.contentOffset) {
-            print("WERP above isVisibleToUser @@@@")
+            print(WEGConstants.TAG+" WERP above isVisibleToUser @@@@")
             if self.isVisibleToUser == true{
-                print("WERP screen is visible in the port @@@@")
+                print(WEGConstants.TAG+" WERP screen is visible in the port @@@@")
                 if let scrollview = self.getScrollview(view: self){
                     // remove observer added to scrollview
                     scrollview.removeObserver(self, forKeyPath:  #keyPath(UIScrollView.contentOffset))
@@ -240,3 +172,4 @@ extension UIView{
         viewFrame.minY <= rootViewController.view.bounds.height - bottomSafeArea
     }
 }
+

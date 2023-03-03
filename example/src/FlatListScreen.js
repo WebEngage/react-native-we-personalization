@@ -125,7 +125,7 @@ const FlatListScreen = ({ navigation }) => {
         <View style={styles.margin50} />
         <Button title={'Scroll screen'} onPress={navigateToScroll} />
 
-        {item.id === 30 ? (
+        {item.id === 3 ? (
           <WEInlineView
             style={styles.box2}
             propertyId={textProp}

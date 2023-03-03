@@ -8,7 +8,6 @@ let campaignExceptionListener = null;
 let campaignShownListener = null;
 
 export const registerForCampaigns = (campaignCallbackList) => {
-  console.log('campaignCallbackList - ', campaignCallbackList);
   const {
     onCampaignPrepared = null,
     onCampaignShown = null,
@@ -17,7 +16,6 @@ export const registerForCampaigns = (campaignCallbackList) => {
   } = campaignCallbackList;
 
   if (!isCampaignListenerAdded) {
-    console.log('registerForCampaigns ', isCampaignListenerAdded);
     PersonalizationBridge.registerCampaignCallback();
     if (onCampaignPrepared) {
       campaignPreparedListener = eventEmitter.addListener(

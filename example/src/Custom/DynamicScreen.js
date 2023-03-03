@@ -2,9 +2,12 @@ import React from 'react';
 import {
   Dimensions,
   FlatList,
+  Pressable,
   ScrollView,
   StyleSheet,
   Text,
+  TouchableHighlight,
+  TouchableOpacity,
   View,
 } from 'react-native';
 import { webengageInstance } from '../Utils/WebEngageManager';
@@ -15,6 +18,7 @@ import {
   userWillHandleDeepLink,
 } from '../../../src';
 import { getValueFromAsyncStorage } from '../Utils';
+import NavigationModal from '../Utils/NavigationModal';
 export default function DynamicScreen(props) {
   const { navigation = {}, route: { params: { item = {} } = {} } = {} } = props;
   const {
@@ -25,8 +29,14 @@ export default function DynamicScreen(props) {
     isRecyclerView = false,
     viewData = [],
   } = item;
-  const arr = Array.from({ length: size });
+  const arr = [];
+  for (let i = 0; i < size; i++) {
+    const id = `item-${i}`;
+    arr.push({ id: id });
+  }
   const [screenList, setScreenList] = React.useState([]);
+  const [showNavigation, setShowNavigation] = React.useState(false);
+
   // TODO- If uncomment WEInlineView will be hidden in android
 
   React.useEffect(() => {
@@ -82,16 +92,12 @@ export default function DynamicScreen(props) {
   };
 
   const onRendered_1 = (d) => {
-    console.log(
-      'WEZ: Regular onRendered_1 triggered for -',
-      d?.targetViewId,
-      d
-    );
+    console.log('WEZ: Dynamic onRendered triggered for -', d?.targetViewId, d);
   };
 
   const onDataReceived_1 = (d) => {
     console.log(
-      'WEZ: Regular onDataReceived_1 triggered for ',
+      'WEZ: Dynamic onDataReceived triggered for ',
       d?.targetViewId,
       d
     );
@@ -99,7 +105,7 @@ export default function DynamicScreen(props) {
 
   const onPlaceholderException_1 = (d) => {
     console.log(
-      'WEZ: Regular onPlaceholderException_1 triggered for ',
+      'WEZ: Dynamic onPlaceholderException triggered for ',
       d?.targetViewId,
       d
     );
@@ -139,11 +145,16 @@ export default function DynamicScreen(props) {
   };
 
   const renderFlatList = () => {
-    return <FlatList data={arr} renderItem={renderRecycler} />;
+    return (
+      <FlatList
+        data={arr}
+        keyExtractor={(item) => item.id}
+        renderItem={renderRecycler}
+      />
+    );
   };
 
   const renderRegularScreen = () => {
-    console.log('arr -', arr);
     return arr.map((item, index) => {
       return renderRecycler({ item, index });
     });
@@ -155,10 +166,37 @@ export default function DynamicScreen(props) {
       return <ScrollView>{renderRegularScreen()}</ScrollView>;
     }
   };
-  return <View>{renderScreen()}</View>;
+
+  const openNavigation = () => {
+    console.log('Screen navigation - ', screenList);
+    setShowNavigation(true);
+  };
+
+  const sendNavigation = (item) => {
+    navigation.navigate('dynamicScreen', { item });
+  };
+
+  return (
+    <View style={styles.container}>
+      <TouchableOpacity style={styles.button} onPress={openNavigation}>
+        <Text> Navigate </Text>
+      </TouchableOpacity>
+      <NavigationModal
+        screenList={screenList}
+        currentScreen={screenName}
+        showModal={showNavigation}
+        changeModalStatus={setShowNavigation}
+        sendNavigation={sendNavigation}
+      />
+      {renderScreen()}
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
   card: {
     height: 100,
     backgroundColor: '#e3e1de',
@@ -168,6 +206,19 @@ const styles = StyleSheet.create({
     borderColor: '#ccc',
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  button: {
+    marginTop: 25,
+    backgroundColor: '#91e058',
+    borderWidth: 1,
+    width: 100,
+    height: 50,
+    borderRadius: 30,
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignSelf: 'flex-end',
+    marginRight: 25,
+    marginBottom: 20,
   },
   flatColor: {
     backgroundColor: '#e8b77b',
