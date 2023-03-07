@@ -125,7 +125,7 @@ export default function DynamicScreen(props) {
 
       screenListArr.forEach((screenData) => {
         if (screenData.screenName === navigateScreen) {
-          navigation.navigate('dynamicScreen', { item: screenData });
+          navigation.navigate(navigateScreen, { item: screenData });
         }
       });
     }
@@ -225,12 +225,12 @@ export default function DynamicScreen(props) {
   };
 
   const openNavigation = () => {
-    console.log('Screen navigation - ', screenList);
     setShowNavigation(true);
   };
 
-  const sendNavigation = (item) => {
-    navigation.navigate('dynamicScreen', { item, screenId: item.screenName });
+  const sendNavigation = (navItem) => {
+    const { screenName: navigateScreen } = navItem;
+    navigation.navigate(navigateScreen, { navItem, screenId: navigateScreen });
   };
 
   return (
