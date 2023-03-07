@@ -28,7 +28,6 @@ import {
 export default function DynamicScreen(props) {
   const { navigation = {}, route: { params: { item = {} } = {} } = {} } = props;
 
-
   const {
     id = 0,
     screenName = '',
@@ -56,9 +55,9 @@ export default function DynamicScreen(props) {
       if (eventName) {
         webengageInstance.track(eventName);
       }
-      console.log("WEZ: dynamic  "+screenName + 'mounted');
+      console.log('WEZ: dynamic  ' + screenName + 'mounted');
       return () => {
-        console.log("WEZ: dynamic "+screenName+" is out of focus")
+        console.log('WEZ: dynamic ' + screenName + ' is out of focus');
       };
     }, [])
   );
@@ -230,7 +229,10 @@ export default function DynamicScreen(props) {
 
   const sendNavigation = (navItem) => {
     const { screenName: navigateScreen } = navItem;
-    navigation.navigate(navigateScreen, { navItem, screenId: navigateScreen });
+    navigation.navigate(navigateScreen, {
+      item: navItem,
+      screenId: navigateScreen,
+    });
   };
 
   return (
