@@ -7,19 +7,30 @@ import {
   SafeAreaView,
   StyleSheet,
   Pressable,
+  TouchableHighlight,
 } from 'react-native';
 import WebEngage from 'react-native-webengage';
+import { removeItem } from './Utils';
 const ListScreen = ({ navigation }) => {
   var webengage = new WebEngage();
   React.useEffect(() => {
     webengage.screen('test');
-    console.log("1234 is navigated")
-  })
+    console.log('1234 is navigated');
+  });
+
+  const logout = () => {
+    removeItem('userName');
+    navigation.navigate('login');
+  };
+
   return (
     <SafeAreaView style={styles.mainContainer}>
-      <Text style={{ marginTop: 20, marginBottom: 50 }}>
-        Saving you form In-App notification
-      </Text>
+      <TouchableHighlight
+        style={[styles.button, styles.logout]}
+        onPress={logout}
+      >
+        <Text> Logout </Text>
+      </TouchableHighlight>
       <Pressable
         style={styles.button}
         onPress={() => navigation.navigate('regular')}
@@ -64,6 +75,14 @@ const styles = StyleSheet.create({
     height: 50,
     borderRadius: 30,
     justifyContent: 'center',
+  },
+  logout: {
+    // justifyContent: 'flex-end'
+    alignSelf: 'flex-end',
+    width: 100,
+    height: 35,
+    alignItems: 'center',
+    backgroundColor: '#f59518',
   },
   textStyle: {
     // color: 'white',

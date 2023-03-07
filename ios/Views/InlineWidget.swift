@@ -5,7 +5,7 @@ import React
 import WEPersonalization
 
 
-public class WEHInlineView: UICollectionViewCell{
+public class WEHInlineView: UIView{
     var inlineView: WEInlineView? = nil
     var campaignData: WEGCampaignData? = nil
     @objc var width: CGFloat = 0.1 {
@@ -37,6 +37,7 @@ public class WEHInlineView: UICollectionViewCell{
     }
 
     @objc func reloadViews(){
+        print("WERL reloadView called for \(self.propertyId)")
         DispatchQueue.main.async {
             if let viewToreload = self.inlineView,
                   viewToreload.superview != nil{
@@ -133,6 +134,7 @@ extension WEHInlineView {
                 if let scrollview = self.getScrollview(view: self){
                     // remove observer added to scrollview
                     scrollview.removeObserver(self, forKeyPath:  #keyPath(UIScrollView.contentOffset))
+                    
                     if let data = self.campaignData{
                         data.trackImpression(attributes: nil)
                     }

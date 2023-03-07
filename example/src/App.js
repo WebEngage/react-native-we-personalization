@@ -11,13 +11,18 @@ import { initWebEngage } from './Utils/WebEngageManager';
 
 export default function App() {
   const [isUserLoggedIn, setIsUserLoggedIn] = React.useState(false);
-  const userName = getValueFromAsyncStorage('userName');
   initWebEngage();
+  const userNameRef = React.useRef(null);
 
   React.useEffect(() => {
-    if (userName) {
-      setIsUserLoggedIn(true);
-    }
+    (async () => {
+      const name = await getValueFromAsyncStorage('userName');
+      if (name) {
+        setIsUserLoggedIn(true);
+      }
+      userNameRef.current = name;
+    })();
+
     // const callbacks = {
     //   onCampaignPrepared,
     //   onCampaignShown,
@@ -30,7 +35,7 @@ export default function App() {
     // return () => {
     //   unRegisterForCampaigns();
     // };
-  }, [userName]);
+  }, []);
 
   const onCampaignClicked = (data) => {
     console.log('App: onCampaignClicked ', data);
@@ -59,6 +64,7 @@ export default function App() {
     console.log('user login state updated', loginState);
     setIsUserLoggedIn(loginState);
   };
+
   if (isUserLoggedIn) {
     return <Navigation />;
   } else {

@@ -1,12 +1,15 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import {
   Button,
   FlatList,
   Pressable,
   StyleSheet,
+  Switch,
   Text,
   View,
 } from 'react-native';
+import { userWillHandleDeepLink } from '../../../src';
+import { ScreenNamesContext } from '../Navigation';
 import {
   getValueFromAsyncStorage,
   removeItem,
@@ -15,14 +18,19 @@ import {
 
 export default function CustomScreens({ navigation }) {
   const [screenList, setScreenList] = React.useState([]);
+  const [screenNames, setScreenNames] = useContext(ScreenNamesContext);
+  const [isClickHandledByUser, setIsClickHandledByUser] = React.useState(false);
+
 
   const addScreen = () => {
     navigation.navigate('screenDetails');
   };
+
   React.useEffect(() => {
     const unsubscribe = navigation.addListener('focus', async () => {
       const screenData = await getValueFromAsyncStorage('screenData');
       const screenLists = JSON.parse(screenData);
+      setScreenNames(screenLists); // updating navigation context
       setScreenList(screenLists);
     });
     return unsubscribe;
@@ -37,12 +45,16 @@ export default function CustomScreens({ navigation }) {
   };
 
   const openScreen = (item) => {
-    navigation.navigate('dynamicScreen', { item });
-    // TODO - Navigation to dynamicScreen.js
+    navigation.navigate(item.screenName, { item, screenId: item.screenName });
+
   };
 
-  const editScreen = (item) => {
-    navigation.navigate('screenDetails', { screenData: item, isEdit: true });
+  const editScreen = (item, index) => {
+    navigation.navigate('screenDetails', {
+      screenData: item,
+      isEdit: true,
+      itemIndex: index,
+    });
   };
 
   const renderItem = ({ item, index }) => {
@@ -62,9 +74,13 @@ export default function CustomScreens({ navigation }) {
           <View style={styles.row}>
             {/* <Text style={styles.textView}>Screen Name</Text> */}
             {item.isRecyclerView ? (
-              <Text style={[styles.itemText, styles.redText]}>RecyclerView</Text>
+              <Text style={[styles.itemText, styles.redText]}>
+                RecyclerView
+              </Text>
             ) : (
-              <Text style={[styles.itemText, styles.blueText]}>Regular View</Text>
+              <Text style={[styles.itemText, styles.blueText]}>
+                Regular View
+              </Text>
             )}
           </View>
         </View>
@@ -77,7 +93,7 @@ export default function CustomScreens({ navigation }) {
           </Pressable>
           <Pressable
             style={[styles.remove, styles.edit]}
-            onPress={() => editScreen(item)}
+            onPress={() => editScreen(item, index)}
           >
             <Text>Edit</Text>
           </Pressable>
@@ -147,6 +163,16 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flex: 1,
   },
+  rowLine: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  rowView: {
+    flexDirection: 'row',
+    alignSelf: 'center',
+    borderWidth: 1,
+    borderColor: '#000',
+  },
   textView: {
     // flex: 0.9,
     width: 100,
@@ -155,10 +181,10 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   redText: {
-    color: '#ff0000'
+    color: '#ff0000',
   },
   blueText: {
-    color: '#00FF'
+    color: '#00FF',
   },
   remove: {
     width: 100,
@@ -175,6 +201,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#66b8f2',
   },
   edit: {
-    backgroundColor: '#49b528'
-  }
+    backgroundColor: '#49b528',
+  },
 });

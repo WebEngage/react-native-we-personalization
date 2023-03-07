@@ -16,7 +16,7 @@ import MyModal from '../Utils/MyModal';
 export default function ScreenDetails(props) {
   const { navigation, route = {} } = props;
   const { params = {} } = route;
-  const { screenData = {}, isEdit = false } = params;
+  const { screenData = {}, isEdit = false, itemIndex = 0 } = params;
   const [size, setSize] = React.useState(screenData?.size || 0);
   const [screenName, setScreenName] = React.useState(
     screenData?.screenName || ''
@@ -68,11 +68,12 @@ export default function ScreenDetails(props) {
         (item) => item.screenName === screenName
       );
       if (isEdit) {
-        if (index !== -1) {
-          alert('editing existing screenListData');
-          screenListData[index] = screenData;
+        if (index === itemIndex) {
+          screenListData[itemIndex] = screenData;
           saveToAsyncStorage('screenData', JSON.stringify(screenListData));
           navigation.goBack();
+        } else {
+          alert("screen Name already Exists")
         }
       } else {
         if (index !== -1) {

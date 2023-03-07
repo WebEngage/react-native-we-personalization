@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import {
   Dimensions,
   FlatList,
   Pressable,
   ScrollView,
   StyleSheet,
+  Switch,
   Text,
   TouchableHighlight,
   TouchableOpacity,
@@ -19,8 +20,15 @@ import {
 } from '../../../src';
 import { getValueFromAsyncStorage } from '../Utils';
 import NavigationModal from '../Utils/NavigationModal';
+import {
+  useFocusEffect,
+  useNavigation,
+  useNavigationState,
+} from '@react-navigation/native';
 export default function DynamicScreen(props) {
   const { navigation = {}, route: { params: { item = {} } = {} } = {} } = props;
+
+
   const {
     id = 0,
     screenName = '',
@@ -35,43 +43,87 @@ export default function DynamicScreen(props) {
     arr.push({ id: id });
   }
   const [screenList, setScreenList] = React.useState([]);
+  const screenListRef = useRef(null);
   const [showNavigation, setShowNavigation] = React.useState(false);
+  const [isClickHandledByUser, setIsClickHandledByUser] = React.useState(false);
+  const clickRef = useRef(null);
 
-  // TODO- If uncomment WEInlineView will be hidden in android
+  useFocusEffect(
+    React.useCallback(() => {
+      if (screenName) {
+        webengageInstance.screen(screenName);
+      }
+      if (eventName) {
+        webengageInstance.track(eventName);
+      }
+      console.log("WEZ: dynamic  "+screenName + 'mounted');
+      return () => {
+        console.log("WEZ: dynamic "+screenName+" is out of focus")
+      };
+    }, [])
+  );
 
   React.useEffect(() => {
+    // console.log('WEZ: ' + screenName + 'navigted');
+    // if (screenName) {
+    //   webengageInstance.screen(screenName);
+    // }
+    // if (eventName) {
+    //   webengageInstance.track(eventName);
+    // }
     (async () => {
       const screenListData = await getValueFromAsyncStorage('screenData');
       const screenArrData = JSON.parse(screenListData);
       setScreenList(screenArrData);
+      screenListRef.current = screenArrData;
     })();
+    const callbacks = {
+      onCampaignPrepared,
+      onCampaignShown,
+      onCampaignClicked,
+      onCampaignException,
+    };
+    const doesUserHandelCallbacks = true;
+    registerForCampaigns(callbacks);
+    return () => {
+      unRegisterForCampaigns();
+    };
   }, []);
+
   React.useEffect(() => {
-    if (screenName) {
-      webengageInstance.screen(screenName);
-    }
-    // const callbacks = {
-    //   onCampaignPrepared,
-    //   onCampaignShown,
-    //   onCampaignClicked,
-    //   onCampaignException,
-    // };
-    // const doesUserHandelCallbacks = true;
-    // registerForCampaigns(callbacks);
-    // userWillHandleDeepLink(doesUserHandelCallbacks);
-    // return () => {
-    //   unRegisterForCampaigns();
-    // };
-  });
+    userWillHandleDeepLink(isClickHandledByUser);
+  }, [isClickHandledByUser]);
+
+  // React.useEffect(() => {
+
+  // const callbacks = {
+  //   onCampaignPrepared,
+  //   onCampaignShown,
+  //   onCampaignClicked,
+  //   onCampaignException,
+  // };
+  // const doesUserHandelCallbacks = true;
+  // registerForCampaigns(callbacks);
+  // userWillHandleDeepLink(doesUserHandelCallbacks);
+  // return () => {
+  //   unRegisterForCampaigns();
+  // };
+  // });
 
   const onCampaignClicked = (data) => {
     console.log('dynamic: onCampaignClicked ', data);
     const { deepLink = '' } = data;
     const deepLinkArr = deepLink.split('/');
 
-    if (deepLinkArr.length > 3 && deepLinkArr[2] === 'www.webengage.com') {
+    if (
+      clickRef.current &&
+      deepLinkArr.length > 3 &&
+      deepLinkArr[2] === 'www.webengage.com'
+    ) {
       const navigateScreen = deepLinkArr[3];
-      screenList.forEach((screenData) => {
+      const screenListArr = screenListRef.current;
+
+      screenListArr.forEach((screenData) => {
         if (screenData.screenName === navigateScreen) {
           navigation.navigate('dynamicScreen', { item: screenData });
         }
@@ -166,6 +218,11 @@ export default function DynamicScreen(props) {
       return <ScrollView>{renderRegularScreen()}</ScrollView>;
     }
   };
+  const toggleSwitch = () => {
+    clickRef.current = !isClickHandledByUser;
+
+    setIsClickHandledByUser(!isClickHandledByUser);
+  };
 
   const openNavigation = () => {
     console.log('Screen navigation - ', screenList);
@@ -173,14 +230,26 @@ export default function DynamicScreen(props) {
   };
 
   const sendNavigation = (item) => {
-    navigation.navigate('dynamicScreen', { item });
+    navigation.navigate('dynamicScreen', { item, screenId: item.screenName });
   };
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.button} onPress={openNavigation}>
-        <Text> Navigate </Text>
-      </TouchableOpacity>
+      <View style={styles.rowLine}>
+        <View style={styles.rowItem}>
+          <Text> isClickHandledByUser:</Text>
+          <Switch
+            trackColor={{ false: '#767577', true: '#81b0ff' }}
+            thumbColor={isClickHandledByUser ? '#f5dd4b' : '#f4f3f4'}
+            ios_backgroundColor="#3e3e3e"
+            onValueChange={toggleSwitch}
+            value={isClickHandledByUser}
+          />
+        </View>
+        <TouchableOpacity style={styles.button} onPress={openNavigation}>
+          <Text> Navigate </Text>
+        </TouchableOpacity>
+      </View>
       <NavigationModal
         screenList={screenList}
         currentScreen={screenName}
@@ -220,12 +289,21 @@ const styles = StyleSheet.create({
     marginRight: 25,
     marginBottom: 20,
   },
+  rowItem: {
+    flexDirection: 'row',
+    alignSelf: 'center',
+  },
   flatColor: {
     backgroundColor: '#e8b77b',
   },
   textStyle: {
     fontSize: 20,
     // color: '#000',
+  },
+  rowLine: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginHorizontal: 20,
   },
   box: {
     width: Dimensions.get('window').width,

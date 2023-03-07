@@ -181,15 +181,11 @@ const styles = StyleSheet.create({
   box: {
     width: Dimensions.get('window').width,
     height: 220,
-    borderWidth: 10,
-    borderColor: 'red',
     padding: 50,
   },
   box2: {
     width: Dimensions.get('window').width,
     height: 220,
-    borderWidth: 10,
-    borderColor: 'red',
     padding: 50,
   },
   imageStyle: {

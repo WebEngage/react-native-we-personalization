@@ -14,7 +14,7 @@ import { useFocusEffect } from '@react-navigation/native';
 import {
   WEInlineView,
   registerCustomPlaceHolder,
-  unRegisterCustomPlaceHolder
+  unRegisterCustomPlaceHolder,
 } from 'react-native-webengage-personalization';
 import WebEngage from 'react-native-webengage';
 const RegularScreen = ({ navigation }) => {
@@ -23,13 +23,13 @@ const RegularScreen = ({ navigation }) => {
   useFocusEffect(
     React.useCallback(() => {
       webengage.screen(regularScreenName);
-      const propertyId = "flutter_text";
-    // registerCustomPlaceHolder(
-    //   propertyId,
-    //   regularScreenName,
-    //   custom_onRendered,
-    //   custom_onPlaceholderException
-    // );
+      const propertyId = 'flutter_text';
+      // registerCustomPlaceHolder(
+      //   propertyId,
+      //   regularScreenName,
+      //   custom_onRendered,
+      //   custom_onPlaceholderException
+      // );
       console.log(regularScreenName + 'navigted');
       return () => {
         // unRegisterCustomPlaceHolder(propertyId, regularScreenName);
@@ -115,12 +115,12 @@ const RegularScreen = ({ navigation }) => {
     navigation.navigate('flatlist');
   };
 
-  const regularScreenName = Platform.OS === 'android' ? 'screendark' : 'ET_home';
+  const regularScreenName = Platform.OS === 'android' ? 'ET_home' : 'ET_home';
   // 'ET_home';
-  const screenHomeProperties =
-    Platform.OS === 'android' ? 'dm2' : 99;
+  const screenHomeProperties = Platform.OS === 'android' ? 'ninetyNine' : 99;
   const screenProperties = Platform.OS === 'android' ? 'flutter_text' : 1002; // screen_home
 
+  // screendark(screen) | dm2(prop) - android (Working)
   // registerForCampaigns(clickCb, shownCb)
   // add for custom callback
 

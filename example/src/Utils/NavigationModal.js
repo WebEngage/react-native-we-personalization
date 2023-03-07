@@ -24,7 +24,7 @@ export default function NavigationModal(props) {
   };
   const renderScreenList = ({ item, index }) => {
     const { screenName = '' } = item;
-    console.log('item render ', item);
+
     if (currentScreen !== screenName)
       return (
         <View style={styles.modalCard}>

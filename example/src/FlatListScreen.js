@@ -98,6 +98,10 @@ const FlatListScreen = ({ navigation }) => {
   const textProp = Platform.OS === 'android' ? 'react_text' : 21;
   const bannerProp = Platform.OS === 'android' ? 'react_banner' : 11; // screen_home
 
+  // const flatScreenName = 'scroll';
+  // const textProp = Platform.OS === 'android' ? 'text_prop' : 432;
+  // const bannerProp = Platform.OS === 'android' ? 'banner_prop' : 532;
+
   const navigateToRegular = () => {
     navigation.navigate('regular');
   };
@@ -125,7 +129,7 @@ const FlatListScreen = ({ navigation }) => {
         <View style={styles.margin50} />
         <Button title={'Scroll screen'} onPress={navigateToScroll} />
 
-        {item.id === 3 ? (
+        {item.id === 2 ? (
           <WEInlineView
             style={styles.box2}
             propertyId={textProp}
@@ -145,7 +149,7 @@ const FlatListScreen = ({ navigation }) => {
       <FlatList
         keyExtractor={(item) => item.id}
         data={data1}
-        // initialNumToRender={5}
+        initialNumToRender={10}
         // extraData={data}
         // bouncesZoom
         // overScrollMode="always"
