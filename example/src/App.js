@@ -4,6 +4,7 @@ import {
   unRegisterForCampaigns,
   userWillHandleDeepLink,
 } from 'react-native-webengage-personalization';
+import { enableDevMode } from '../../src/MyLogs';
 import LoginScreen from './LoginScreen';
 import Navigation from './Navigation';
 import { getValueFromAsyncStorage } from './Utils';
@@ -21,47 +22,11 @@ export default function App() {
         setIsUserLoggedIn(true);
       }
       userNameRef.current = name;
+      // enableDevMode();
     })();
-
-    // const callbacks = {
-    //   onCampaignPrepared,
-    //   onCampaignShown,
-    //   onCampaignClicked,
-    //   onCampaignException,
-    // };
-    // const doesUserHandelCallbacks = true;
-    // registerForCampaigns(callbacks);
-    // userWillHandleDeepLink(doesUserHandelCallbacks);
-    // return () => {
-    //   unRegisterForCampaigns();
-    // };
   }, []);
 
-  const onCampaignClicked = (data) => {
-    console.log('App: onCampaignClicked ', data);
-    const { deepLink = '' } = data;
-    const deepLinkArr = deepLink.split('/');
-    console.log('App: deepLinkArr ', deepLinkArr);
-    if (deepLinkArr.length > 3 && deepLinkArr[3] === 'www.webengage.com') {
-      const navigateScreen = deepLinkArr[4];
-      // Navigation.naviagteTo(navigateScreen);
-    }
-  };
-
-  const onCampaignPrepared = (data) => {
-    console.log('App: onCampaignPrepared ', data);
-  };
-
-  const onCampaignShown = (data) => {
-    console.log('App: onCampaignShown ', data);
-  };
-
-  const onCampaignException = (data) => {
-    console.log('App: onCampaignException ', data);
-  };
-
   const updateLoginDetails = (loginState) => {
-    console.log('user login state updated', loginState);
     setIsUserLoggedIn(loginState);
   };
 

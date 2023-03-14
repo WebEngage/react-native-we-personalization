@@ -18,23 +18,12 @@ const FlatListScreen = ({ navigation }) => {
 
   React.useEffect(() => {
     webengage.screen(flatScreenName);
-    console.log(flatScreenName + ' is navigated');
-
     return () => {
-      console.log('@@@@ flatlist screen unmounted with empty depency');
     };
   }, []);
-  const personalizationCallback1 = (d) => {
-    console.log('PPersonalization callback1 triggered-', d);
-  };
-
-  const personalizationCallback2 = (d) => {
-    console.log('PPersonalization callback2 triggered-', d);
-  };
-
   const onRendered_1 = (d) => {
     console.log(
-      'WER: Flatlist onRendered_1 triggered for -',
+      'Example: Flatlist onRendered_1 triggered for -',
       d?.targetViewId,
       d
     );
@@ -42,7 +31,7 @@ const FlatListScreen = ({ navigation }) => {
 
   const onDataReceived_1 = (d) => {
     console.log(
-      'WER: Flatlist onDataReceived_1 triggered for ',
+      'Example: Flatlist onDataReceived_1 triggered for ',
       d?.targetViewId,
       d
     );
@@ -50,7 +39,7 @@ const FlatListScreen = ({ navigation }) => {
 
   const onPlaceholderException_1 = (d) => {
     console.log(
-      'WER: Flatlist onPlaceholderException_1 triggered for ',
+      'Example: Flatlist onPlaceholderException_1 triggered for ',
       d?.targetViewId,
       d
     );
@@ -58,7 +47,7 @@ const FlatListScreen = ({ navigation }) => {
 
   const onRendered_2 = (d) => {
     console.log(
-      'WER: Flatlist onRendered_2 callback triggered for ',
+      'Example: Flatlist onRendered_2 callback triggered for ',
       d?.targetViewId,
       d
     );
@@ -66,7 +55,7 @@ const FlatListScreen = ({ navigation }) => {
 
   const onDataReceived_2 = (d) => {
     console.log(
-      'WER: Flatlist onDataReceived_2 triggered for ',
+      'Example: Flatlist onDataReceived_2 triggered for ',
       d?.targetViewId,
       d
     );
@@ -74,7 +63,7 @@ const FlatListScreen = ({ navigation }) => {
 
   const onPlaceholderException_2 = (d) => {
     console.log(
-      'WER: Flatlist onPlaceholderException_2 triggered for ',
+      'Example: Flatlist onPlaceholderException_2 triggered for ',
       d?.targetViewId,
       d
     );
@@ -84,16 +73,6 @@ const FlatListScreen = ({ navigation }) => {
   for (let i = 0; i < 100; i++) {
     data1.push({ id: i, title: `${i}th item` });
   }
-  // const flatScreenName = 'scroll23';
-  // const textProp = Platform.OS === 'android' ? 'banner_prop' : 432;
-  // const bannerProp = Platform.OS === 'android' ? 'text_prop' : 532;
-
-  // const flatScreenName = 'ET_home_2';
-  // const textProp =
-  //   Platform.OS === 'android' ? 'flutter_banner' : 99;
-  // const bannerProp = Platform.OS === 'android' ? 'flutter_text' : 1002; // screen_home
-
-  // Created this properties but not reflecting
   const flatScreenName = Platform.OS === 'android' ? 'react_screen' : 'screen1';
   const textProp = Platform.OS === 'android' ? 'react_text' : 21;
   const bannerProp = Platform.OS === 'android' ? 'react_banner' : 11; // screen_home
@@ -119,7 +98,6 @@ const FlatListScreen = ({ navigation }) => {
             style={styles.box}
             propertyId={bannerProp}
             screenName={flatScreenName}
-            // personalizationCallback={personalizationCallback1}
             onRendered={onRendered_1}
             onDataReceived={onDataReceived_1}
             onPlaceholderException={onPlaceholderException_1}
@@ -137,7 +115,6 @@ const FlatListScreen = ({ navigation }) => {
             onRendered={onRendered_2}
             onDataReceived={onDataReceived_2}
             onPlaceholderException={onPlaceholderException_2}
-            // personalizationCallback={personalizationCallback2}
           />
         ) : null}
       </View>
@@ -150,12 +127,8 @@ const FlatListScreen = ({ navigation }) => {
         keyExtractor={(item) => item.id}
         data={data1}
         initialNumToRender={10}
-        // extraData={data}
-        // bouncesZoom
-        // overScrollMode="always"
-        pagingEnabled
         renderItem={renderItem}
-        removeClippedSubviews={true} //most imp => without this it(DidMoveToWindow - iOS) won't work
+        // removeClippedSubviews={true} //most imp => without this it(DidMoveToWindow - iOS) won't work
       />
     </SafeAreaView>
   );
@@ -184,13 +157,11 @@ const styles = StyleSheet.create({
     marginBottom: 30,
   },
   box: {
-    // width: PixelRatio.getPixelSizeForLayoutSize(Dimensions.get('window').width),
     width: Dimensions.get('window').width,
     height: PixelRatio.getPixelSizeForLayoutSize(80),
     padding: 50,
   },
   box2: {
-    // width: PixelRatio.getPixelSizeForLayoutSize(Dimensions.get('window').width),
     width: Dimensions.get('window').width,
     height: PixelRatio.getPixelSizeForLayoutSize(100),
     padding: 50,

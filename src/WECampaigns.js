@@ -1,4 +1,5 @@
 import React from 'react';
+import { MyLogs } from './MyLogs';
 import PersonalizationBridge, { eventEmitter } from './PersonalizationBridge';
 
 let isCampaignListenerAdded = false;
@@ -21,7 +22,7 @@ export const registerForCampaigns = (campaignCallbackList) => {
       campaignPreparedListener = eventEmitter.addListener(
         'onCampaignPrepared',
         (data) => {
-          console.log('WECa: onCampaignPrepared list', data);
+          MyLogs('WECampaigns: onCampaignPrepared list', data);
           onCampaignPrepared(data);
         }
       );
@@ -31,7 +32,7 @@ export const registerForCampaigns = (campaignCallbackList) => {
       campaignClickedListener = eventEmitter.addListener(
         'onCampaignClicked',
         (data) => {
-          console.log('WECa: onCampaignClicked list', data);
+          MyLogs('WECampaigns: onCampaignClicked ', data);
           onCampaignClicked(data);
         }
       );
@@ -41,7 +42,7 @@ export const registerForCampaigns = (campaignCallbackList) => {
       campaignExceptionListener = eventEmitter.addListener(
         'onCampaignException',
         (data) => {
-          console.log('WECa: onCampaignException list', data);
+          MyLogs('WECampaigns: onCampaignException ', data);
           onCampaignException(data);
         }
       );
@@ -51,7 +52,7 @@ export const registerForCampaigns = (campaignCallbackList) => {
       campaignShownListener = eventEmitter.addListener(
         'onCampaignShown',
         (data) => {
-          console.log('WECa: onCampaignShown list', data);
+          MyLogs('WECampaigns: onCampaignShown ', data);
           onCampaignShown(data);
         }
       );

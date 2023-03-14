@@ -60,7 +60,7 @@ export default function DynamicScreen(props) {
         console.log('navigating to  ' + screenName + ' with data', {screenProperty: screenValue});
           webengageInstance.screen(screenName, { [screenProperty]: parseInt(screenValue)});
         } else {
-        console.log('navigating to  ' + screenName );
+        console.log('navigating to  ' + screenName + " without data" );
         webengageInstance.screen(screenName);
         }
       }
@@ -68,21 +68,12 @@ export default function DynamicScreen(props) {
         webengageInstance.track(eventName);
       }
       checkForCustomView()
-      // console.log('WEZ: dynamic  ' + screenName + 'mounted');
       return () => {
-        // console.log('WEZ: dynamic ' + screenName + ' is out of focus');
       };
     }, [])
   );
 
   React.useEffect(() => {
-    // console.log('WEZ: ' + screenName + 'navigted');
-    // if (screenName) {
-    //   webengageInstance.screen(screenName);
-    // }
-    // if (eventName) {
-    //   webengageInstance.track(eventName);
-    // }
     (async () => {
       const screenListData = await getValueFromAsyncStorage('screenData');
       const screenArrData = JSON.parse(screenListData);
@@ -106,24 +97,8 @@ export default function DynamicScreen(props) {
     userWillHandleDeepLink(isClickHandledByUser);
   }, [isClickHandledByUser]);
 
-  // React.useEffect(() => {
-
-  // const callbacks = {
-  //   onCampaignPrepared,
-  //   onCampaignShown,
-  //   onCampaignClicked,
-  //   onCampaignException,
-  // };
-  // const doesUserHandelCallbacks = true;
-  // registerForCampaigns(callbacks);
-  // userWillHandleDeepLink(doesUserHandelCallbacks);
-  // return () => {
-  //   unRegisterForCampaigns();
-  // };
-  // });
 
   const checkForCustomView = () => {
-    // console.log("viewData in checking custom ",viewData)
     viewData.map( (viewItem) => {
       const {isCustomView = false, propertyId} = viewItem
       if(isCustomView) {
@@ -138,7 +113,6 @@ export default function DynamicScreen(props) {
   }
 
   const onCampaignClicked = (data) => {
-    // console.log('dynamic: onCampaignClicked ', data);
     const { deepLink = '' } = data;
     const deepLinkArr = deepLink.split('/');
 
@@ -159,24 +133,24 @@ export default function DynamicScreen(props) {
   };
 
   const onCampaignPrepared = (data) => {
-    console.log('dynamic: onCampaignPrepared ', data);
+    console.log('Example: dynamic: onCampaignPrepared ', data);
   };
 
   const onCampaignShown = (data) => {
-    console.log('dynamic: onCampaignShown ', data);
+    console.log('Example: dynamic: onCampaignShown ', data);
   };
 
   const onCampaignException = (data) => {
-    console.log('dynamic: onCampaignException ', data);
+    console.log('Example: dynamic: onCampaignException ', data);
   };
 
   const onRendered_1 = (d) => {
-    console.log('WEZ: Dynamic onRendered triggered for -', d?.targetViewId, d);
+    console.log('Example: Dynamic onRendered triggered for -', d?.targetViewId, d);
   };
 
   const onDataReceived_1 = (d) => {
     console.log(
-      'WEZ: Dynamic onDataReceived triggered for ',
+      'Example: Dynamic onDataReceived triggered for ',
       d?.targetViewId,
       d
     );
@@ -184,14 +158,14 @@ export default function DynamicScreen(props) {
 
   const onPlaceholderException_1 = (d) => {
     console.log(
-      'WEZ: Dynamic onPlaceholderException triggered for ',
+      'Example: Dynamic onPlaceholderException triggered for ',
       d?.targetViewId,
       d
     );
   }
    const onCustomDataReceived_1 = (d) => {
     console.log(
-      'WEZ: Dynamic onPlaceholderException triggered for ',
+      'Example: Dynamic onPlaceholderException triggered for ',
       d?.targetViewId,
       d
     );
@@ -199,7 +173,7 @@ export default function DynamicScreen(props) {
 
   const onCustomDataReceived = (d) => {
     console.log(
-      'WEZ: custom onDataReceived triggered for ',
+      'Example: custom onDataReceived triggered for ',
       d?.targetViewId,
       d
     );
@@ -208,14 +182,10 @@ export default function DynamicScreen(props) {
 
   const onCustomPlaceholderException = (d) => {
     console.log(
-      'WEZ: custom onPlaceholderException triggered for ',
+      'Example: custom onPlaceholderException triggered for ',
       d?.targetViewId,
       d
     );
-  };
-
-  const renderView = ({ item, index }) => {
-    return <View />;
   };
 
   const trackImpression = () => {
@@ -230,7 +200,6 @@ export default function DynamicScreen(props) {
     let inlineView = null;
     let isCustomView = false
     viewData?.forEach((viewItem) => {
-      // console.log("renderCycle - ",viewItem)
       const { position,  } = viewItem
       if (position === index) {
         inlineView = viewItem;
@@ -258,7 +227,7 @@ export default function DynamicScreen(props) {
         <WEInlineView
           style={[styles.box, { height: inlineHeight, width: inlineWidth }]}
           screenName={screenName}
-          propertyId={inlineView.propertyId} // ak_test_2 - custom
+          propertyId={inlineView.propertyId}
           onRendered={onRendered_1}
           onDataReceived={onDataReceived_1}
           onPlaceholderException={onPlaceholderException_1}

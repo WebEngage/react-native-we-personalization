@@ -23,45 +23,22 @@ const RegularScreen = ({ navigation }) => {
   useFocusEffect(
     React.useCallback(() => {
       webengage.screen(regularScreenName);
-      const propertyId = 'flutter_text';
-      // registerCustomPlaceHolder(
-      //   propertyId,
-      //   regularScreenName,
-      //   custom_onRendered,
-      //   custom_onPlaceholderException
-      // );
-      console.log(regularScreenName + 'navigted');
       return () => {
-        // unRegisterCustomPlaceHolder(propertyId, regularScreenName);
-        // Perform cleanup on blur
       };
     }, [])
   );
 
-  // React.useEffect(() => {
-  //   const propertyId = "flutter_text";
-  //   registerCustomPlaceHolder(
-  //     propertyId,
-  //     regularScreenName,
-  //     custom_onRendered,
-  //     custom_onPlaceholderException
-  //   );
-  //   return () => {
-  //     unRegisterCustomPlaceHolder(propertyId, regularScreenName);
-  //   };
-  // }, []);
-
   const custom_onRendered = (d) => {
-    console.log('WER: Custom onDataReceived for-', d?.targetViewId, d);
+    console.log('Example: Custom onDataReceived for-', d?.targetViewId, d);
   };
 
   const custom_onPlaceholderException = (d) => {
-    console.log('WER: Custom onPlaceholderException  for ', d?.targetViewId, d);
+    console.log('Example: Custom onPlaceholderException  for ', d?.targetViewId, d);
   };
 
   const onRendered_1 = (d) => {
     console.log(
-      'WER: Regular onRendered_1 triggered for -',
+      'Example: Regular onRendered_1 triggered for -',
       d?.targetViewId,
       d
     );
@@ -69,7 +46,7 @@ const RegularScreen = ({ navigation }) => {
 
   const onDataReceived_1 = (d) => {
     console.log(
-      'WER: Regular onDataReceived_1 triggered for ',
+      'Example: Regular onDataReceived_1 triggered for ',
       d?.targetViewId,
       d
     );
@@ -77,7 +54,7 @@ const RegularScreen = ({ navigation }) => {
 
   const onPlaceholderException_1 = (d) => {
     console.log(
-      'WER: Regular onPlaceholderException_1 triggered for ',
+      'Example: Regular onPlaceholderException_1 triggered for ',
       d?.targetViewId,
       d
     );
@@ -85,7 +62,7 @@ const RegularScreen = ({ navigation }) => {
 
   const onRendered_2 = (d) => {
     console.log(
-      'WER: Regular onRendered_2 callback triggered for ',
+      'Example: Regular onRendered_2 callback triggered for ',
       d?.targetViewId,
       d
     );
@@ -93,7 +70,7 @@ const RegularScreen = ({ navigation }) => {
 
   const onDataReceived_2 = (d) => {
     console.log(
-      'WER: Regular onDataReceived_2 triggered for ',
+      'Example: Regular onDataReceived_2 triggered for ',
       d?.targetViewId,
       d
     );
@@ -101,7 +78,7 @@ const RegularScreen = ({ navigation }) => {
 
   const onPlaceholderException_2 = (d) => {
     console.log(
-      'WER: Regular onPlaceholderException_2 triggered for ',
+      'Example: Regular onPlaceholderException_2 triggered for ',
       d?.targetViewId,
       d
     );
@@ -116,7 +93,6 @@ const RegularScreen = ({ navigation }) => {
   };
 
   const regularScreenName = Platform.OS === 'android' ? 'ET_home' : 'ET_home';
-  // 'ET_home';
   const screenHomeProperties = Platform.OS === 'android' ? 'ninetyNine' : 99;
   const screenProperties = Platform.OS === 'android' ? 'flutter_text' : 1002; // screen_home
 
@@ -129,7 +105,7 @@ const RegularScreen = ({ navigation }) => {
       <WEInlineView
         style={styles.box}
         screenName={regularScreenName}
-        propertyId={screenHomeProperties} // ak_test_2 - custom
+        propertyId={screenHomeProperties}
         color="#32a852"
         onRendered={onRendered_1}
         onDataReceived={onDataReceived_1}

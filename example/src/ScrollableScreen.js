@@ -21,38 +21,8 @@ const ScrollableScreen = ({ navigation }) => {
   useFocusEffect(
     React.useCallback(() => {
       webengage.screen(scrollScreen);
-      console.log(scrollScreen + ' is navigated');
     }, [])
   );
-
-  // React.useEffect(() => {
-  //   const propertyId = 'banner_prop';
-  //   registerCustomPlaceHolder(
-  //     propertyId,
-  //     scrollScreen,
-  //     custom_onDataReceived,
-  //     custom_onPlaceholderException
-  //   );
-
-  //   return () => {
-  //     unRegisterCustomPlaceHolder(propertyId, scrollScreen);
-  //   };
-  // });
-
-  const custom_onDataReceived = (d) => {
-    console.log('WER: Custom onDataReceived for-', d?.targetViewId, d);
-  };
-
-  const custom_onPlaceholderException = (d) => {
-    console.log('WER: Custom onPlaceholderException2 for ', d?.targetViewId, d);
-  };
-  const personalizationCallback1 = (d) => {
-    console.log('PPersonalization callback1 triggered for flutter_banner-', d);
-  };
-
-  const personalizationCallback2 = (d) => {
-    console.log('Personalization callback2 triggered for flutter_text-', d);
-  };
 
   const navigateToRegular = () => {
     navigation.navigate('regular');
@@ -63,27 +33,27 @@ const ScrollableScreen = ({ navigation }) => {
   };
 
   const onRendered_1 = (d) => {
-    console.log('WER: Scrollable onRendered_1 triggered for -', d?.targetViewId, d);
+    console.log('Example: Scrollable onRendered_1 triggered for -', d?.targetViewId, d);
   };
 
   const onDataReceived_1 = (d) => {
-    console.log('WER: Scrollable onDataReceived_1 triggered for ', d?.targetViewId, d);
+    console.log('Example: Scrollable onDataReceived_1 triggered for ', d?.targetViewId, d);
   };
 
   const onPlaceholderException_1 = (d) => {
-    console.log('WER: Scrollable onPlaceholderException_1 triggered for ', d?.targetViewId, d);
+    console.log('Example: Scrollable onPlaceholderException_1 triggered for ', d?.targetViewId, d);
   };
 
   const onRendered_2 = (d) => {
-    console.log('WER: Scrollable onRendered_2 callback triggered for ', d?.targetViewId, d);
+    console.log('Example: Scrollable onRendered_2 callback triggered for ', d?.targetViewId, d);
   };
 
   const onDataReceived_2 = (d) => {
-    console.log('WER: Scrollable onDataReceived_2 triggered for ', d?.targetViewId, d);
+    console.log('Example: Scrollable onDataReceived_2 triggered for ', d?.targetViewId, d);
   };
 
   const onPlaceholderException_2 = (d) => {
-    console.log('WER: Scrollable onPlaceholderException_2 triggered for ', d?.targetViewId, d);
+    console.log('Example: Scrollable onPlaceholderException_2 triggered for ', d?.targetViewId, d);
   };
 
   const scrollScreen = 'scroll';
@@ -148,7 +118,6 @@ const ScrollableScreen = ({ navigation }) => {
         onRendered={onRendered_2}
         onDataReceived={onDataReceived_2}
         onPlaceholderException={onPlaceholderException_2}
-        // personalizationCallback={personalizationCallback2}
       />
       <Text style={styles.nativeText}> Below View is React-Native</Text>
       <Image

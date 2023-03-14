@@ -17,7 +17,6 @@ export const ScreenNamesContext = React.createContext([]);
 const Navigation = () => {
   const [screenNames, setScreenNames] = React.useState([]);
   const renderScreenName = () => {
-    console.log("navigation: screenNames",screenNames)
     return screenNames?.map((item) => {
       const { screenName } = item;
       return (

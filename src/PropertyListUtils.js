@@ -1,3 +1,5 @@
+import { MyLogs } from "./MyLogs";
+
 let propertyProcessorList = []
 export const registerPropertyList = (
   list,
@@ -28,7 +30,7 @@ export const registerPropertyList = (
     };
     list[list?.length - 1].propertyList.push(obj);
   }
-  console.log("@@@ list after updation ",list)
+  MyLogs("PropertyListUtils: screenList list after updation ",list)
   propertyProcessorList = [...list];
   return list;
 };
@@ -45,52 +47,33 @@ export const removePropertyFromPropertyList = (
   listenerFlag
 ) => {
   let updatedList = list;
-  console.log('@@@ updated list - ', updatedList, screenName, propertyId);
-  console.log('@@@ propertyProcessorList - ', propertyProcessorList);
-
   updatedList?.map((val, index) => {
     if (val.screenName === screenName) {
-      // updatedList.splice(index, 1);
       val.propertyList.forEach((item) => {
         if (val.screenName === screenName) {
-          console.log(
-            '@@@ updated list - ',
-            updatedList,
-            screenName,
-            propertyId
-          );
           val?.propertyList?.forEach((property, propertyIndex) => {
             if (property?.propertyId === propertyId) {
               updatedList[index].propertyList.splice(propertyIndex, 1);
             }
           });
-          console.log(
-            '@@@ updated list after removing property- ',
-            updatedList,
-            screenName,
-            propertyId
+          MyLogs(
+            'PropertyListUtils: updated list after removing property- ',
+            updatedList
           );
         }
       });
     }
   });
-  console.log(
-    'listener individual removePropertyFromPropertyList ',
-    list,
-    listenerFlag
-  );
 
   if (!updatedList?.length && listenerFlag) {
     listenersList?.forEach((listener) => {
       listener?.remove();
     });
     listenerFlag = false;
-    console.log('@@@@ All the Listeners are removed ');
+    MyLogs('PropertyListUtils: All the Listeners are removed ');
   }
-  console.log('$$$ list after removing screen ', updatedList);
 
   return { updatedList, listenerFlag };
-  // return list;
 };
 
 export const getPropertyDetails = (list, weCampaignData) => {
@@ -115,7 +98,7 @@ export const sendOnDataReceivedEvent = (list, data) => {
     payload,
   };
   const propertyItem = getPropertyDetails(list, weCampaignData);
-  console.log('onDataReceived! - Event Listener called ->', weCampaignData);
+  MyLogs('PropertyListUtils: onDataReceived! - Event Listener called ->', weCampaignData);
 
   if (propertyItem?.callbacks?.onDataReceived) {
     propertyItem?.callbacks?.onDataReceived(weCampaignData);
@@ -130,7 +113,7 @@ export const sendOnRenderedEvent = (list, data) => {
     campaignId,
     payload,
   };
-  console.log('onRendered - Event Listener called ->', weCampaignData);
+  MyLogs('PropertyListUtils: onRendered - Event Listener called ->', weCampaignData);
 
   const propertyItem = getPropertyDetails(list, weCampaignData);
   if (propertyItem?.callbacks?.onRendered) {
@@ -139,7 +122,7 @@ export const sendOnRenderedEvent = (list, data) => {
 };
 
 export const sendOnExceptionEvent = (list, data) => {
-  console.log('onPlaceholderException - Event Listener called ->', data);
+  MyLogs('PropertyListUtils: onPlaceholderException - Event Listener called ->', data);
   const { targetViewId = '' } = data;
   const weCampaignData = {
     targetViewId,

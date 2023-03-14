@@ -15,7 +15,7 @@ const ListScreen = ({ navigation }) => {
   var webengage = new WebEngage();
   React.useEffect(() => {
     webengage.screen('test');
-    console.log('1234 is navigated');
+
   });
 
   const logout = () => {

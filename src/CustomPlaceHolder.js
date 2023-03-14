@@ -1,3 +1,4 @@
+import { MyLogs } from './MyLogs';
 import PersonalizationBridge, { eventEmitter } from './PersonalizationBridge';
 import {
   registerPropertyList,
@@ -26,7 +27,7 @@ export const registerCustomPlaceHolder = (
     null,
     onPlaceholderExceptionCb
   );
-  console.log(
+  MyLogs(
     'customPH: registerCustomPlaceHolder registered customPropertyList',
     customPropertyList
   );
@@ -34,14 +35,14 @@ export const registerCustomPlaceHolder = (
     customOnRenderedListener = eventEmitter.addListener(
       'onCustomDataReceived',
       (data) => {
-        console.log('customPH: onCustomDataReceived list', data);
+        MyLogs('customPH: onCustomDataReceived list', data);
         sendOnDataReceivedEvent(customPropertyList, data);
       }
     );
     customExceptionListener = eventEmitter.addListener(
       'onCustomPlaceholderException',
       (data) => {
-        console.log('customPH: onCustomPlaceholderException list', data);
+        MyLogs('customPH: onCustomPlaceholderException list', data);
         sendOnExceptionEvent(customPropertyList, data);
       }
     );
@@ -50,7 +51,7 @@ export const registerCustomPlaceHolder = (
 };
 
 export const unRegisterCustomPlaceHolder = (propertyId, screen) => {
-  console.log(
+  MyLogs(
     'customPH: unRegisterCustomPlaceHolder! - Event Listener called ->'
   );
 
@@ -65,13 +66,14 @@ export const unRegisterCustomPlaceHolder = (propertyId, screen) => {
   );
   isCustomListenerAdded = listenerFlag;
   customPropertyList = updatedList;
-  console.log('customPH: after remove customPropertyList ', customPropertyList);
 };
 
 export const trackCustomClick = () => {
+  MyLogs('customPH: trackCustomClick ');
   PersonalizationBridge.trackClick()
 }
 
 export const trackCustomImpression = () => {
+  MyLogs('customPH: trackImpression ');
   PersonalizationBridge.trackImpression()
 }

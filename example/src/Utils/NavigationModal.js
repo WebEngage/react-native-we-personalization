@@ -9,7 +9,6 @@ import {
 } from 'react-native';
 
 export default function NavigationModal(props) {
-  console.log('props in Navigation Modal', props);
   const {
     screenList,
     showModal,
@@ -18,7 +17,6 @@ export default function NavigationModal(props) {
     currentScreen,
   } = props;
   const navigateTO = (item) => {
-    console.log('navigateTo ', item);
     sendNavigation(item);
     changeModalStatus(false);
   };

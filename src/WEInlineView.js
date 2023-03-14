@@ -1,4 +1,5 @@
 import React from 'react';
+import { MyLogs } from './MyLogs';
 import {
   eventEmitter,
   WebengagePersonalizationView,
@@ -28,17 +29,16 @@ const WEInlineView = (props) => {
 
 
   React.useEffect(() => {
-    console.log('$$$$ WEInlineView: Attached/Mounted ', propertyId);
+    MyLogs('WEInlineView: Attached/Mounted ', propertyId);
 
     return () => {
-      console.log('$$$$ WEInlineView: Destroyed/UnMounted ', propertyId);
+      MyLogs('WEInlineView: Destroyed/UnMounted ', propertyId);
 
       const listenersList = [
         dataReceivedListener,
         renderListerner,
         exceptionalListener,
       ];
-  console.log("@@@ List before removing",propertyProcessor)
 
       const { updatedList, listenerFlag } = removePropertyFromPropertyList(
         propertyProcessor,
@@ -61,7 +61,7 @@ const WEInlineView = (props) => {
     onPlaceholderException
   );
   propertyProcessor = [...propList];
-  console.log("@@@ registerPropertyList",propertyProcessor)
+  MyLogs("WEInlineView: propertyProcessor",propertyProcessor)
   if (!isListenerAdded) {
     dataReceivedListener = eventEmitter.addListener(
       'onDataReceived',
