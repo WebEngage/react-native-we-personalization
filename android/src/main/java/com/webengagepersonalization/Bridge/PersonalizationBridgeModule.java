@@ -31,6 +31,7 @@ import android.util.Log;
 public class PersonalizationBridgeModule extends ReactContextBaseJavaModule implements WEPlaceholderCallback, WECampaignCallback {
   private ReactApplicationContext applicationContext = null;
   Boolean doesUserHandelCallbacks = false;
+  WECampaignData weCampaign = null;
 
   public PersonalizationBridgeModule(ReactApplicationContext reactContext) {
     super(reactContext);
@@ -65,6 +66,20 @@ public class PersonalizationBridgeModule extends ReactContextBaseJavaModule impl
   public void unRegisterCampaignCallback() {
     Logger.d(WEGConstants.TAG,"PersonalizationBridgeModule: unRegisterCampaignCallback ");
     WEPersonalization.Companion.get().unregisterWECampaignCallback(this);
+  }
+
+  @ReactMethod
+  public void trackImpression() {
+    if(weCampaign != null) {
+      weCampaign.trackImpression(null);
+    }
+  }
+
+  @ReactMethod
+  public void trackClick() {
+    if(weCampaign != null) {
+      weCampaign.trackClick(null);
+    }
   }
 
   @Override
@@ -113,6 +128,7 @@ public class PersonalizationBridgeModule extends ReactContextBaseJavaModule impl
     Log.d("WebEngage1", "OnDataReceived from personalization view manager - "+weCampaignData);
     WritableMap params = Arguments.createMap();
     params = Utils.generateParams(weCampaignData);
+    weCampaign = weCampaignData;
     Utils.sendEvent(applicationContext, "onCustomDataReceived", params);
   }
 

@@ -67,3 +67,11 @@ export const unRegisterCustomPlaceHolder = (propertyId, screen) => {
   customPropertyList = updatedList;
   console.log('customPH: after remove customPropertyList ', customPropertyList);
 };
+
+export const trackCustomClick = () => {
+  PersonalizationBridge.trackClick()
+}
+
+export const trackCustomImpression = () => {
+  PersonalizationBridge.trackImpression()
+}

@@ -34,6 +34,9 @@ public class Utils {
     params.putString("targetViewId", weCampaignData.getTargetViewId());
     params.putString("campaignId", weCampaignData.getCampaignId());
     params.putString("payloadData", weCampaignData.toJSONString());
+    params.putString("trackImpression", "PersonalizationBridge.trackImpression");
+    params.putString("trackClick", "PersonalizationBridge.trackClick");
+
     return params;
   }
 

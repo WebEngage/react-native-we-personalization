@@ -15,6 +15,7 @@ import {
   removeItem,
   saveToAsyncStorage,
 } from '../Utils';
+import { webengageInstance } from '../Utils/WebEngageManager';
 
 export default function CustomScreens({ navigation }) {
   const [screenList, setScreenList] = React.useState([]);
@@ -27,6 +28,7 @@ export default function CustomScreens({ navigation }) {
   };
 
   React.useEffect(() => {
+    webengageInstance.screen('custom');
     const unsubscribe = navigation.addListener('focus', async () => {
       const screenData = await getValueFromAsyncStorage('screenData');
       const screenLists = JSON.parse(screenData);

@@ -22,6 +22,9 @@ export default function ScreenDetails(props) {
     screenData?.screenName || ''
   );
   const [eventName, setEventName] = React.useState(screenData?.eventName || '');
+  const [screenProperty, setScreenProperty] = React.useState(screenData?.screenProperty || '');
+  const [screenValue, setScreenValue] = React.useState(screenData?.screenValue || '');
+
   const [isRecyclerView, setIsRecyclerView] = useState(
     screenData?.isRecyclerView || false
   );
@@ -49,6 +52,14 @@ export default function ScreenDetails(props) {
     setEventName(value);
   };
 
+  const onScreenPropertyChange = (value) => {
+    setScreenProperty(value);
+  };
+
+  const onScreenValueChange = (value) => {
+    setScreenValue(value);
+  };
+
   const addScreenDetails = () => {
     const length = screenList.length + 1;
     if (size > 0 && screenName) {
@@ -60,6 +71,8 @@ export default function ScreenDetails(props) {
         eventName,
         isRecyclerView,
         viewData,
+        screenProperty,
+        screenValue,
         id: randomNumber,
       };
 
@@ -67,6 +80,7 @@ export default function ScreenDetails(props) {
       const index = screenListData.findIndex(
         (item) => item.screenName === screenName
       );
+
       if (isEdit) {
         if (index === itemIndex) {
           screenListData[itemIndex] = screenData;
@@ -196,6 +210,25 @@ export default function ScreenDetails(props) {
             value={eventName}
           />
         </View>
+
+        <View style={styles.ViewLine}>
+          <Text>Screen Property Name: </Text>
+          <TextInput
+            style={styles.textViewStyle}
+            onChangeText={onScreenPropertyChange}
+            value={screenProperty}
+          />
+        </View>
+
+        <View style={styles.ViewLine}>
+          <Text>Screen Value: </Text>
+          <TextInput
+            style={styles.textViewStyle}
+            onChangeText={onScreenValueChange}
+            value={screenValue}
+          />
+        </View>
+
 
         <View style={styles.rowLine}>
           <CheckBox

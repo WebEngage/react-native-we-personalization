@@ -1,3 +1,4 @@
+import CheckBox from '@react-native-community/checkbox';
 import React, { useState } from 'react';
 import {
   Modal,
@@ -17,6 +18,7 @@ const MyModal = (props) => {
   const [height, setHeight] = React.useState(0);
   const [width, setWidth] = React.useState(0);
   const [propertyId, setPropertyId] = React.useState('');
+  const [isCustomView, setIsCustomView] = React.useState(false);
 
   const addViewData = () => {
     if (position > 0 && propertyId != '') {
@@ -28,6 +30,7 @@ const MyModal = (props) => {
         height: parseInt(height, 10) || 0,
         width: parseInt(width, 10) || 0,
         propertyId: propertyIdToSave,
+        isCustomView
       };
       addViewListData(viewData);
     } else {
@@ -91,6 +94,22 @@ const MyModal = (props) => {
                 value={propertyId}
               />
             </View>
+
+
+            <View style={styles.rowLine}>
+          <Text>Custom View: </Text>
+
+          <CheckBox
+            offAnimationType="stroke"
+            onFillColor={'blue'}
+            onCheckColor={'white'}
+            disabled={false}
+            value={isCustomView}
+            style={styles.checkbox}
+            onValueChange={(newValue) => setIsCustomView(newValue)}
+          />
+        </View>
+
             {/* <TouchableOpacity onPress={() => setIsModalVisible(false)}>
               <Text>Close Modal</Text>
             </TouchableOpacity> */}

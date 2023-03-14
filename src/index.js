@@ -3,10 +3,13 @@ import {
   registerForCampaigns,
   unRegisterForCampaigns,
   userWillHandleDeepLink,
+
 } from './WECampaigns';
 import {
   registerCustomPlaceHolder,
   unRegisterCustomPlaceHolder,
+  trackCustomClick,
+  trackCustomImpression,
 } from './CustomPlaceHolder';
 
 export {
@@ -16,4 +19,6 @@ export {
   registerCustomPlaceHolder,
   unRegisterCustomPlaceHolder,
   userWillHandleDeepLink,
+  trackCustomClick,
+  trackCustomImpression,
 };

@@ -12,12 +12,14 @@ import {
   View,
 } from 'react-native';
 import { webengageInstance } from '../Utils/WebEngageManager';
-import { WEInlineView } from 'react-native-webengage-personalization';
+import { WEInlineView, trackCustomClick, trackCustomImpression } from 'react-native-webengage-personalization';
 import {
   registerForCampaigns,
   unRegisterForCampaigns,
   userWillHandleDeepLink,
 } from '../../../src';
+
+import PersonalizationBridge from '../../../src/PersonalizationBridge';
 import { getValueFromAsyncStorage } from '../Utils';
 import NavigationModal from '../Utils/NavigationModal';
 import {
@@ -25,14 +27,16 @@ import {
   useNavigation,
   useNavigationState,
 } from '@react-navigation/native';
+import { registerCustomPlaceHolder } from 'react-native-webengage-personalization'
 export default function DynamicScreen(props) {
   const { navigation = {}, route: { params: { item = {} } = {} } = {} } = props;
-
   const {
     id = 0,
     screenName = '',
     size = 0,
     eventName = '',
+    screenProperty = '',
+    screenValue = '',
     isRecyclerView = false,
     viewData = [],
   } = item;
@@ -46,18 +50,27 @@ export default function DynamicScreen(props) {
   const [showNavigation, setShowNavigation] = React.useState(false);
   const [isClickHandledByUser, setIsClickHandledByUser] = React.useState(false);
   const clickRef = useRef(null);
+  const [customViewLabel, setCustomViewLabel] = React.useState("This is a custom View bro!")
+
 
   useFocusEffect(
     React.useCallback(() => {
       if (screenName) {
+        if(screenProperty && screenValue) {
+        console.log('navigating to  ' + screenName + ' with data', {screenProperty: screenValue});
+          webengageInstance.screen(screenName, { [screenProperty]: screenValue});
+        } else {
+        console.log('navigating to  ' + screenName );
         webengageInstance.screen(screenName);
+        }
       }
       if (eventName) {
         webengageInstance.track(eventName);
       }
-      console.log('WEZ: dynamic  ' + screenName + 'mounted');
+      checkForCustomView()
+      // console.log('WEZ: dynamic  ' + screenName + 'mounted');
       return () => {
-        console.log('WEZ: dynamic ' + screenName + ' is out of focus');
+        // console.log('WEZ: dynamic ' + screenName + ' is out of focus');
       };
     }, [])
   );
@@ -109,8 +122,23 @@ export default function DynamicScreen(props) {
   // };
   // });
 
+  const checkForCustomView = () => {
+    // console.log("viewData in checking custom ",viewData)
+    viewData.map( (viewItem) => {
+      const {isCustomView = false, propertyId} = viewItem
+      if(isCustomView) {
+        registerCustomPlaceHolder(
+        propertyId,
+        screenName,
+        onCustomDataReceived,
+        onCustomPlaceholderException
+      )
+        }
+    })
+  }
+
   const onCampaignClicked = (data) => {
-    console.log('dynamic: onCampaignClicked ', data);
+    // console.log('dynamic: onCampaignClicked ', data);
     const { deepLink = '' } = data;
     const deepLinkArr = deepLink.split('/');
 
@@ -160,23 +188,72 @@ export default function DynamicScreen(props) {
       d?.targetViewId,
       d
     );
+  }
+   const onCustomDataReceived_1 = (d) => {
+    console.log(
+      'WEZ: Dynamic onPlaceholderException triggered for ',
+      d?.targetViewId,
+      d
+    );
+   }
+
+  const onCustomDataReceived = (d) => {
+    console.log(
+      'WEZ: custom onDataReceived triggered for ',
+      d?.targetViewId,
+      d
+    );
+    setCustomViewLabel(JSON.stringify(d))
+  };
+
+  const onCustomPlaceholderException = (d) => {
+    console.log(
+      'WEZ: custom onPlaceholderException triggered for ',
+      d?.targetViewId,
+      d
+    );
   };
 
   const renderView = ({ item, index }) => {
     return <View />;
   };
 
+  const trackImpression = () => {
+    trackCustomImpression()
+  }
+
+  const trackClick = () => {
+    trackCustomClick()
+  }
+
   const renderRecycler = ({ item, index }) => {
     let inlineView = null;
+    let isCustomView = false
     viewData?.forEach((viewItem) => {
-      if (viewItem.position === index) {
+      // console.log("renderCycle - ",viewItem)
+      const { position,  } = viewItem
+      if (position === index) {
         inlineView = viewItem;
+        isCustomView = viewItem.isCustomView
       }
     });
     const styleList = isRecyclerView ? styles.flatColor : [];
     if (inlineView) {
       const inlineHeight = inlineView?.height || 250;
       const inlineWidth = inlineView?.width || Dimensions.get('window').width;
+      if(isCustomView) {
+        return(<View>
+          <Text> {customViewLabel} </Text>
+          <View style={styles.rowLine}>
+            <TouchableHighlight onPress={trackImpression} style={styles.customButton}>
+              <Text>Impression</Text>
+            </TouchableHighlight>
+            <TouchableHighlight onPress={trackClick} style={styles.customButton}>
+              <Text>Click</Text>
+            </TouchableHighlight>
+          </View>
+        </View>)
+      } else {
       return (
         <WEInlineView
           style={[styles.box, { height: inlineHeight, width: inlineWidth }]}
@@ -187,6 +264,7 @@ export default function DynamicScreen(props) {
           onPlaceholderException={onPlaceholderException_1}
         />
       );
+      }
     }
     return (
       <View style={[styles.card, styleList]}>
@@ -281,6 +359,19 @@ const styles = StyleSheet.create({
   button: {
     marginTop: 25,
     backgroundColor: '#91e058',
+    borderWidth: 1,
+    width: 100,
+    height: 50,
+    borderRadius: 30,
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignSelf: 'flex-end',
+    marginRight: 25,
+    marginBottom: 20,
+  },
+  customButton: {
+    marginTop: 25,
+    backgroundColor: '#eb5e67',
     borderWidth: 1,
     width: 100,
     height: 50,
