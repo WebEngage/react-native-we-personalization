@@ -221,11 +221,12 @@ export default function ScreenDetails(props) {
         </View>
 
         <View style={styles.ViewLine}>
-          <Text>Screen Value: </Text>
+          <Text>Screen Value(Number): </Text>
           <TextInput
             style={styles.textViewStyle}
             onChangeText={onScreenValueChange}
             value={screenValue}
+            keyboardType={'numeric'}
           />
         </View>
 

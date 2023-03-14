@@ -58,7 +58,7 @@ export default function DynamicScreen(props) {
       if (screenName) {
         if(screenProperty && screenValue) {
         console.log('navigating to  ' + screenName + ' with data', {screenProperty: screenValue});
-          webengageInstance.screen(screenName, { [screenProperty]: screenValue});
+          webengageInstance.screen(screenName, { [screenProperty]: parseInt(screenValue)});
         } else {
         console.log('navigating to  ' + screenName );
         webengageInstance.screen(screenName);
