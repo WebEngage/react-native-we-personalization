@@ -7,6 +7,6 @@ export const enableDevMode = () => {
 
 export const MyLogs = (...data) => {
   if(isDevEnabled) {
-    console.log("WebEngage: "+ data)
+    console.log("WebEngage: ", ...data)
   }
 }

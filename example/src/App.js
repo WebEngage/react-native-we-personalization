@@ -4,11 +4,14 @@ import {
   unRegisterForCampaigns,
   userWillHandleDeepLink,
 } from 'react-native-webengage-personalization';
+import { registerCustomPlaceHolder } from '../../src';
 import { enableDevMode } from '../../src/MyLogs';
 import LoginScreen from './LoginScreen';
 import Navigation from './Navigation';
 import { getValueFromAsyncStorage } from './Utils';
 import { initWebEngage } from './Utils/WebEngageManager';
+import WebEngage from 'react-native-webengage';
+
 
 export default function App() {
   const [isUserLoggedIn, setIsUserLoggedIn] = React.useState(false);
@@ -22,9 +25,13 @@ export default function App() {
         setIsUserLoggedIn(true);
       }
       userNameRef.current = name;
-      // enableDevMode();
+      enableDevMode();
     })();
+
+
   }, []);
+
+
 
   const updateLoginDetails = (loginState) => {
     setIsUserLoggedIn(loginState);

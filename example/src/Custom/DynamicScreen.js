@@ -15,6 +15,7 @@ import { webengageInstance } from '../Utils/WebEngageManager';
 import { WEInlineView, trackCustomClick, trackCustomImpression } from 'react-native-webengage-personalization';
 import {
   registerForCampaigns,
+  unRegisterCustomPlaceHolder,
   unRegisterForCampaigns,
   userWillHandleDeepLink,
 } from '../../../src';
@@ -41,26 +42,29 @@ export default function DynamicScreen(props) {
     viewData = [],
   } = item;
   const arr = [];
+  const customPropertyList = []
   for (let i = 0; i < size; i++) {
     const id = `item-${i}`;
     arr.push({ id: id });
   }
   const [screenList, setScreenList] = React.useState([]);
   const screenListRef = useRef(null);
+  const [customViewLabel, setCustomViewLabel] = React.useState("Custom View: Either campaign not Running / onRendered not triggered")
   const [showNavigation, setShowNavigation] = React.useState(false);
   const [isClickHandledByUser, setIsClickHandledByUser] = React.useState(false);
   const clickRef = useRef(null);
-  const [customViewLabel, setCustomViewLabel] = React.useState("This is a custom View bro!")
+  const [exceptionLable, setExceptionLable] = React.useState("No Exception");
+
 
 
   useFocusEffect(
     React.useCallback(() => {
       if (screenName) {
         if(screenProperty && screenValue) {
-        console.log('navigating to  ' + screenName + ' with data', {screenProperty: screenValue});
+        console.log('Example: dynamic navigating to  ' + screenName + ' with data', {[screenProperty]: screenValue});
           webengageInstance.screen(screenName, { [screenProperty]: parseInt(screenValue)});
         } else {
-        console.log('navigating to  ' + screenName + " without data" );
+        console.log('Example: dynamic navigating to  ' + screenName + " without data" );
         webengageInstance.screen(screenName);
         }
       }
@@ -80,6 +84,7 @@ export default function DynamicScreen(props) {
       setScreenList(screenArrData);
       screenListRef.current = screenArrData;
     })();
+
     const callbacks = {
       onCampaignPrepared,
       onCampaignShown,
@@ -90,6 +95,7 @@ export default function DynamicScreen(props) {
     registerForCampaigns(callbacks);
     return () => {
       unRegisterForCampaigns();
+      removeCustomViews()
     };
   }, []);
 
@@ -97,11 +103,20 @@ export default function DynamicScreen(props) {
     userWillHandleDeepLink(isClickHandledByUser);
   }, [isClickHandledByUser]);
 
+  const removeCustomViews = () => {
+    customPropertyList.map(property => {
+      unRegisterCustomPlaceHolder(property, screenName)
+    })
+    customPropertyList?.splice(0, customPropertyList.length);
+  }
+
 
   const checkForCustomView = () => {
     viewData.map( (viewItem) => {
-      const {isCustomView = false, propertyId} = viewItem
+      const {isCustomView =
+         false, propertyId} = viewItem
       if(isCustomView) {
+        customPropertyList.push(propertyId)
         registerCustomPlaceHolder(
         propertyId,
         screenName,
@@ -162,6 +177,8 @@ export default function DynamicScreen(props) {
       d?.targetViewId,
       d
     );
+    const exceptionText = "Exception occured for id - "+d?.targetViewId+" Exception - "+d?.exception
+    setExceptionLable(exceptionText)
   }
    const onCustomDataReceived_1 = (d) => {
     console.log(
@@ -172,12 +189,17 @@ export default function DynamicScreen(props) {
    }
 
   const onCustomDataReceived = (d) => {
+
+    setCustomViewLabel(JSON.stringify(d))
+    setIsClickHandledByUser(true)
+
     console.log(
-      'Example: custom onDataReceived triggered for ',
+      'Example: custom onDataReceived!!! triggered for ',
       d?.targetViewId,
       d
     );
-    setCustomViewLabel(JSON.stringify(d))
+
+
   };
 
   const onCustomPlaceholderException = (d) => {
@@ -188,12 +210,12 @@ export default function DynamicScreen(props) {
     );
   };
 
-  const trackImpression = () => {
-    trackCustomImpression()
+  const trackImpression = (propertyId) => {
+    trackCustomImpression(propertyId, null)
   }
 
-  const trackClick = () => {
-    trackCustomClick()
+  const trackClick = (propertyId) => {
+    trackCustomClick(propertyId, null)
   }
 
   const renderRecycler = ({ item, index }) => {
@@ -214,10 +236,10 @@ export default function DynamicScreen(props) {
         return(<View>
           <Text> {customViewLabel} </Text>
           <View style={styles.rowLine}>
-            <TouchableHighlight onPress={trackImpression} style={styles.customButton}>
+            <TouchableHighlight onPress={() => trackImpression(inlineView.propertyId)} style={styles.customButton}>
               <Text>Impression</Text>
             </TouchableHighlight>
-            <TouchableHighlight onPress={trackClick} style={styles.customButton}>
+            <TouchableHighlight onPress={() => trackClick(inlineView.propertyId)} style={styles.customButton}>
               <Text>Click</Text>
             </TouchableHighlight>
           </View>
@@ -266,7 +288,6 @@ export default function DynamicScreen(props) {
   };
   const toggleSwitch = () => {
     clickRef.current = !isClickHandledByUser;
-
     setIsClickHandledByUser(!isClickHandledByUser);
   };
 
@@ -299,6 +320,8 @@ export default function DynamicScreen(props) {
           <Text> Navigate </Text>
         </TouchableOpacity>
       </View>
+      <Text> {exceptionLable}</Text>
+
       <NavigationModal
         screenList={screenList}
         currentScreen={screenName}

@@ -188,6 +188,7 @@ export default function ScreenDetails(props) {
             onChangeText={onSizeChange}
             value={size}
             keyboardType="numeric"
+            autoCapitalize="none"
           />
         </View>
 
@@ -199,6 +200,7 @@ export default function ScreenDetails(props) {
             autoCapitalize="none"
             autoCorrect={false}
             value={screenName}
+            autoCapitalize="none"
           />
         </View>
 
@@ -208,6 +210,7 @@ export default function ScreenDetails(props) {
             style={styles.textViewStyle}
             onChangeText={onEventChange}
             value={eventName}
+            autoCapitalize="none"
           />
         </View>
 
@@ -217,6 +220,7 @@ export default function ScreenDetails(props) {
             style={styles.textViewStyle}
             onChangeText={onScreenPropertyChange}
             value={screenProperty}
+            autoCapitalize="none"
           />
         </View>
 
@@ -227,6 +231,7 @@ export default function ScreenDetails(props) {
             onChangeText={onScreenValueChange}
             value={screenValue}
             keyboardType={'numeric'}
+            autoCapitalize="none"
           />
         </View>
 

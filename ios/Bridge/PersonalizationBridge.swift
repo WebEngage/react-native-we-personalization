@@ -7,8 +7,9 @@ class PersonalizationBridge: RCTEventEmitter {
 
   public static var emitter: RCTEventEmitter!
     var propertyId = 0;
+    var weCampaignData: WEGCampaignData? = nil
 
-
+    static let shared = PersonalizationBridge()
   override init() {
     super.init()
     PersonalizationBridge.emitter = self
@@ -36,15 +37,33 @@ class PersonalizationBridge: RCTEventEmitter {
     }
 
     // Custom place holders
-    @objc func registerCallback(_ propertyId: Int) {
+    @objc func registerCallback(_ propertyId: Int, screenName: String) {
         print(WEGConstants.TAG+" customPH: registerCallback called - \(propertyId)")
-        WEPersonalization.shared.registerWEPlaceholderCallback(propertyId, CustomCallbackHandler.shared)
+        WEPersonalization.shared.registerWEPlaceholderCallback(propertyId, self)
         self.propertyId = propertyId
+        let data: [String: Any] = [
+            WEGConstants.PAYLOAD_ID: propertyId,
+            WEGConstants.PAYLOAD_SCREEN_NAME: screenName,
+            WEGConstants.PAYLOAD_IOS_PROPERTY_ID: propertyId
+        ]
+       customRegistry.instance.registerData(map: data)
     }
 
     @objc func unRegisterCallback(_ propertyId: Int) {
         print(WEGConstants.TAG+" customPH: unRegisterCallback called - \(propertyId)")
         WEPersonalization.shared.unregisterWEPlaceholderCallback(propertyId)
+    }
+
+    @objc func trackClick(_ propertyId: Int, attributes: [String: Any]) -> Void {
+        print(WEGConstants.TAG+" WET: trackClick called")
+        let weginline = customRegistry.instance.getWEGHinline(targetViewTag: propertyId)
+        weginline?.campaignData?.trackClick(attributes: attributes)
+    }
+
+    @objc func trackImpression(_ propertyId: Int, attributes: [String: Any]) -> Void {
+        print(WEGConstants.TAG+" WET: trackImpression called")
+        let weginline = customRegistry.instance.getWEGHinline(targetViewTag: propertyId)
+        weginline?.campaignData?.trackImpression(attributes: attributes)
     }
 
 

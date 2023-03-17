@@ -8,7 +8,6 @@ import {
   Text,
   View,
 } from 'react-native';
-import { userWillHandleDeepLink } from '../../../src';
 import { ScreenNamesContext } from '../Navigation';
 import {
   getValueFromAsyncStorage,

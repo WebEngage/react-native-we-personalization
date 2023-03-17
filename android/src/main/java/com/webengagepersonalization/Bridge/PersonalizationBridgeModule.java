@@ -6,6 +6,7 @@ import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
+import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.module.annotations.ReactModule;
 import com.facebook.react.bridge.Callback;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
@@ -20,19 +21,22 @@ import com.webengagepersonalization.Utils.Logger;
 import com.webengagepersonalization.Utils.Utils;
 import com.webengagepersonalization.Utils.WEGConstants;
 import com.webengagepersonalization.handler.CallbackHandler;
+import com.webengagepersonalization.registry.CustomRegistry;
 
 import androidx.annotation.Nullable;
 
 import android.os.Handler;
 import android.util.Log;
 
+import java.util.HashMap;
+import java.util.Map;
+
 // TODO - This might be required for custom part
 @ReactModule(name = WEGConstants.PERSONALIZATION_BRIDGE)
 public class PersonalizationBridgeModule extends ReactContextBaseJavaModule implements WEPlaceholderCallback, WECampaignCallback {
   private ReactApplicationContext applicationContext = null;
   Boolean doesUserHandelCallbacks = false;
-  WECampaignData weCampaign = null;
-
+  String propertyId = "";
   public PersonalizationBridgeModule(ReactApplicationContext reactContext) {
     super(reactContext);
     this.applicationContext = reactContext;
@@ -40,8 +44,10 @@ public class PersonalizationBridgeModule extends ReactContextBaseJavaModule impl
     WEPersonalization.Companion.get().init();
   }
   @ReactMethod
-  public void registerCallback(String tagName) {
+  public void registerCallback(String tagName, String screenName) {
     Logger.d(WEGConstants.TAG,"PersonalizationBridgeModule: registercallback "+tagName);
+    propertyId = tagName;
+    CustomRegistry.get().registerData(tagName);
     WEPersonalization.Companion.get().registerWEPlaceholderCallback(tagName, this);
   }
 
@@ -69,16 +75,18 @@ public class PersonalizationBridgeModule extends ReactContextBaseJavaModule impl
   }
 
   @ReactMethod
-  public void trackImpression() {
-    if(weCampaign != null) {
-      weCampaign.trackImpression(null);
+  public void trackImpression(String propertyId, ReadableMap attributes) {
+    WECampaignData weCampaignData = CustomRegistry.get().getMapData(propertyId);
+    if(weCampaignData != null) {
+      weCampaignData.trackImpression(Utils.convertReadableMapToMap(attributes));
     }
   }
 
   @ReactMethod
-  public void trackClick() {
-    if(weCampaign != null) {
-      weCampaign.trackClick(null);
+  public void trackClick(String propertyId, ReadableMap attributes) {
+    WECampaignData weCampaignData = CustomRegistry.get().getMapData(propertyId);
+    if(weCampaignData != null) {
+      weCampaignData.trackClick(Utils.convertReadableMapToMap(attributes));
     }
   }
 
@@ -128,7 +136,8 @@ public class PersonalizationBridgeModule extends ReactContextBaseJavaModule impl
     Log.d("WebEngage1", "OnDataReceived from personalization view manager - "+weCampaignData);
     WritableMap params = Arguments.createMap();
     params = Utils.generateParams(weCampaignData);
-    weCampaign = weCampaignData;
+    String targetView = weCampaignData.getTargetViewId();
+    CustomRegistry.get().registerData(targetView, weCampaignData);
     Utils.sendEvent(applicationContext, "onCustomDataReceived", params);
   }
 

@@ -18,7 +18,7 @@ export const registerCustomPlaceHolder = (
   onDataReceivedCb,
   onPlaceholderExceptionCb
 ) => {
-  PersonalizationBridge.registerCallback(propertyId);
+  PersonalizationBridge.registerCallback(propertyId, screenName);
   customPropertyList = registerPropertyList(
     customPropertyList,
     screenName,
@@ -36,6 +36,7 @@ export const registerCustomPlaceHolder = (
       'onCustomDataReceived',
       (data) => {
         MyLogs('customPH: onCustomDataReceived list', data);
+
         sendOnDataReceivedEvent(customPropertyList, data);
       }
     );
@@ -68,12 +69,12 @@ export const unRegisterCustomPlaceHolder = (propertyId, screen) => {
   customPropertyList = updatedList;
 };
 
-export const trackCustomClick = () => {
+export const trackCustomClick = (propertyId = '', map = null) => {
   MyLogs('customPH: trackCustomClick ');
-  PersonalizationBridge.trackClick()
+  PersonalizationBridge.trackClick(propertyId, map)
 }
 
-export const trackCustomImpression = () => {
+export const trackCustomImpression = (propertyId = '', map = null) => {
   MyLogs('customPH: trackImpression ');
-  PersonalizationBridge.trackImpression()
+  PersonalizationBridge.trackImpression(propertyId, map)
 }

@@ -10,13 +10,14 @@ import {
   TouchableHighlight,
 } from 'react-native';
 import WebEngage from 'react-native-webengage';
+import { registerCustomPlaceHolder } from '../../src';
 import { removeItem } from './Utils';
 const ListScreen = ({ navigation }) => {
   var webengage = new WebEngage();
   React.useEffect(() => {
     webengage.screen('test');
-
   });
+
 
   const logout = () => {
     removeItem('userName');
