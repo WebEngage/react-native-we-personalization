@@ -11,7 +11,7 @@ class CampaignCallbackHandler:WECampaignCallback{
     static let shared = CampaignCallbackHandler()
     var autoHandleClick = true
     var latestScreenName = ""
-    
+
     func getLatestScreenName() -> String {
         return self.latestScreenName
     }
@@ -53,12 +53,12 @@ extension CampaignCallbackHandler:PropertyRegistryCallback{
         print(WEGConstants.TAG+" WERP screen changed!!!")
         let message = "From CampaignCallbackHandler!"
         self.latestScreenName = screenDetails["screen_name"] as! String
-        
+
         if let screenName = screenDetails["screen_name"] as? String{
             print(WEGConstants.TAG+" WERP screen changed to \(screenName)")
             NotificationCenter.default.post(name: Notification.Name(WEGConstants.SCREEN_NAVIGATED), object: nil, userInfo: ["screenName": screenName]
             )
         }
-       
+
     }
 }

@@ -92,6 +92,7 @@ const MyModal = (props) => {
                 style={styles.textViewStyle}
                 onChangeText={(val) => setPropertyId(val)}
                 value={propertyId}
+                autoCapitalize="none"
               />
             </View>
 

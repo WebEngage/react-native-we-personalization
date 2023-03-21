@@ -36,7 +36,6 @@ import java.util.Map;
 public class PersonalizationBridgeModule extends ReactContextBaseJavaModule implements WEPlaceholderCallback, WECampaignCallback {
   private ReactApplicationContext applicationContext = null;
   Boolean doesUserHandelCallbacks = false;
-  String propertyId = "";
   public PersonalizationBridgeModule(ReactApplicationContext reactContext) {
     super(reactContext);
     this.applicationContext = reactContext;
@@ -45,9 +44,8 @@ public class PersonalizationBridgeModule extends ReactContextBaseJavaModule impl
   }
   @ReactMethod
   public void registerCallback(String tagName, String screenName) {
-    Logger.d(WEGConstants.TAG,"PersonalizationBridgeModule: registercallback "+tagName);
-    propertyId = tagName;
-    CustomRegistry.get().registerData(tagName);
+    Logger.d(WEGConstants.TAG,"PersonalizationBridgeModule: registercallback for  tagName "+tagName+ " | screen - "+screenName);
+//    CustomRegistry.get().registerData(tagName);
     WEPersonalization.Companion.get().registerWEPlaceholderCallback(tagName, this);
   }
 

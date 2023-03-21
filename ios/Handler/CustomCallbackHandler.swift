@@ -8,46 +8,46 @@
 import Foundation
 import WEPersonalization
 
- public class customRegistry: WEPlaceholderCallback {
-     private init(){}
+public class customRegistry: WEPlaceholderCallback {
+    private init(){}
 
-         static let instance = customRegistry()
+        static let instance = customRegistry()
 
-         public var registryMap = [Int: WEGHInline]()
-         internal var impressionTrackedForTargetviews:[String] = []
-     public func registerData(map:[String:Any]){
-             let id = map[WEGConstants.PAYLOAD_IOS_PROPERTY_ID] as! Int
-             let weghinline = WEGHInline(id: id,
-                 screenName: map[WEGConstants.PAYLOAD_SCREEN_NAME] as! String,
-                 propertyID: map[WEGConstants.PAYLOAD_IOS_PROPERTY_ID] as! Int)
+        public var registryMap = [Int: WEGHInline]()
+        internal var impressionTrackedForTargetviews:[String] = []
+    public func registerData(map:[String:Any]){
+            let id = map[WEGConstants.PAYLOAD_IOS_PROPERTY_ID] as! Int
+            let weghinline = WEGHInline(id: id,
+                screenName: map[WEGConstants.PAYLOAD_SCREEN_NAME] as! String,
+                propertyID: map[WEGConstants.PAYLOAD_IOS_PROPERTY_ID] as! Int)
 
-             registryMap[id] = weghinline
-         }
+            registryMap[id] = weghinline
+        }
 
-     public func updateRegisterData(map:[String:Any]){
-         let id = map[WEGConstants.PAYLOAD_IOS_PROPERTY_ID] as! Int
-         let existingData = registryMap[id]
-         print("Existing data \(existingData) ")
-         let weghinline = WEGHInline(id: existingData?.id ?? -1,
-                                     screenName: (existingData?.screenName ?? "") as String,
-                                     propertyID: (existingData?.propertyID ?? 0) as! Int,
-                                     campaignData: map[WEGConstants.PAYLOAD_WEGDATA] as! WEGCampaignData)
+    public func updateRegisterData(map:[String:Any]){
+        let id = map[WEGConstants.PAYLOAD_IOS_PROPERTY_ID] as! Int
+        let existingData = registryMap[id]
+        print("Existing data \(existingData) ")
+        let weghinline = WEGHInline(id: existingData?.id ?? -1,
+                                    screenName: (existingData?.screenName ?? "") as String,
+                                    propertyID: (existingData?.propertyID ?? 0) as! Int,
+                                    campaignData: map[WEGConstants.PAYLOAD_WEGDATA] as! WEGCampaignData)
 
-         registryMap[id] = weghinline
-         print("CustomPH: updateRegisterData \(registryMap)")
-     }
+        registryMap[id] = weghinline
+        print("CustomPH: updateRegisterData \(registryMap)")
+    }
 
-     public func getWEGHinline(targetViewTag:Int)->WEGHInline?{
-             for(_,weginline) in registryMap{
-                 if(weginline.propertyID == targetViewTag){
-                     return weginline
-                 }
-             }
-             return nil
-         }
+    public func getWEGHinline(targetViewTag:Int)->WEGHInline?{
+            for(_,weginline) in registryMap{
+                if(weginline.propertyID == targetViewTag){
+                    return weginline
+                }
+            }
+            return nil
+        }
 
 
- }
+}
 
 public class CustomCallbackHandler:WEPlaceholderCallback{
     static let shared = CustomCallbackHandler()
@@ -68,7 +68,7 @@ public class CustomCallbackHandler:WEPlaceholderCallback{
             WEGConstants.PAYLOAD_IOS_PROPERTY_ID: data.targetViewTag,
             WEGConstants.PAYLOAD_WEGDATA: data,
         ]
-         customRegistry.instance.updateRegisterData(map: customData)
+        customRegistry.instance.updateRegisterData(map: customData)
 
         PersonalizationBridge.emitter.sendEvent(withName: "onCustomDataReceived", body: campaignData)
     }
