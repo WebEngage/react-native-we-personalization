@@ -7,7 +7,7 @@ import {
   sendOnExceptionEvent,
 } from './PropertyListUtils';
 
-let customOnRenderedListener = null;
+let customOnDataReceivedListener = null;
 let customExceptionListener = null;
 let isCustomListenerAdded = false;
 let customPropertyList = [];
@@ -32,7 +32,12 @@ export const registerCustomPlaceHolder = (
     customPropertyList
   );
   if (!isCustomListenerAdded) {
-    customOnRenderedListener = eventEmitter.addListener(
+    MyLogs(
+      'customPH: New Listeners Added',
+      customPropertyList
+    );
+
+    customOnDataReceivedListener = eventEmitter.addListener(
       'onCustomDataReceived',
       (data) => {
         MyLogs('customPH: onCustomDataReceived list', data);
@@ -57,7 +62,7 @@ export const unRegisterCustomPlaceHolder = (propertyId, screen) => {
   );
 
   PersonalizationBridge.unRegisterCallback(propertyId);
-  const listenersList = [customOnRenderedListener, customExceptionListener];
+  const listenersList = [customOnDataReceivedListener, customExceptionListener];
   const { updatedList, listenerFlag } = removePropertyFromPropertyList(
     customPropertyList,
     screen,
@@ -67,6 +72,10 @@ export const unRegisterCustomPlaceHolder = (propertyId, screen) => {
   );
   isCustomListenerAdded = listenerFlag;
   customPropertyList = updatedList;
+  if(!listenerFlag) {
+    customOnDataReceivedListener.remove();
+    customExceptionListener.remove();
+  }
 };
 
 export const trackCustomClick = (propertyId = '', map = null) => {

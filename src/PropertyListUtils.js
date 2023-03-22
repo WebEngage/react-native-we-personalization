@@ -49,8 +49,6 @@ export const removePropertyFromPropertyList = (
   let updatedList = list;
   updatedList?.map((val, index) => {
     if (val.screenName === screenName) {
-      val.propertyList.forEach((item) => {
-        if (val.screenName === screenName) {
           val?.propertyList?.forEach((property, propertyIndex) => {
             if (property?.propertyId === propertyId) {
               updatedList[index].propertyList.splice(propertyIndex, 1);
@@ -60,17 +58,15 @@ export const removePropertyFromPropertyList = (
             'PropertyListUtils: updated list after removing property- ',
             updatedList
           );
-        }
-      });
+          if(!val.propertyList.length) {
+            updatedList.splice(index,1)
+          }
     }
   });
 
   if (!updatedList?.length && listenerFlag) {
-    listenersList?.forEach((listener) => {
-      listener?.remove();
-    });
     listenerFlag = false;
-    MyLogs('PropertyListUtils: All the Listeners are removed ');
+    MyLogs('PropertyListUtils: All the Listeners are removed ',listenersList);
   }
 
   return { updatedList, listenerFlag };
