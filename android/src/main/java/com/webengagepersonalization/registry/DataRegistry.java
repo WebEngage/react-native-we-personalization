@@ -41,7 +41,7 @@ public class DataRegistry {
 
   public void clearCacheData() {
     impressionTrackedForTargetViews.clear();
-    Logger.d(WEGConstants.TAG,"trackImpression: clearCacheData ");
+    Logger.d(WEGConstants.TAG,"trackImpression: Clear impression tracked data ");
 
   }
 }

@@ -255,7 +255,9 @@ dependencies {
     // Google API error fix
     implementation 'com.android.support:multidex:1.0.3'
     implementation 'com.google.android.gms:play-services:12.0.1'
-  implementation files('libs/android-sdk.aar')
+  //  implementation files('libs/android-sdk.aar')
+ implementation (project(':android-sdk'))
+
   implementation 'net.sourceforge.htmlcleaner:htmlcleaner:2.16'
 
 

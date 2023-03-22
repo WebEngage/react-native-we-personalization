@@ -81,6 +81,9 @@ dependencies {
 //  implementation(name:'libs/we-personalization-debug1', ext:'aar')
 
   implementation files('libs/we-personalization-debug.aar')
+  // implementation (project(':we-personalization'))
+  // implementation (project(':android-sdk'))
+
   // CoroutineScope
   api 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.0'
   api 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.0'
