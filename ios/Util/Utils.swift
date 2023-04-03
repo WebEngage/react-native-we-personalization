@@ -3,7 +3,7 @@ import Foundation
 import WEPersonalization
 
 //TODO - Make use of these methods currently it's being called multiple times
-func generateParams(data: WEGCampaignData) -> [String: Any] {
+func generateParams(data: WECampaignData) -> [String: Any] {
     let campaignData: [String: Any] = [WEGConstants.PAYLOAD_TARGET_VIEW_ID: data.targetViewTag, WEGConstants.PAYLOAD_CAMPAIGN_ID: data.campaignId, WEGConstants.PAYLOAD: data.toJSONString()]
     return campaignData;
 }
@@ -15,7 +15,7 @@ func generateParams(campaignId: String?, _ targetViewId: String, _ exception: Er
 }
 
 // clicked
-func generateParams(actionId: String, deepLink: String, data: WEGCampaignData) -> [String: Any] {
+func generateParams(actionId: String, deepLink: String, data: WECampaignData) -> [String: Any] {
     let campaignData: [String: Any] = [WEGConstants.PAYLOAD_ACTION_ID: actionId, WEGConstants.PAYLOAD_DEEPLINK: deepLink, WEGConstants.PAYLOAD: data.toJSONString()]
     return campaignData;
 }

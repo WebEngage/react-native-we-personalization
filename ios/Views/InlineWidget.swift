@@ -7,7 +7,7 @@ import WEPersonalization
 
 public class WEHInlineView: UIView{
     var inlineView: WEInlineView? = nil
-    var campaignData: WEGCampaignData? = nil
+    var campaignData: WECampaignData? = nil
     @objc var width: CGFloat = 0.1 {
         didSet {
             setupView()
@@ -88,7 +88,7 @@ public class WEHInlineView: UIView{
 
 
 extension WEHInlineView : WEPlaceholderCallback{
-    public func onRendered(data: WEGCampaignData) {
+    public func onRendered(data: WECampaignData) {
         print(WEGConstants.TAG+" WERP : onRendered \(self.propertyId)")
         let campaignData: [String: Any] = [WEGConstants.PAYLOAD_TARGET_VIEW_ID: data.targetViewTag, WEGConstants.PAYLOAD_CAMPAIGN_ID: data.campaignId ?? "", WEGConstants.PAYLOAD: data.toJSONString()]
         PersonalizationBridge.emitter.sendEvent(withName: WEGConstants.METHOD_NAME_ON_RENDERED, body: campaignData)
@@ -104,16 +104,16 @@ extension WEHInlineView : WEPlaceholderCallback{
         }
 
     }
-    public func onDataReceived(_ data: WEGCampaignData) {
+    public func onDataReceived(_ data: WECampaignData) {
         self.campaignData = data;
         print(WEGConstants.TAG+" WERP : onDataReceived \(self.propertyId)")
         let campaignData: [String: Any] = [WEGConstants.PAYLOAD_TARGET_VIEW_ID: data.targetViewTag, WEGConstants.PAYLOAD_CAMPAIGN_ID: data.campaignId, WEGConstants.PAYLOAD: data.toJSONString()]
 
         PersonalizationBridge.emitter.sendEvent(withName: WEGConstants.METHOD_NAME_ON_DATA_RECEIVED, body: campaignData)
     }
-    public func onPlaceholderException(_ campaignId: String?, _ targetViewId: Int, _ exception: Error) {
+    public func onPlaceholderException(_ campaignId: String?, _ targetViewId: String, _ exception: Error) {
         print(WEGConstants.TAG+" WERP : onPlaceholderException \(self.propertyId)")
-        let campaignData: [String: Any] = [WEGConstants.PAYLOAD_TARGET_VIEW_ID: targetViewId, WEGConstants.PAYLOAD_CAMPAIGN_ID: campaignId ?? "", WEGConstants.EXCEPTION: exception]
+        let campaignData: [String: Any] = [WEGConstants.PAYLOAD_TARGET_VIEW_ID: targetViewId, WEGConstants.PAYLOAD_CAMPAIGN_ID: campaignId ?? "", WEGConstants.EXCEPTION: exception.localizedDescription]
         PersonalizationBridge.emitter.sendEvent(withName: WEGConstants.METHOD_NAME_ON_PLACEHOLDER_EXCEPTION, body: campaignData)
     }
 }
@@ -134,7 +134,6 @@ extension WEHInlineView {
                 if let scrollview = self.getScrollview(view: self){
                     // remove observer added to scrollview
                     scrollview.removeObserver(self, forKeyPath:  #keyPath(UIScrollView.contentOffset))
-                    
                     if let data = self.campaignData{
                         data.trackImpression(attributes: nil)
                     }

@@ -77,7 +77,7 @@ export const getPropertyDetails = (list, weCampaignData) => {
   const { targetViewId = '' } = weCampaignData;
   if (list?.length) {
     list[list.length - 1]?.propertyList?.map((val) => {
-      if (val.propertyId === targetViewId) {
+      if (val.propertyId == targetViewId) {
         res = val;
       }
     });

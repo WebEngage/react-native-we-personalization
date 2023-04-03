@@ -63,7 +63,7 @@ repositories {
 
 
 dependencies {
-  implementation fileTree(include: ['*.jar', '*.aar'], dir: 'libs')
+  // implementation fileTree(include: ['*.jar', '*.aar'], dir: 'libs')
 
   // For < 0.71, this will be from the local maven repo
   // For > 0.71, this will be replaced by `com.facebook.react:react-android:$version` by react gradle plugin
@@ -74,14 +74,17 @@ dependencies {
   implementation 'androidx.core:core:1.3.2'
 
   // implementation 'com.webengage:android-sdk:4.0.0'
+  // TODO = When enabling aar file add android-sdk also
+  // if adding from implementation we-personalization:1.1.0' then only WE-Personalization
 //  implementation files('we-personalization')
 
-//  implementation 'com.webengage:we-personalization:1.0.0'
+ implementation 'com.webengage:we-personalization:1.1.0'
 
 //  implementation(name:'libs/we-personalization-debug1', ext:'aar')
 
-  implementation files('libs/we-personalization-debug.aar')
-  // implementation (project(':we-personalization'))
+  //  implementation files('libs/we-personalization-debug.aar')
+
+//   implementation (project(':we-personalization'))
   // implementation (project(':android-sdk'))
 
   // CoroutineScope

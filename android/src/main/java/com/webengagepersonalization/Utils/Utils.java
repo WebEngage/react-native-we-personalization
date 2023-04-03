@@ -52,7 +52,7 @@ public class Utils {
     WritableMap params = Arguments.createMap();
     params.putString("targetViewId", targetViewId);
     params.putString("campaignId", campaignId);
-    params.putString("Error", e.toString());
+    params.putString("exception", e.toString());
     return params;
   }
 

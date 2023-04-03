@@ -47,6 +47,11 @@ const WEInlineView = (props) => {
         listenersList,
         isListenerAdded
       );
+      if(!listenerFlag) {
+        dataReceivedListener?.remove()
+        renderListerner?.remove()
+        exceptionalListener?.remove()
+      }
       isListenerAdded = listenerFlag;
       propertyProcessor = updatedList;
     };

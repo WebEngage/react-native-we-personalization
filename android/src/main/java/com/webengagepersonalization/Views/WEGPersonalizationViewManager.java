@@ -18,7 +18,7 @@ import com.facebook.react.uimanager.annotations.ReactProp;
 import com.facebook.react.uimanager.annotations.ReactPropGroup;
 import com.webengage.personalization.WEPersonalization;
 //import  androidx.annotation..widget.CardView;
-import com.webengage.personalization.utils.ConstantsKt;
+//import com.webengage.personalization.utils.ConstantsKt;
 import com.webengagepersonalization.Utils.Logger;
 import com.webengagepersonalization.Utils.WEGConstants;
 import com.webengagepersonalization.Views.WEHInlineWidget;
@@ -34,8 +34,8 @@ public class WEGPersonalizationViewManager extends SimpleViewManager<ViewGroup> 
   public WEGPersonalizationViewManager(ReactApplicationContext reactContext) {
     super();
     this.applicationContext = reactContext;
-    SharedPreferences sharedPrefsManager = applicationContext.getSharedPreferences(ConstantsKt.WE_SHARED_STORAGE, Context.MODE_PRIVATE);
-    sharedPrefsManager.edit().putBoolean(ConstantsKt.KEY_SHOULD_AUTO_TRACK_IMPRESSIONS, false).apply();
+    SharedPreferences sharedPrefsManager = applicationContext.getSharedPreferences(WEGConstants.WE_SHARED_STORAGE, Context.MODE_PRIVATE);
+    sharedPrefsManager.edit().putBoolean(WEGConstants.KEY_SHOULD_AUTO_TRACK_IMPRESSIONS, false).apply();
     WEPersonalization.Companion.get().registerPropertyRegistryCallback(new CallbackHandler());
   }
 

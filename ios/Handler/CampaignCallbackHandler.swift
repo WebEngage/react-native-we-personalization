@@ -15,7 +15,7 @@ class CampaignCallbackHandler:WECampaignCallback{
     func getLatestScreenName() -> String {
         return self.latestScreenName
     }
-    func onCampaignPrepared(_ data: WEGCampaignData) -> WEGCampaignData {
+    func onCampaignPrepared(_ data: WECampaignData) -> WECampaignData {
         print(WEGConstants.TAG+" WEP CC: onCampaignPrepared for \(data.targetViewTag)")
 //        let campaignData: [String: Any] = generateParams(data: data)
         let campaignData: [String: Any] = ["targetViewId": data.targetViewTag, "campaingId": data.campaignId, "payloadData": data.toJSONString()]
@@ -23,7 +23,7 @@ class CampaignCallbackHandler:WECampaignCallback{
         return data
     }
 
-    func onCampaignShown(data: WEGCampaignData) {
+    func onCampaignShown(data: WECampaignData) {
         print(WEGConstants.TAG+" WEP CC: onCampaignShown for \(data.targetViewTag)")
 //        let campaignData: [String: Any] = generateParams(data: data)
         let campaignData: [String: Any] = ["targetViewId": data.targetViewTag, "campaingId": data.campaignId, "payloadData": data.toJSONString()]
@@ -37,7 +37,7 @@ class CampaignCallbackHandler:WECampaignCallback{
         PersonalizationBridge.emitter.sendEvent(withName: "onCampaignException", body: campaignData)
     }
 
-    func onCampaignClicked(actionId: String, deepLink: String, data: WEGCampaignData) -> Bool {
+    func onCampaignClicked(actionId: String, deepLink: String, data: WECampaignData) -> Bool {
         print(WEGConstants.TAG+" WEP CC: onCampaignClicked for \(data.targetViewTag) autoHandle \(self.autoHandleClick)")
         let campaignData: [String: Any] = ["actionId": actionId, "deepLink": deepLink ?? "", "payloadData": data.toJSONString()]
 //        let campaignData: [String: Any] = generateParams(actionId: actionId, deepLink: deepLink, data: data)

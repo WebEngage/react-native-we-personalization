@@ -12,6 +12,10 @@ public class WEGConstants {
   public static final String PROPERTY_ID = "propertyId";
   public static final String SCREEN_NAME = "screenName";
 
+  public static final String WE_SHARED_STORAGE = "we_shared_storage";
+  public static final String KEY_SHOULD_AUTO_TRACK_IMPRESSIONS = "com.webengage.personalization.auto_track_impression";
+
+
 
 
 

@@ -16,6 +16,7 @@ import com.webengage.personalization.WEPersonalization;
 import com.webengage.personalization.callbacks.WECampaignCallback;
 import com.webengage.personalization.callbacks.WEPlaceholderCallback;
 import com.webengage.personalization.data.WECampaignData;
+import com.webengage.sdk.android.Analytics;
 import com.webengage.sdk.android.WebEngage;
 import com.webengagepersonalization.Utils.Logger;
 import com.webengagepersonalization.Utils.Utils;
@@ -39,7 +40,7 @@ public class PersonalizationBridgeModule extends ReactContextBaseJavaModule impl
   public PersonalizationBridgeModule(ReactApplicationContext reactContext) {
     super(reactContext);
     this.applicationContext = reactContext;
-    Logger.d("AKC", "PersonalizationBridgeModule");
+    Logger.d(WEGConstants.TAG, "PersonalizationBridgeModule");
     WEPersonalization.Companion.get().init();
   }
   @ReactMethod

@@ -1,5 +1,6 @@
 import React, { useRef } from 'react';
 import {
+  Button,
   Dimensions,
   FlatList,
   Pressable,
@@ -7,6 +8,7 @@ import {
   StyleSheet,
   Switch,
   Text,
+  TextInput,
   TouchableHighlight,
   TouchableOpacity,
   View,
@@ -54,6 +56,7 @@ export default function DynamicScreen(props) {
   const [isClickHandledByUser, setIsClickHandledByUser] = React.useState(false);
   const clickRef = useRef(null);
   const [exceptionLable, setExceptionLable] = React.useState("No Exception");
+  const [eventNameToTrigger, setEventNameToTrigger] = React.useState("");
 
 
 
@@ -122,7 +125,7 @@ export default function DynamicScreen(props) {
         screenName,
         onCustomDataReceived,
         onCustomPlaceholderException
-      )
+        )
         }
     })
   }
@@ -208,6 +211,8 @@ export default function DynamicScreen(props) {
       d?.targetViewId,
       d
     );
+    const exceptionText = "Exception occured for id - "+d?.targetViewId+" Exception - "+d?.exception
+    setExceptionLable(exceptionText)
   };
 
   const trackImpression = (propertyId) => {
@@ -295,6 +300,10 @@ export default function DynamicScreen(props) {
     setShowNavigation(true);
   };
 
+  const trackEvent = () => {
+    webengageInstance.track(eventNameToTrigger)
+  }
+
   const sendNavigation = (navItem) => {
     const { screenName: navigateScreen } = navItem;
     navigation.navigate(navigateScreen, {
@@ -321,6 +330,13 @@ export default function DynamicScreen(props) {
         </TouchableOpacity>
       </View>
       <Text> {exceptionLable}</Text>
+      <View style={[styles.rowItem, styles.border]}>
+
+      <TextInput style={styles.textInput} placeholder="Enter Event Name" value={eventNameToTrigger} onChangeText={(text) => setEventNameToTrigger(text)} />
+      <TouchableOpacity onPress={trackEvent} style={styles.trackButton} >
+        <Text style={styles.trackText}> Track  </Text>
+        </TouchableOpacity>
+      </View>
 
       <NavigationModal
         screenList={screenList}
@@ -378,6 +394,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignSelf: 'center',
   },
+  border: {
+    borderWidth: 1,
+    borderColor: '#ccc'
+  },
   flatColor: {
     backgroundColor: '#e8b77b',
   },
@@ -390,9 +410,30 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginHorizontal: 20,
   },
+  textInput: {
+    height: 45,
+    borderBottomWidth: 2,
+    marginBottom: 2,
+    marginHorizontal: 20,
+    borderBottomColor: '#ccc',
+  },
+  trackButton: {
+    height: 30,
+    width: 100,
+    backgroundColor: '#fcc111',
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignSelf: 'center'
+  },
+  trackText: {
+    color: '#000',
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
   box: {
     width: Dimensions.get('window').width,
     height: 200,
+
     // borderWidth: 10,
     // borderColor: 'red',
     // padding: 50,

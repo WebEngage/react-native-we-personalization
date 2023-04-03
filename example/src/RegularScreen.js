@@ -93,7 +93,7 @@ const RegularScreen = ({ navigation }) => {
   };
 
   const regularScreenName = Platform.OS === 'android' ? 'ET_home' : 'ET_home';
-  const screenHomeProperties = Platform.OS === 'android' ? 'ninetyNine' : 99;
+  const screenHomeProperties = Platform.OS === 'android' ? 'flutter_text_2' : 99;
   const screenProperties = Platform.OS === 'android' ? 'flutter_text' : 1002; // screen_home
 
   // screendark(screen) | dm2(prop) - android (Working)

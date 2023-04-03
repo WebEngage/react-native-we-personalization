@@ -18,6 +18,10 @@ export const registerCustomPlaceHolder = (
   onDataReceivedCb,
   onPlaceholderExceptionCb
 ) => {
+  MyLogs(
+    'customPH: Registering for ',
+    propertyId
+  );
   PersonalizationBridge.registerCallback(propertyId, screenName);
   customPropertyList = registerPropertyList(
     customPropertyList,
@@ -53,6 +57,10 @@ export const registerCustomPlaceHolder = (
       }
     );
     isCustomListenerAdded = true;
+  } else {
+    MyLogs(
+      'customPH: CustomListener is already Added'
+    );
   }
 };
 
