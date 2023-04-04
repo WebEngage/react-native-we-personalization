@@ -32,26 +32,6 @@ const ListScreen = ({ navigation }) => {
       >
         <Text> Logout </Text>
       </TouchableHighlight>
-      <Pressable
-        style={styles.button}
-        onPress={() => navigation.navigate('regular')}
-      >
-        <Text style={styles.textStyle}> Regular </Text>
-      </Pressable>
-
-      <Pressable
-        style={styles.button}
-        onPress={() => navigation.navigate('scrollable')}
-      >
-        <Text style={styles.textStyle}> Scrollable </Text>
-      </Pressable>
-
-      <Pressable
-        style={styles.button}
-        onPress={() => navigation.navigate('flatlist')}
-      >
-        <Text style={styles.textStyle}> Flatlist </Text>
-      </Pressable>
 
       <Pressable
         style={styles.button}
