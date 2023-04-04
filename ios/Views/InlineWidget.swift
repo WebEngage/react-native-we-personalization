@@ -14,40 +14,38 @@ public class WEHInlineView: UIView{
         }
     }
 
-
     @objc var height: CGFloat = 0.1 {
         didSet {
             setupView()
         }
     }
 
-
     @objc var screenName: String = ""{
         didSet {
-            print(WEGConstants.TAG+" Initialization for screenName- \(screenName)")
+            print(WEGConstants.TAG+"InlineWidget: Initialization for screenName- \(screenName)")
             self.setupView()
         }
     }
 
     @objc var propertyId: Int = 0 {
         didSet {
-            print(WEGConstants.TAG+" Initialization for propertyId - \(propertyId)")
+            print(WEGConstants.TAG+"InlineWidget: Initialization for propertyId - \(propertyId)")
             self.setupView()
         }
     }
 
     @objc func reloadViews(){
-        print("WERL reloadView called for \(self.propertyId)")
+        print(WEGConstants.TAG+"InlineWidget: reloadView called for \(self.propertyId)")
         DispatchQueue.main.async {
             if let viewToreload = self.inlineView,
-                  viewToreload.superview != nil{
+               viewToreload.superview != nil{
                 self.inlineView?.load(tag: self.propertyId, callbacks: self)
-                }
             }
+        }
 
     }
     override init(frame: CGRect) {
-        print(WEGConstants.TAG+"WER: init called for inlineWidget")
+        print(WEGConstants.TAG+"InlineWidget: init called for inlineWidget")
         super.init(frame: frame)
         setupView()
         NotificationCenter.default.addObserver(self, selector: #selector(reloadViews), name: Notification.Name(WEGConstants.SCREEN_NAVIGATED), object: nil)
@@ -55,8 +53,8 @@ public class WEHInlineView: UIView{
     }
 
     deinit{
-        print(WEGConstants.TAG+"WER2: deInit called for \(self.propertyId)")
-           NotificationCenter.default.removeObserver(self)
+        print(WEGConstants.TAG+"InlineWidget: deInit called for \(self.propertyId)")
+        NotificationCenter.default.removeObserver(self)
         if let scrollview = self.getScrollview(view: self){
             scrollview.removeObserver(self, forKeyPath:  #keyPath(UIScrollView.contentOffset))
         }
@@ -75,21 +73,18 @@ public class WEHInlineView: UIView{
             inlineView = WEInlineView(frame: CGRect(x: 0, y: 0, width: self.width, height: self.height))
             inlineView?.tag = self.propertyId
             if(self.propertyId != 0) {
-                print(WEGConstants.TAG+" WERL: LoadView called for - \(self.propertyId)")
-//                inlineView?.tag = self.propertyId
-                 inlineView?.load(tag: self.propertyId, callbacks: self)
-//                PlaceHolderCallbackHandler
+                print(WEGConstants.TAG+" InlineWidget: LoadView called for - \(self.propertyId)")
+                inlineView?.load(tag: self.propertyId, callbacks: self)
             }
-//            print(WEGConstants.TAG+" Yay! Adding subview for - \(self.propertyId)")
             addSubview(inlineView!)
-       }
+        }
     }
 }
 
 
 extension WEHInlineView : WEPlaceholderCallback{
     public func onRendered(data: WECampaignData) {
-        print(WEGConstants.TAG+" WERP : onRendered \(self.propertyId)")
+        print(WEGConstants.TAG+" InlineWidget: onRendered \(self.propertyId)")
         let campaignData: [String: Any] = [WEGConstants.PAYLOAD_TARGET_VIEW_ID: data.targetViewTag, WEGConstants.PAYLOAD_CAMPAIGN_ID: data.campaignId ?? "", WEGConstants.PAYLOAD: data.toJSONString()]
         PersonalizationBridge.emitter.sendEvent(withName: WEGConstants.METHOD_NAME_ON_RENDERED, body: campaignData)
         if(self.isVisibleToUser) {
@@ -97,22 +92,19 @@ extension WEHInlineView : WEPlaceholderCallback{
         } else {
             if let scrollview = self.getScrollview(view: self){
                 scrollview.addObserver(self, forKeyPath: #keyPath(UIScrollView.contentOffset), options: [.old, .new], context: nil)
-                print(WEGConstants.TAG+" WERS: Scrollview  found")
-            }else{
-                print(WEGConstants.TAG+" WERS: Scrollview not found")
             }
         }
 
     }
     public func onDataReceived(_ data: WECampaignData) {
         self.campaignData = data;
-        print(WEGConstants.TAG+" WERP : onDataReceived \(self.propertyId)")
+        print(WEGConstants.TAG+" InlineWidget: onDataReceived \(self.propertyId)")
         let campaignData: [String: Any] = [WEGConstants.PAYLOAD_TARGET_VIEW_ID: data.targetViewTag, WEGConstants.PAYLOAD_CAMPAIGN_ID: data.campaignId, WEGConstants.PAYLOAD: data.toJSONString()]
 
         PersonalizationBridge.emitter.sendEvent(withName: WEGConstants.METHOD_NAME_ON_DATA_RECEIVED, body: campaignData)
     }
     public func onPlaceholderException(_ campaignId: String?, _ targetViewId: String, _ exception: Error) {
-        print(WEGConstants.TAG+" WERP : onPlaceholderException \(self.propertyId)")
+        print(WEGConstants.TAG+" InlineWidget: onPlaceholderException \(self.propertyId)")
         let campaignData: [String: Any] = [WEGConstants.PAYLOAD_TARGET_VIEW_ID: targetViewId, WEGConstants.PAYLOAD_CAMPAIGN_ID: campaignId ?? "", WEGConstants.EXCEPTION: exception.localizedDescription]
         PersonalizationBridge.emitter.sendEvent(withName: WEGConstants.METHOD_NAME_ON_PLACEHOLDER_EXCEPTION, body: campaignData)
     }
@@ -128,11 +120,9 @@ extension WEHInlineView {
 
     public override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         if keyPath == #keyPath(UIScrollView.contentOffset) {
-            print(WEGConstants.TAG+" WERP above isVisibleToUser @@@@")
             if self.isVisibleToUser == true{
-                print(WEGConstants.TAG+" WERP screen is visible in the port @@@@")
                 if let scrollview = self.getScrollview(view: self){
-                    // remove observer added to scrollview
+                    // removes observer added to scrollview
                     scrollview.removeObserver(self, forKeyPath:  #keyPath(UIScrollView.contentOffset))
                     if let data = self.campaignData{
                         data.trackImpression(attributes: nil)

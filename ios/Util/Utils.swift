@@ -2,7 +2,6 @@
 import Foundation
 import WEPersonalization
 
-//TODO - Make use of these methods currently it's being called multiple times
 func generateParams(data: WECampaignData) -> [String: Any] {
     let campaignData: [String: Any] = [WEGConstants.PAYLOAD_TARGET_VIEW_ID: data.targetViewTag, WEGConstants.PAYLOAD_CAMPAIGN_ID: data.campaignId, WEGConstants.PAYLOAD: data.toJSONString()]
     return campaignData;

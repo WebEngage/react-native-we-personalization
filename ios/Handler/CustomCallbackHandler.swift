@@ -2,7 +2,6 @@
 //  CustomCallbackHandler.swift
 //  react-native-webengage-personalization
 //
-//  Created by Akshaykumar Chilad on 16/02/23.
 //
 
 import Foundation
@@ -11,23 +10,22 @@ import WEPersonalization
 public class customRegistry: WEPlaceholderCallback {
     private init(){}
 
-        static let instance = customRegistry()
+    static let instance = customRegistry()
 
-        public var registryMap = [Int: WEGHInline]()
-        internal var impressionTrackedForTargetviews:[String] = []
+    public var registryMap = [Int: WEGHInline]()
+    internal var impressionTrackedForTargetviews:[String] = []
     public func registerData(map:[String:Any]){
-            let id = map[WEGConstants.PAYLOAD_IOS_PROPERTY_ID] as! Int
-            let weghinline = WEGHInline(id: id,
-                screenName: map[WEGConstants.PAYLOAD_SCREEN_NAME] as! String,
-                propertyID: map[WEGConstants.PAYLOAD_IOS_PROPERTY_ID] as! Int)
+        let id = map[WEGConstants.PAYLOAD_IOS_PROPERTY_ID] as! Int
+        let weghinline = WEGHInline(id: id,
+                                    screenName: map[WEGConstants.PAYLOAD_SCREEN_NAME] as! String,
+                                    propertyID: map[WEGConstants.PAYLOAD_IOS_PROPERTY_ID] as! Int)
 
-            registryMap[id] = weghinline
-        }
+        registryMap[id] = weghinline
+    }
 
     public func updateRegisterData(map:[String:Any]){
         let id = map[WEGConstants.PAYLOAD_IOS_PROPERTY_ID] as! Int
         let existingData = registryMap[id]
-        print("Existing data \(existingData) ")
         let weghinline = WEGHInline(id: existingData?.id ?? -1,
                                     screenName: (existingData?.screenName ?? "") as String,
                                     propertyID: (existingData?.propertyID ?? 0) as! Int,
@@ -38,13 +36,13 @@ public class customRegistry: WEPlaceholderCallback {
     }
 
     public func getWEGHinline(targetViewTag:Int)->WEGHInline?{
-            for(_,weginline) in registryMap{
-                if(weginline.propertyID == targetViewTag){
-                    return weginline
-                }
+        for(_,weginline) in registryMap{
+            if(weginline.propertyID == targetViewTag){
+                return weginline
             }
-            return nil
         }
+        return nil
+    }
 
 
 }
@@ -71,18 +69,9 @@ public class CustomCallbackHandler:WEPlaceholderCallback{
         PersonalizationBridge.emitter.sendEvent(withName: "onCustomDataReceived", body: campaignData)
     }
     public func onPlaceholderException(_ campaignId: String?, _ targetViewId: String, _ exception: Error) {
-        print("WEP: customPH: onCustomPlaceholderException \(targetViewId)")
+        print("customPH: onCustomPlaceholderException \(targetViewId)")
         let campaignData: [String: Any] = ["targetViewId": targetViewId, "campaingId": campaignId ?? "", "exception": exception.localizedDescription]
         PersonalizationBridge.emitter.sendEvent(withName: "onCustomPlaceholderException", body: campaignData)
     }
 }
 
-extension PersonalizationBridge: WEPlaceholderCallback {
-    func onDataReceived(_ data: WECampaignData) {
-        print("onDataReceived ###")
-    }
-    func onPlaceholderException(_ campaignId: String?, _ targetViewId: String, _ exception: Error) {
-        print("onPlaceholderException ###")
-    }
-
-}

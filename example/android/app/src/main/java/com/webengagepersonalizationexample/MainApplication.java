@@ -67,9 +67,7 @@ public class MainApplication extends Application implements ReactApplication {
               .setDebugMode(true) // only in development mode
               .build();
   registerActivityLifecycleCallbacks(new WebEngageActivityLifeCycleCallbacks(this, webEngageConfig));
-
-  // Initializing WebEngage Personalization SDK
-
+  
   }
 
   /**
