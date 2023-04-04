@@ -46,7 +46,6 @@ public class PersonalizationBridgeModule extends ReactContextBaseJavaModule impl
   @ReactMethod
   public void registerCallback(String tagName, String screenName) {
     Logger.d(WEGConstants.TAG,"PersonalizationBridgeModule: registercallback for  tagName "+tagName+ " | screen - "+screenName);
-//    CustomRegistry.get().registerData(tagName);
     WEPersonalization.Companion.get().registerWEPlaceholderCallback(tagName, this);
   }
 
@@ -132,7 +131,7 @@ public class PersonalizationBridgeModule extends ReactContextBaseJavaModule impl
 
   @Override
   public void onDataReceived(WECampaignData weCampaignData) {
-    Log.d("WebEngage1", "OnDataReceived from personalization view manager - "+weCampaignData);
+    Log.d(WEGConstants.TAG, "OnDataReceived from personalization view manager - "+weCampaignData);
     WritableMap params = Arguments.createMap();
     params = Utils.generateParams(weCampaignData);
     String targetView = weCampaignData.getTargetViewId();
@@ -145,11 +144,11 @@ public class PersonalizationBridgeModule extends ReactContextBaseJavaModule impl
     WritableMap params = Arguments.createMap();
     params = Utils.generateParams(campaignId, targetViewId, e);
     Utils.sendEvent(applicationContext, "onCustomPlaceholderException", params);
-    Log.d("WebEngage1", "onCustomPlaceholderException from personalization view manager-> \ncampaignId- "+campaignId+"\ntargetViewId- "+targetViewId + "\nerror-"+e);
+    Log.d(WEGConstants.TAG, "onCustomPlaceholderException from personalization view manager-> \ncampaignId- "+campaignId+"\ntargetViewId- "+targetViewId + "\nerror-"+e);
   }
 
   @Override
   public void onRendered(WECampaignData weCampaignData) {
-    Log.d("WebEngage1", "onRendered from personalization view manager");
+    Log.d(WEGConstants.TAG, "onRendered from personalization view manager");
   }
 }

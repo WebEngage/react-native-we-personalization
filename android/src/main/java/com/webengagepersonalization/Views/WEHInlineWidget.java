@@ -92,7 +92,7 @@ public class WEHInlineWidget extends FrameLayout implements WECampaignCallback, 
               boolean isUserScreenVisible = Utils.isVisible(view);
               if (isUserScreenVisible) {
                 trackImpression(weCampaignData);
-                Logger.d(WEGConstants.TAG, "WEHInlineWidget: Impression tracked1 for  " + tagName);
+                Logger.d(WEGConstants.TAG, "WEHInlineWidget: Impression tracked for  " + tagName);
                 view.getViewTreeObserver().removeOnScrollChangedListener(this);
               }
             }
@@ -138,7 +138,7 @@ public class WEHInlineWidget extends FrameLayout implements WECampaignCallback, 
     heightInPixel -= (bm + tm);
     widthInPixel -= (rm + lm);
 
-//    Size of the view
+//    Size of the view - applied to WEInlineWidget
     view.measure(
       View.MeasureSpec.makeMeasureSpec(widthInPixel, View.MeasureSpec.EXACTLY),
       View.MeasureSpec.makeMeasureSpec(heightInPixel, View.MeasureSpec.EXACTLY));
@@ -177,7 +177,6 @@ public class WEHInlineWidget extends FrameLayout implements WECampaignCallback, 
         WritableMap params = Arguments.createMap();
         params = Utils.generateParams(campaignId, targetViewId, e);
         Utils.sendEvent(applicationContext, "onPlaceholderException", params);
-
       }
 
       @Override
@@ -186,7 +185,12 @@ public class WEHInlineWidget extends FrameLayout implements WECampaignCallback, 
         WritableMap params = Arguments.createMap();
         params = Utils.generateParams(weCampaignData);
         Utils.sendEvent(applicationContext, "onRendered", params);
-        View view = weInlineView.findViewWithTag("INLINE_PERSONALIZATION_TAG");
+        View view = null;
+        if(weInlineView.getChildCount() > 1) {
+          view = weInlineView.getChildAt(weInlineView.getChildCount()-1);
+        } else {
+          view = weInlineView.findViewWithTag("INLINE_PERSONALIZATION_TAG");
+        }
         if (view != null) {
           setupLayout(view, weCampaignData);
         }
@@ -194,13 +198,6 @@ public class WEHInlineWidget extends FrameLayout implements WECampaignCallback, 
     });
   }
 
-//  TODO - Check if this has to be kept for custom callback
-  public void registerCallback(String tagName) {
-//    WEPersonalization.Companion.get().registerWEPlaceholderCallback(tagName, this);
-  }
-
-
-  //  TODO - Check with  Milind if it has to be visible at hybrid for the below methods
   @Override
   public boolean onCampaignClicked(@NonNull String s, @NonNull String s1, @NonNull WECampaignData weCampaignData) {
     Logger.d(WEGConstants.TAG, "onCampaignClicked called ---- " + weCampaignData);

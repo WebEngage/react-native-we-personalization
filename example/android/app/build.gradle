@@ -249,24 +249,15 @@ android {
 }
 
 dependencies {
-    // implementation fileTree(dir: "libs", include: ["*.jar", "*.aar"])
-
-
-    // Google API error fix
     implementation 'com.android.support:multidex:1.0.3'
     implementation 'com.google.android.gms:play-services:12.0.1'
-  //  implementation files('libs/android-sdk.aar')
-//  implementation (project(':android-sdk'))
 
   implementation 'net.sourceforge.htmlcleaner:htmlcleaner:2.16'
 
 
-  //WebEngage
+//  WebEngage
     implementation 'com.webengage:android-sdk:4.+'
-    // implementation 'com.webengage:we-personalization:1.0.0'
-
-//    implementation project(':android-sdk')
-//    implementation (project(':we-personalization'))
+     implementation 'com.webengage:we-personalization:1.0.0'
 
   // cardView
   implementation 'androidx.cardview:cardview:1.0.0'
