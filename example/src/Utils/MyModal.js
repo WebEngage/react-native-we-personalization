@@ -1,5 +1,5 @@
 import CheckBox from '@react-native-community/checkbox';
-import React, { useState } from 'react';
+import React from 'react';
 import {
   Modal,
   Platform,
@@ -7,7 +7,6 @@ import {
   StyleSheet,
   Text,
   TextInput,
-  TouchableOpacity,
   View,
 } from 'react-native';
 
@@ -111,9 +110,6 @@ const MyModal = (props) => {
           />
         </View>
 
-            {/* <TouchableOpacity onPress={() => setIsModalVisible(false)}>
-              <Text>Close Modal</Text>
-            </TouchableOpacity> */}
             <Pressable
               onPress={addViewData}
               style={[styles.button, styles.btnAdd]}

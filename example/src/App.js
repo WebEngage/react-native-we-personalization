@@ -27,10 +27,7 @@ export default function App() {
       userNameRef.current = name;
       enableDevMode();
     })();
-
-
   }, []);
-
 
 
   const updateLoginDetails = (loginState) => {

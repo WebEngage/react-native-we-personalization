@@ -91,20 +91,17 @@ export default function ScreenDetails(props) {
         }
       } else {
         if (index !== -1) {
-          // screenListData.splice(index, 1, screenData);
           alert('Screen Already Exists');
         } else {
           screenListData.push(screenData);
           saveToAsyncStorage('screenData', JSON.stringify(screenListData));
           navigation.goBack();
-          alert('Added screen data');
         }
       }
     }
   };
 
   const addViewData = () => {
-    // setIsModalVisible(true);
     changeModalVisiblity(true);
   };
 
@@ -114,9 +111,7 @@ export default function ScreenDetails(props) {
 
   const addViewListData = (data) => {
     const viewList = [...viewData];
-
     let isDuplicate = false;
-
     for (const viewItem of viewList) {
       if (
         viewItem.propertyId === data.propertyId ||
@@ -135,7 +130,6 @@ export default function ScreenDetails(props) {
     } else {
       alert('Invalid PropertyId||Position');
     }
-
     setIsModalVisible(false);
   };
   const renderRow = (item) => {
@@ -153,14 +147,12 @@ export default function ScreenDetails(props) {
     const viewList = [...viewData];
     viewList.splice(index, 1);
     setViewData(viewList);
-    // const list = getValueFromAsyncStorage("screenData")
   };
 
   const renderView = (item, index) => {
     return (
       <View style={styles.cardView}>
         {renderRow(item)}
-        {/* <Button title="delete" onPress={() => deleteView(index)} /> */}
         <Pressable style={styles.deletebtn} onPress={() => deleteView(index)}>
           <Text> Delete </Text>
         </Pressable>

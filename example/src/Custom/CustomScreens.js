@@ -1,17 +1,14 @@
 import React, { useContext } from 'react';
 import {
-  Button,
   FlatList,
   Pressable,
   StyleSheet,
-  Switch,
   Text,
   View,
 } from 'react-native';
 import { ScreenNamesContext } from '../Navigation';
 import {
   getValueFromAsyncStorage,
-  removeItem,
   saveToAsyncStorage,
 } from '../Utils';
 import { webengageInstance } from '../Utils/WebEngageManager';
@@ -19,8 +16,6 @@ import { webengageInstance } from '../Utils/WebEngageManager';
 export default function CustomScreens({ navigation }) {
   const [screenList, setScreenList] = React.useState([]);
   const [screenNames, setScreenNames] = useContext(ScreenNamesContext);
-  const [isClickHandledByUser, setIsClickHandledByUser] = React.useState(false);
-
 
   const addScreen = () => {
     navigation.navigate('screenDetails');
@@ -40,7 +35,6 @@ export default function CustomScreens({ navigation }) {
   const removeScreenData = (index) => {
     const screenListData = [...screenList];
     screenListData.splice(index, 1);
-
     setScreenList(screenListData);
     saveToAsyncStorage('screenData', JSON.stringify(screenListData));
   };
@@ -73,7 +67,6 @@ export default function CustomScreens({ navigation }) {
           </View>
 
           <View style={styles.row}>
-            {/* <Text style={styles.textView}>Screen Name</Text> */}
             {item.isRecyclerView ? (
               <Text style={[styles.itemText, styles.redText]}>
                 RecyclerView
@@ -121,7 +114,7 @@ export default function CustomScreens({ navigation }) {
 
       <FlatList
         data={screenList}
-        keyExtractor={(item, index) => item.id}
+        keyExtractor={(item) => item.id}
         renderItem={renderItem}
       />
     </View>

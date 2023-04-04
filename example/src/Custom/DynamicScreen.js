@@ -1,9 +1,7 @@
 import React, { useRef } from 'react';
 import {
-  Button,
   Dimensions,
   FlatList,
-  Pressable,
   ScrollView,
   StyleSheet,
   Switch,
@@ -14,23 +12,21 @@ import {
   View,
 } from 'react-native';
 import { webengageInstance } from '../Utils/WebEngageManager';
-import { WEInlineView, trackCustomClick, trackCustomImpression } from 'react-native-webengage-personalization';
-import {
-  registerForCampaigns,
+import { WEInlineView, trackCustomClick, trackCustomImpression, registerForCampaigns,
   unRegisterCustomPlaceHolder,
   unRegisterForCampaigns,
-  userWillHandleDeepLink,
-} from '../../../src';
-
-import PersonalizationBridge from '../../../src/PersonalizationBridge';
+  userWillHandleDeepLink, } from 'react-native-webengage-personalization';
+// import {
+//   registerForCampaigns,
+//   unRegisterCustomPlaceHolder,
+//   unRegisterForCampaigns,
+//   userWillHandleDeepLink,
+// } from '../../../src';
 import { getValueFromAsyncStorage } from '../Utils';
 import NavigationModal from '../Utils/NavigationModal';
-import {
-  useFocusEffect,
-  useNavigation,
-  useNavigationState,
-} from '@react-navigation/native';
+import { useFocusEffect } from '@react-navigation/native';
 import { registerCustomPlaceHolder } from 'react-native-webengage-personalization'
+
 export default function DynamicScreen(props) {
   const { navigation = {}, route: { params: { item = {} } = {} } = {} } = props;
   const {
@@ -183,13 +179,6 @@ export default function DynamicScreen(props) {
     const exceptionText = "Exception occured for id - "+d?.targetViewId+" Exception - "+d?.exception
     setExceptionLable(exceptionText)
   }
-   const onCustomDataReceived_1 = (d) => {
-    console.log(
-      'Example: Dynamic onPlaceholderException triggered for ',
-      d?.targetViewId,
-      d
-    );
-   }
 
   const onCustomDataReceived = (d) => {
 

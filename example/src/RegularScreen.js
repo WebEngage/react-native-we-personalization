@@ -6,15 +6,11 @@ import {
   Text,
   Dimensions,
   Button,
-  AppState,
-  ScrollView,
   Platform,
 } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import {
   WEInlineView,
-  registerCustomPlaceHolder,
-  unRegisterCustomPlaceHolder,
 } from 'react-native-webengage-personalization';
 import WebEngage from 'react-native-webengage';
 const RegularScreen = ({ navigation }) => {
@@ -96,9 +92,6 @@ const RegularScreen = ({ navigation }) => {
   const screenHomeProperties = Platform.OS === 'android' ? 'flutter_text_2' : 99;
   const screenProperties = Platform.OS === 'android' ? 'flutter_text' : 1002; // screen_home
 
-  // screendark(screen) | dm2(prop) - android (Working)
-  // registerForCampaigns(clickCb, shownCb)
-  // add for custom callback
 
   return (
     <View style={styles.container}>

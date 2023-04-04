@@ -2,7 +2,6 @@
 import { AsyncStorage } from 'react-native';
 import { MyLogs } from '../../src/MyLogs';
 
-// import { AsyncStorage } from '@react-native-async-storage/async-storage';
 
 export const saveToAsyncStorage = async (key, val) => {
   try {

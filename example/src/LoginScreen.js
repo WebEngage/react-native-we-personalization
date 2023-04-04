@@ -2,14 +2,11 @@ import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { StyleSheet, TouchableHighlight } from 'react-native';
 import { TextInput, Text, Button, SafeAreaView } from 'react-native';
-import WebEngage from 'react-native-webengage';
-import Navigation from './Navigation';
 import { saveToAsyncStorage } from './Utils';
 import { webengageInstance } from './Utils/WebEngageManager';
 
 export default function LoginScreen(props) {
   const {
-    isUserLoggedIn,
     updateLoginDetails = () => {},
     navigation = null,
   } = props;
