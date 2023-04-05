@@ -10,14 +10,31 @@ import {
   TouchableHighlight,
 } from 'react-native';
 import WebEngage from 'react-native-webengage';
+import { getValueFromAsyncStorage } from './Utils';
+
 import { registerCustomPlaceHolder } from '../../src';
 import { removeItem } from './Utils';
-const ListScreen = ({ navigation }) => {
+const ListScreen = (props) => {
+  const { navigation } = props
+  const [ isUserLoggedIn, setIsUserLoggedIn ] = React.useState(false)
+
   var webengage = new WebEngage();
+  const userNameRef = React.useRef(null);
+
   React.useEffect(() => {
     webengage.screen('test');
   });
 
+
+  React.useEffect(() => {
+    (async () => {
+      const name = await getValueFromAsyncStorage('userName');
+      if (name) {
+        setIsUserLoggedIn(true);
+      }
+      userNameRef.current = name;
+    })();
+  });
 
   const logout = () => {
     removeItem('userName');
@@ -26,12 +43,14 @@ const ListScreen = ({ navigation }) => {
 
   return (
     <SafeAreaView style={styles.mainContainer}>
+      {isUserLoggedIn &&
       <TouchableHighlight
         style={[styles.button, styles.logout]}
         onPress={logout}
       >
         <Text> Logout </Text>
       </TouchableHighlight>
+      }
 
       <Pressable
         style={styles.button}

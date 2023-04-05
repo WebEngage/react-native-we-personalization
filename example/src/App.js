@@ -15,6 +15,8 @@ import WebEngage from 'react-native-webengage';
 
 export default function App() {
   const [isUserLoggedIn, setIsUserLoggedIn] = React.useState(false);
+  const [continueAsGuest, setContinueAsGuest] = React.useState(false);
+
   initWebEngage();
   const userNameRef = React.useRef(null);
 
@@ -34,11 +36,19 @@ export default function App() {
     setIsUserLoggedIn(loginState);
   };
 
+  const updateGuestState = () => {
+    setContinueAsGuest(true)
+  }
+
   if (isUserLoggedIn) {
     return <Navigation />;
   } else {
+    if(!continueAsGuest) {
     return (
-      <LoginScreen isUserLoggedIn updateLoginDetails={updateLoginDetails} />
+      <LoginScreen isUserLoggedIn updateLoginDetails={updateLoginDetails} updateGuestState={updateGuestState}  />
     );
+    } else {
+      return <Navigation />;
+    }
   }
 }

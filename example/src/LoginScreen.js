@@ -9,6 +9,7 @@ export default function LoginScreen(props) {
   const {
     updateLoginDetails = () => {},
     navigation = null,
+    updateGuestState = () => {},
   } = props;
   const [userName, setuserName] = React.useState('');
 
@@ -28,6 +29,9 @@ export default function LoginScreen(props) {
       webengageInstance.user.login(userName);
     }
   };
+  const skipLogin = () => {
+    updateGuestState()
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -35,6 +39,9 @@ export default function LoginScreen(props) {
       <TextInput onChangeText={onChange} style={styles.textBox} />
       <TouchableHighlight onPress={login} style={styles.button}>
         <Text style={styles.btnText}> Login </Text>
+      </TouchableHighlight>
+      <TouchableHighlight onPress={skipLogin} style={styles.button}>
+        <Text style={styles.btnText}> Skip Login </Text>
       </TouchableHighlight>
     </SafeAreaView>
   );
