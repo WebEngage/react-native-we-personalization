@@ -12,7 +12,7 @@ import {
 import WebEngage from 'react-native-webengage';
 import { getValueFromAsyncStorage } from './Utils';
 
-import { registerCustomPlaceHolder } from '../../src';
+import { registerWEPlaceholderCallback } from '../../src';
 import { removeItem } from './Utils';
 const ListScreen = (props) => {
   const { navigation } = props

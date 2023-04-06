@@ -1,6 +1,6 @@
 import React from 'react';
-import { MyLogs } from './MyLogs';
-import PersonalizationBridge, { eventEmitter } from './PersonalizationBridge';
+import { MyLogs } from '../utils/MyLogs';
+import WEPersonalizationBridge, { eventEmitter } from '../bridge/WEPersonalizationBridge';
 
 let isCampaignListenerAdded = false;
 let campaignPreparedListener = null;
@@ -8,7 +8,7 @@ let campaignClickedListener = null;
 let campaignExceptionListener = null;
 let campaignShownListener = null;
 
-export const registerForCampaigns = (campaignCallbackList) => {
+export const registerWECampaignCallback = (campaignCallbackList) => {
   const {
     onCampaignPrepared = null,
     onCampaignShown = null,
@@ -17,13 +17,13 @@ export const registerForCampaigns = (campaignCallbackList) => {
   } = campaignCallbackList;
 
   if (!isCampaignListenerAdded) {
-    PersonalizationBridge.registerCampaignCallback();
+    WEPersonalizationBridge.registerCampaignCallback();
     if (onCampaignPrepared) {
       campaignPreparedListener = eventEmitter.addListener(
         'onCampaignPrepared',
-        (data) => {
-          MyLogs('WECampaigns: onCampaignPrepared list', data);
-          onCampaignPrepared(data);
+        (WECampaignData) => {
+          MyLogs('WECampaigns: onCampaignPrepared list', WECampaignData);
+          onCampaignPrepared(WECampaignData);
         }
       );
     }
@@ -31,9 +31,9 @@ export const registerForCampaigns = (campaignCallbackList) => {
     if (onCampaignClicked) {
       campaignClickedListener = eventEmitter.addListener(
         'onCampaignClicked',
-        (data) => {
-          MyLogs('WECampaigns: onCampaignClicked ', data);
-          onCampaignClicked(data);
+        (WECampaignData) => {
+          MyLogs('WECampaigns: onCampaignClicked ', WECampaignData);
+          onCampaignClicked(WECampaignData);
         }
       );
     }
@@ -41,9 +41,9 @@ export const registerForCampaigns = (campaignCallbackList) => {
     if (onCampaignException) {
       campaignExceptionListener = eventEmitter.addListener(
         'onCampaignException',
-        (data) => {
-          MyLogs('WECampaigns: onCampaignException ', data);
-          onCampaignException(data);
+        (WECampaignData) => {
+          MyLogs('WECampaigns: onCampaignException ', WECampaignData);
+          onCampaignException(WECampaignData);
         }
       );
     }
@@ -51,9 +51,9 @@ export const registerForCampaigns = (campaignCallbackList) => {
     if (onCampaignShown) {
       campaignShownListener = eventEmitter.addListener(
         'onCampaignShown',
-        (data) => {
-          MyLogs('WECampaigns: onCampaignShown ', data);
-          onCampaignShown(data);
+        (WECampaignData) => {
+          MyLogs('WECampaigns: onCampaignShown ', WECampaignData);
+          onCampaignShown(WECampaignData);
         }
       );
       isCampaignListenerAdded = true;
@@ -62,11 +62,11 @@ export const registerForCampaigns = (campaignCallbackList) => {
 };
 
 export const userWillHandleDeepLink = (doesUserHandleCallbacks) => {
-  PersonalizationBridge.userWillHandleDeepLink(doesUserHandleCallbacks);
+  WEPersonalizationBridge.userWillHandleDeepLink(doesUserHandleCallbacks);
 };
 
-export const unRegisterForCampaigns = () => {
-  PersonalizationBridge.unRegisterCampaignCallback();
+export const deregisterWECampaignCallback = () => {
+  WEPersonalizationBridge.unRegisterCampaignCallback();
   campaignPreparedListener?.remove();
   campaignClickedListener?.remove();
   campaignExceptionListener?.remove();

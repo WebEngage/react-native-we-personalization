@@ -3,18 +3,18 @@ import React
 import WEPersonalization
 import WebEngage
 
-@objc(PersonalizationBridge)
-class PersonalizationBridge: RCTEventEmitter {
+@objc(WEPersonalizationBridge)
+class WEPersonalizationBridge: RCTEventEmitter {
     
     public static var emitter: RCTEventEmitter!
     var propertyId = 0;
     var weCampaignData: WECampaignData? = nil
     
-    static let shared = PersonalizationBridge()
+    static let shared = WEPersonalizationBridge()
     override init() {
         super.init()
-        PersonalizationBridge.emitter = self
-        print(WEGConstants.TAG+" WEP: PersonalizationBridge Initialization")
+        WEPersonalizationBridge.emitter = self
+        print(WEGConstants.TAG+" WEP: WEPersonalizationBridge Initialization")
         WEPersonalization.shared.initialise()
         UserDefaults.standard.setValue(false, forKey: WEPersonalization.Constants.KEY_SHOULD_AUTO_TRACK_IMPRESSIONS)
         WEPersonalization.shared.registerPropertyRegistryCallbacks(CampaignCallbackHandler.shared)

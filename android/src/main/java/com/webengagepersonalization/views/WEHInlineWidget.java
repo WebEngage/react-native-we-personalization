@@ -19,6 +19,7 @@ import com.webengage.personalization.WEInlineView;
 import com.webengage.personalization.callbacks.WECampaignCallback;
 import com.webengage.personalization.callbacks.WEPlaceholderCallback;
 import com.webengage.personalization.data.WECampaignData;
+import com.webengage.sdk.android.Logger;
 import com.webengagepersonalization.handler.CallbackHandler;
 import com.webengagepersonalization.R;
 import com.webengagepersonalization.utils.Utils;

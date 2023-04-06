@@ -18,26 +18,26 @@ class CampaignCallbackHandler:WECampaignCallback{
     func onCampaignPrepared(_ data: WECampaignData) -> WECampaignData {
         print(WEGConstants.TAG+" WEP: onCampaignPrepared for \(data.targetViewTag)")
         let campaignData: [String: Any] = ["targetViewId": data.targetViewTag, "campaingId": data.campaignId, "payloadData": data.toJSONString()]
-        PersonalizationBridge.emitter.sendEvent(withName: "onCampaignPrepared", body: campaignData)
+        WEPersonalizationBridge.emitter.sendEvent(withName: "onCampaignPrepared", body: campaignData)
         return data
     }
     
     func onCampaignShown(data: WECampaignData) {
         print(WEGConstants.TAG+" WEP: onCampaignShown for \(data.targetViewTag)")
         let campaignData: [String: Any] = ["targetViewId": data.targetViewTag, "campaingId": data.campaignId, "payloadData": data.toJSONString()]
-        PersonalizationBridge.emitter.sendEvent(withName: "onCampaignShown", body: campaignData)
+        WEPersonalizationBridge.emitter.sendEvent(withName: "onCampaignShown", body: campaignData)
     }
     
     func onCampaignException(_ campaignId: String?, _ targetViewId: Int, _ exception: Error) {
         print(WEGConstants.TAG+" WEP: onCampaignException for \(targetViewId) error: \(exception.localizedDescription)")
         let campaignData: [String: Any] = ["targetViewId": targetViewId, "campaingId": campaignId ?? "", "exception": exception]
-        PersonalizationBridge.emitter.sendEvent(withName: "onCampaignException", body: campaignData)
+        WEPersonalizationBridge.emitter.sendEvent(withName: "onCampaignException", body: campaignData)
     }
     
     func onCampaignClicked(actionId: String, deepLink: String, data: WECampaignData) -> Bool {
         print(WEGConstants.TAG+" WEP: onCampaignClicked for \(data.targetViewTag) autoHandle \(self.autoHandleClick)")
         let campaignData: [String: Any] = ["actionId": actionId, "deepLink": deepLink ?? "", "payloadData": data.toJSONString()]
-        PersonalizationBridge.emitter.sendEvent(withName: "onCampaignClicked", body: campaignData)
+        WEPersonalizationBridge.emitter.sendEvent(withName: "onCampaignClicked", body: campaignData)
         return self.autoHandleClick
     }
 }

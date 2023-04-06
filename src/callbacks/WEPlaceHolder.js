@@ -1,18 +1,18 @@
-import { MyLogs } from './MyLogs';
-import PersonalizationBridge, { eventEmitter } from './PersonalizationBridge';
+import { MyLogs } from '../utils/MyLogs';
+import WEPersonalizationBridge, { eventEmitter } from '../bridge/WEPersonalizationBridge';
 import {
   registerPropertyList,
   removePropertyFromPropertyList,
   sendOnDataReceivedEvent,
   sendOnExceptionEvent,
-} from './PropertyListUtils';
+} from '../utils/PropertyListUtils';
 
 let customOnDataReceivedListener = null;
 let customExceptionListener = null;
 let isCustomListenerAdded = false;
 let customPropertyList = [];
 
-export const registerCustomPlaceHolder = (
+export const registerWEPlaceholderCallback = (
   propertyId,
   screenName,
   onDataReceivedCb,
@@ -22,7 +22,7 @@ export const registerCustomPlaceHolder = (
     'customPH: Registering for ',
     propertyId
   );
-  PersonalizationBridge.registerCallback(propertyId, screenName);
+  WEPersonalizationBridge.registerCallback(propertyId, screenName);
   customPropertyList = registerPropertyList(
     customPropertyList,
     screenName,
@@ -32,7 +32,7 @@ export const registerCustomPlaceHolder = (
     onPlaceholderExceptionCb
   );
   MyLogs(
-    'customPH: registerCustomPlaceHolder registered customPropertyList',
+    'customPH: registerWEPlaceholderCallback registered customPropertyList',
     customPropertyList
   );
   if (!isCustomListenerAdded) {
@@ -64,12 +64,12 @@ export const registerCustomPlaceHolder = (
   }
 };
 
-export const unRegisterCustomPlaceHolder = (propertyId, screen) => {
+export const deregisterWEPlaceholderCallback = (propertyId, screen) => {
   MyLogs(
-    'customPH: unRegisterCustomPlaceHolder! - Event Listener called ->'
+    'customPH: deregisterWEPlaceholderCallback! - Event Listener called ->'
   );
 
-  PersonalizationBridge.unRegisterCallback(propertyId);
+  WEPersonalizationBridge.unRegisterCallback(propertyId);
   const listenersList = [customOnDataReceivedListener, customExceptionListener];
   const { updatedList, listenerFlag } = removePropertyFromPropertyList(
     customPropertyList,
@@ -86,12 +86,12 @@ export const unRegisterCustomPlaceHolder = (propertyId, screen) => {
   }
 };
 
-export const trackCustomClick = (propertyId = '', map = null) => {
-  MyLogs('customPH: trackCustomClick ');
-  PersonalizationBridge.trackClick(propertyId, map)
+export const trackClick = (propertyId = '', map = null) => {
+  MyLogs('customPH: trackClick ');
+  WEPersonalizationBridge.trackClick(propertyId, map)
 }
 
-export const trackCustomImpression = (propertyId = '', map = null) => {
+export const trackImpression = (propertyId = '', map = null) => {
   MyLogs('customPH: trackImpression ');
-  PersonalizationBridge.trackImpression(propertyId, map)
+  WEPersonalizationBridge.trackImpression(propertyId, map)
 }

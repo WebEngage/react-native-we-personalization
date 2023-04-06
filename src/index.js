@@ -1,24 +1,24 @@
-import WEInlineView from './WEInlineView';
+import WEInlineWidget from './view/WEInlineWidget';
 import {
-  registerForCampaigns,
-  unRegisterForCampaigns,
-  userWillHandleDeepLink,
+  registerWECampaignCallback,
+  deregisterWECampaignCallback,
+  userWillHandleDeepLink, // check with milind - TODO
 
-} from './WECampaigns';
+} from './callbacks/WECampaignData';
 import {
-  registerCustomPlaceHolder,
-  unRegisterCustomPlaceHolder,
-  trackCustomClick,
-  trackCustomImpression,
-} from './CustomPlaceHolder';
+  registerWEPlaceholderCallback,
+  deregisterWEPlaceholderCallback,
+  trackClick,
+  trackImpression,
+} from './callbacks/WEPlaceHolder';
 
 export {
-  WEInlineView,
-  registerForCampaigns,
-  unRegisterForCampaigns,
-  registerCustomPlaceHolder,
-  unRegisterCustomPlaceHolder,
+  WEInlineWidget,
+  registerWECampaignCallback,
+  deregisterWECampaignCallback,
+  registerWEPlaceholderCallback,
+  deregisterWEPlaceholderCallback,
   userWillHandleDeepLink,
-  trackCustomClick,
-  trackCustomImpression,
+  trackClick,
+  trackImpression,
 };

@@ -4,12 +4,12 @@ import {
   requireNativeComponent,
   UIManager,
 } from 'react-native';
-import { COMPONENT_NAME } from './WEGConstants';
+import { COMPONENT_NAME } from '../utils/WEGConstants';
 
-const { PersonalizationBridge } = NativeModules;
-export default PersonalizationBridge;
+const { WEPersonalizationBridge } = NativeModules;
+export default WEPersonalizationBridge;
 
-export const eventEmitter = new NativeEventEmitter(PersonalizationBridge);
+export const eventEmitter = new NativeEventEmitter(WEPersonalizationBridge);
 
 export const WebengagePersonalizationView =
   UIManager.getViewManagerConfig(COMPONENT_NAME) != null

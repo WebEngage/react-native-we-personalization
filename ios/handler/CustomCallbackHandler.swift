@@ -59,19 +59,19 @@ public class CustomCallbackHandler:WEPlaceholderCallback{
         print("WEP:customPH: onCustomDataReceived \(data.targetViewTag)")
 
 
-        let campaignData: [String: Any] = ["targetViewId": data.targetViewTag, "campaingId": data.campaignId, "payloadData": data.toJSONString(), "trackImpression": "PersonalizationBridge.trackImpression","trackClick": "PersonalizationBridge.trackClick" ]
+        let campaignData: [String: Any] = ["targetViewId": data.targetViewTag, "campaingId": data.campaignId, "payloadData": data.toJSONString(), "trackImpression": "WEPersonalizationBridge.trackImpression","trackClick": "WEPersonalizationBridge.trackClick" ]
         let customData: [String: Any] = [
             WEGConstants.PAYLOAD_IOS_PROPERTY_ID: data.targetViewTag,
             WEGConstants.PAYLOAD_WEGDATA: data,
         ]
         customRegistry.instance.updateRegisterData(map: customData)
 
-        PersonalizationBridge.emitter.sendEvent(withName: "onCustomDataReceived", body: campaignData)
+        WEPersonalizationBridge.emitter.sendEvent(withName: "onCustomDataReceived", body: campaignData)
     }
     public func onPlaceholderException(_ campaignId: String?, _ targetViewId: String, _ exception: Error) {
         print("customPH: onCustomPlaceholderException \(targetViewId)")
         let campaignData: [String: Any] = ["targetViewId": targetViewId, "campaingId": campaignId ?? "", "exception": exception.localizedDescription]
-        PersonalizationBridge.emitter.sendEvent(withName: "onCustomPlaceholderException", body: campaignData)
+        WEPersonalizationBridge.emitter.sendEvent(withName: "onCustomPlaceholderException", body: campaignData)
     }
 }
 

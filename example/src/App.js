@@ -1,11 +1,11 @@
 import * as React from 'react';
 import {
-  registerForCampaigns,
-  unRegisterForCampaigns,
+  registerWECampaignCallback,
+  deregisterWECampaignCallback,
   userWillHandleDeepLink,
 } from 'react-native-webengage-personalization';
-import { registerCustomPlaceHolder } from '../../src';
-import { enableDevMode } from '../../src/MyLogs';
+import { registerWEPlaceholderCallback } from '../../src';
+import { enableDevMode } from '../../src/utils/MyLogs';
 import LoginScreen from './LoginScreen';
 import Navigation from './Navigation';
 import { getValueFromAsyncStorage } from './Utils';

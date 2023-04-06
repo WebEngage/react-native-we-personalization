@@ -12,20 +12,14 @@ import {
   View,
 } from 'react-native';
 import { webengageInstance } from '../Utils/WebEngageManager';
-import { WEInlineView, trackCustomClick, trackCustomImpression, registerForCampaigns,
-  unRegisterCustomPlaceHolder,
-  unRegisterForCampaigns,
+import { WEInlineWidget, trackClick, trackImpression, registerWECampaignCallback,
+  deregisterWEPlaceholderCallback,
+  deregisterWECampaignCallback,
   userWillHandleDeepLink, } from 'react-native-webengage-personalization';
-// import {
-//   registerForCampaigns,
-//   unRegisterCustomPlaceHolder,
-//   unRegisterForCampaigns,
-//   userWillHandleDeepLink,
-// } from '../../../src';
 import { getValueFromAsyncStorage } from '../Utils';
 import NavigationModal from '../Utils/NavigationModal';
 import { useFocusEffect } from '@react-navigation/native';
-import { registerCustomPlaceHolder } from 'react-native-webengage-personalization'
+import { registerWEPlaceholderCallback } from 'react-native-webengage-personalization'
 
 export default function DynamicScreen(props) {
   const { navigation = {}, route: { params: { item = {} } = {} } = {} } = props;
@@ -91,9 +85,9 @@ export default function DynamicScreen(props) {
       onCampaignException,
     };
     const doesUserHandelCallbacks = true;
-    registerForCampaigns(callbacks);
+    registerWECampaignCallback(callbacks);
     return () => {
-      unRegisterForCampaigns();
+      deregisterWECampaignCallback();
       removeCustomViews()
     };
   }, []);
@@ -104,7 +98,7 @@ export default function DynamicScreen(props) {
 
   const removeCustomViews = () => {
     customPropertyList.map(property => {
-      unRegisterCustomPlaceHolder(property, screenName)
+      deregisterWEPlaceholderCallback(property, screenName)
     })
     customPropertyList?.splice(0, customPropertyList.length);
   }
@@ -116,7 +110,7 @@ export default function DynamicScreen(props) {
          false, propertyId} = viewItem
       if(isCustomView) {
         customPropertyList.push(propertyId)
-        registerCustomPlaceHolder(
+        registerWEPlaceholderCallback(
         propertyId,
         screenName,
         onCustomDataReceived,
@@ -146,70 +140,71 @@ export default function DynamicScreen(props) {
     }
   };
 
-  const onCampaignPrepared = (data) => {
-    console.log('Example: dynamic: onCampaignPrepared ', data);
+  // data should weCampaignData
+  const onCampaignPrepared = (weCampaignData) => {
+    console.log('Example: dynamic: onCampaignPrepared ', weCampaignData);
   };
 
-  const onCampaignShown = (data) => {
-    console.log('Example: dynamic: onCampaignShown ', data);
+  const onCampaignShown = (weCampaignData) => {
+    console.log('Example: dynamic: onCampaignShown ', weCampaignData);
   };
 
-  const onCampaignException = (data) => {
-    console.log('Example: dynamic: onCampaignException ', data);
+  const onCampaignException = (weCampaignData) => {
+    console.log('Example: dynamic: onCampaignException ', weCampaignData);
   };
 
-  const onRendered_1 = (d) => {
-    console.log('Example: Dynamic onRendered triggered for -', d?.targetViewId, d);
+  const onRendered_1 = (weCampaignData) => {
+    console.log('Example: Dynamic onRendered triggered for -', weCampaignData?.targetViewId, weCampaignData);
   };
 
-  const onDataReceived_1 = (d) => {
+  const onDataReceived_1 = (weCampaignData) => {
     console.log(
       'Example: Dynamic onDataReceived triggered for ',
-      d?.targetViewId,
-      d
+      weCampaignData?.targetViewId,
+      weCampaignData
     );
   };
 
-  const onPlaceholderException_1 = (d) => {
+  const onPlaceholderException_1 = (weCampaignData) => {
     console.log(
       'Example: Dynamic onPlaceholderException triggered for ',
-      d?.targetViewId,
-      d
+      weCampaignData?.targetViewId,
+      weCampaignData
     );
-    const exceptionText = "Exception occured for id - "+d?.targetViewId+" Exception - "+d?.exception
+    const exceptionText = "Exception occured for id - "+weCampaignData?.targetViewId+" Exception - "+weCampaignData?.exception
     setExceptionLable(exceptionText)
   }
 
-  const onCustomDataReceived = (d) => {
+  const onCustomDataReceived = (weCampaignData) => {
 
-    setCustomViewLabel(JSON.stringify(d))
+    setCustomViewLabel(JSON.stringify(weCampaignData))
     setIsClickHandledByUser(true)
 
     console.log(
       'Example: custom onDataReceived!!! triggered for ',
-      d?.targetViewId,
-      d
+      weCampaignData?.targetViewId,
+      weCampaignData
     );
 
 
   };
 
-  const onCustomPlaceholderException = (d) => {
+  const onCustomPlaceholderException = (weCampaignData) => {
     console.log(
       'Example: custom onPlaceholderException triggered for ',
-      d?.targetViewId,
-      d
+      weCampaignData?.targetViewId,
+      weCampaignData
     );
     const exceptionText = "Exception occured for id - "+d?.targetViewId+" Exception - "+d?.exception
     setExceptionLable(exceptionText)
   };
 
-  const trackImpression = (propertyId) => {
-    trackCustomImpression(propertyId, null)
+  const trackImpressions = (propertyId) => {
+    trackImpression(propertyId, null)
   }
 
-  const trackClick = (propertyId) => {
-    trackCustomClick(propertyId, null)
+  const trackClicks = (propertyId) => {
+    trackClick(propertyId, null)
   }
 
   const renderRecycler = ({ item, index }) => {
@@ -230,17 +225,17 @@ export default function DynamicScreen(props) {
         return(<View>
           <Text> {customViewLabel} </Text>
           <View style={styles.rowLine}>
-            <TouchableHighlight onPress={() => trackImpression(inlineView.propertyId)} style={styles.customButton}>
+            <TouchableHighlight onPress={() => trackImpressions(inlineView.propertyId)} style={styles.customButton}>
               <Text>Impression</Text>
             </TouchableHighlight>
-            <TouchableHighlight onPress={() => trackClick(inlineView.propertyId)} style={styles.customButton}>
+            <TouchableHighlight onPress={() => trackClicks(inlineView.propertyId)} style={styles.customButton}>
               <Text>Click</Text>
             </TouchableHighlight>
           </View>
         </View>)
       } else {
       return (
-        <WEInlineView
+        <WEInlineWidget
           style={[styles.box, { height: inlineHeight, width: inlineWidth }]}
           screenName={screenName}
           propertyId={inlineView.propertyId}

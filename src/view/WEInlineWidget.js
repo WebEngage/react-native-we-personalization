@@ -1,16 +1,16 @@
 import React from 'react';
-import { MyLogs } from './MyLogs';
+import { MyLogs } from '../utils/MyLogs';
 import {
   eventEmitter,
   WebengagePersonalizationView,
-} from './PersonalizationBridge';
+} from '../bridge/WEPersonalizationBridge';
 import {
   registerPropertyList,
   removePropertyFromPropertyList,
   sendOnDataReceivedEvent,
   sendOnExceptionEvent,
   sendOnRenderedEvent,
-} from './PropertyListUtils';
+} from '../utils/PropertyListUtils';
 
 let dataReceivedListener = null;
 let renderListerner = null;
@@ -18,7 +18,7 @@ let exceptionalListener = null;
 let isListenerAdded = false;
 let propertyProcessor = [];
 
-const WEInlineView = (props) => {
+const WEInlineWidget = (props) => {
   const {
     propertyId = 0,
     screenName = '',
@@ -29,17 +29,14 @@ const WEInlineView = (props) => {
 
 
   React.useEffect(() => {
-    MyLogs('WEInlineView: Attached/Mounted ', propertyId);
-
+    MyLogs('WEInlineWidget: Attached/Mounted ', propertyId);
     return () => {
-      MyLogs('WEInlineView: Destroyed/UnMounted ', propertyId);
-
+      MyLogs('WEInlineWidget: Destroyed/UnMounted ', propertyId);
       const listenersList = [
         dataReceivedListener,
         renderListerner,
         exceptionalListener,
       ];
-
       const { updatedList, listenerFlag } = removePropertyFromPropertyList(
         propertyProcessor,
         screenName,
@@ -66,7 +63,7 @@ const WEInlineView = (props) => {
     onPlaceholderException
   );
   propertyProcessor = [...propList];
-  MyLogs("WEInlineView: propertyProcessor",propertyProcessor)
+  MyLogs("WEInlineWidget: propertyProcessor",propertyProcessor)
   if (!isListenerAdded) {
     dataReceivedListener = eventEmitter.addListener(
       'onDataReceived',
@@ -91,5 +88,4 @@ const WEInlineView = (props) => {
   return <WebengagePersonalizationView {...props} />;
 };
 
-// export default WEInlineView;
-export default React.memo(WEInlineView);
+export default React.memo(WEInlineWidget);

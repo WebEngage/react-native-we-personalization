@@ -2,9 +2,9 @@
 #import <React/RCTLog.h>
 #import <React/RCTEventEmitter.h>
 
-//@interface RCT_EXTERN_MODULE(PersonalizationBridge, NSObject)
+//@interface RCT_EXTERN_MODULE(WEPersonalizationBridge, NSObject)
 
-@interface RCT_EXTERN_MODULE(PersonalizationBridge, RCTEventEmitter)
+@interface RCT_EXTERN_MODULE(WEPersonalizationBridge, RCTEventEmitter)
 
 RCT_EXTERN_METHOD(supportedEvents)
 
