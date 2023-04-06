@@ -1,9 +1,4 @@
 import * as React from 'react';
-import {
-  registerWECampaignCallback,
-  deregisterWECampaignCallback,
-  userWillHandleDeepLink,
-} from 'react-native-webengage-personalization';
 import { registerWEPlaceholderCallback } from '../../src';
 import { enableDevMode } from '../../src/utils/MyLogs';
 import LoginScreen from './LoginScreen';

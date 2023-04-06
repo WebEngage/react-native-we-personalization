@@ -6,13 +6,13 @@ import androidx.annotation.NonNull;
 
 import com.webengage.personalization.callbacks.WEPropertyRegistryCallback;
 import com.webengage.sdk.android.Logger;
-import com.webengagepersonalization.utils.WEGConstants;
+import com.webengagepersonalization.utils.WEConstants;
 import com.webengagepersonalization.model.ScreenNavigatorCallback;
-import com.webengagepersonalization.regisrty.DataRegistry;
+import com.webengagepersonalization.regisrty.WEPropertyRegistry;
 
 import java.util.HashMap;
 
-public class CallbackHandler implements WEPropertyRegistryCallback {
+public class WEPluginCallbackHandler implements WEPropertyRegistryCallback {
   private static String currentScreen = null;
   static HashMap<String, HashMap<String, ScreenNavigatorCallback>> mapOfScreenNavigatedCallbacks = new HashMap<>();
 
@@ -40,10 +40,11 @@ public class CallbackHandler implements WEPropertyRegistryCallback {
 
   @Override
   public void onPropertyCacheCleared(@NonNull String navigatedScreen) {
-    Logger.d(WEGConstants.TAG, "WEHInlineWidget: onPropertyCacheCleared: Screen changed! to "+navigatedScreen);
+    Logger.d(WEConstants.TAG, "WEPluginCallbackHandler: onPropertyCacheCleared: Screen changed! to "+navigatedScreen);
     currentScreen = navigatedScreen;
-    DataRegistry.get().clearCacheData();
+    WEPropertyRegistry.get().clearCacheData();
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+
         HashMap<String, ScreenNavigatorCallback> callbacksList = mapOfScreenNavigatedCallbacks.get(navigatedScreen);
         try {
           if(callbacksList != null) {

@@ -2,7 +2,6 @@ import WEInlineWidget from './view/WEInlineWidget';
 import {
   registerWECampaignCallback,
   deregisterWECampaignCallback,
-  userWillHandleDeepLink, // check with milind - TODO
 
 } from './callbacks/WECampaignData';
 import {
@@ -18,7 +17,6 @@ export {
   deregisterWECampaignCallback,
   registerWEPlaceholderCallback,
   deregisterWEPlaceholderCallback,
-  userWillHandleDeepLink,
   trackClick,
   trackImpression,
 };

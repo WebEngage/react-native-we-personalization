@@ -13,40 +13,35 @@ import com.facebook.react.uimanager.ReactStylesDiffMap;
 import com.facebook.react.uimanager.SimpleViewManager;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.annotations.ReactProp;
-//import android.os.Handler.Callback;
 import com.facebook.react.uimanager.annotations.ReactPropGroup;
 import com.webengage.personalization.WEPersonalization;
-//import  androidx.annotation..widget.CardView;
-//import com.webengage.personalization.utils.ConstantsKt;
-import com.webengagepersonalization.utils.WEGConstants;
-import com.webengagepersonalization.handler.CallbackHandler;
-
+import com.webengagepersonalization.utils.WEConstants;
+import com.webengagepersonalization.handler.WEPluginCallbackHandler;
 import android.view.ViewGroup;
 
-public class WEGPersonalizationViewManager extends SimpleViewManager<ViewGroup> {
+public class WEPersonalizationViewManager extends SimpleViewManager<ViewGroup> {
   private ReactApplicationContext applicationContext = null;
   int width, height;
   String screenName, propertyId;
 
-  public WEGPersonalizationViewManager(ReactApplicationContext reactContext) {
+  public WEPersonalizationViewManager(ReactApplicationContext reactContext) {
     super();
     this.applicationContext = reactContext;
-    SharedPreferences sharedPrefsManager = applicationContext.getSharedPreferences(WEGConstants.WE_SHARED_STORAGE, Context.MODE_PRIVATE);
-    sharedPrefsManager.edit().putBoolean(WEGConstants.KEY_SHOULD_AUTO_TRACK_IMPRESSIONS, false).apply();
-    WEPersonalization.Companion.get().registerPropertyRegistryCallback(new CallbackHandler());
+    SharedPreferences sharedPrefsManager = applicationContext.getSharedPreferences(WEConstants.WE_SHARED_STORAGE, Context.MODE_PRIVATE);
+    sharedPrefsManager.edit().putBoolean(WEConstants.KEY_SHOULD_AUTO_TRACK_IMPRESSIONS, false).apply();
+    WEPersonalization.Companion.get().registerPropertyRegistryCallback(new WEPluginCallbackHandler());
   }
 
   @Override
   @NonNull
   public String getName() {
-    return WEGConstants.REACT_CLASS;
+    return WEConstants.REACT_CLASS;
   }
 
-//  Called After all the props update
   @Override
   public void updateProperties(@NonNull ViewGroup viewToUpdate, ReactStylesDiffMap props) {
     super.updateProperties(viewToUpdate, props);
-    WEHInlineWidget simpleUi = ((WEHInlineWidget) viewToUpdate);
+    WEInlineWidget simpleUi = ((WEInlineWidget) viewToUpdate);
     simpleUi.updateProperties(this.screenName, this.propertyId);
   }
 
@@ -54,14 +49,14 @@ public class WEGPersonalizationViewManager extends SimpleViewManager<ViewGroup> 
   @NonNull
   public ViewGroup createViewInstance(ThemedReactContext reactContext) {
     HashMap<String, Object> map = new HashMap<String, Object>();
-    map.put(WEGConstants.HEIGHT, height);
-    map.put(WEGConstants.WIDTH, width);
-    WEHInlineWidget simpleUi;
-    simpleUi = new WEHInlineWidget(reactContext.getReactApplicationContext(),map,this);
+    map.put(WEConstants.HEIGHT, height);
+    map.put(WEConstants.WIDTH, width);
+    WEInlineWidget simpleUi;
+    simpleUi = new WEInlineWidget(reactContext.getReactApplicationContext(),map,this);
     return simpleUi;
   }
 
-  @ReactPropGroup(names = {WEGConstants.WIDTH, WEGConstants.HEIGHT}, customType = WEGConstants.STYLE)
+  @ReactPropGroup(names = {WEConstants.WIDTH, WEConstants.HEIGHT}, customType = WEConstants.STYLE)
   public void setStyle(View view, int index, int value) {
     if (index == 0) {
       width = value;
@@ -69,20 +64,19 @@ public class WEGPersonalizationViewManager extends SimpleViewManager<ViewGroup> 
     if (index == 1) {
       height = value;
     }
-    WEHInlineWidget simpleUi = ((WEHInlineWidget) view);
+    WEInlineWidget simpleUi = ((WEInlineWidget) view);
     simpleUi.updateStyle(height, width);
   }
 
-  @ReactProp(name = WEGConstants.PROPERTY_ID)
+  @ReactProp(name = WEConstants.PROPERTY_ID)
   public void setPropertyId(View view, String propertyId) {
     this.propertyId = propertyId;
 
   }
 
-  @ReactProp(name = WEGConstants.SCREEN_NAME)
+  @ReactProp(name = WEConstants.SCREEN_NAME)
   public void setScreenName(View view, String screenName) {
     this.screenName = screenName;
   }
-
 
 }

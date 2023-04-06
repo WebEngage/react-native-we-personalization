@@ -15,7 +15,7 @@ import { webengageInstance } from '../Utils/WebEngageManager';
 import { WEInlineWidget, trackClick, trackImpression, registerWECampaignCallback,
   deregisterWEPlaceholderCallback,
   deregisterWECampaignCallback,
-  userWillHandleDeepLink, } from 'react-native-webengage-personalization';
+} from 'react-native-webengage-personalization';
 import { getValueFromAsyncStorage } from '../Utils';
 import NavigationModal from '../Utils/NavigationModal';
 import { useFocusEffect } from '@react-navigation/native';
@@ -43,7 +43,7 @@ export default function DynamicScreen(props) {
   const screenListRef = useRef(null);
   const [customViewLabel, setCustomViewLabel] = React.useState("Custom View: Either campaign not Running / onRendered not triggered")
   const [showNavigation, setShowNavigation] = React.useState(false);
-  const [isClickHandledByUser, setIsClickHandledByUser] = React.useState(false);
+
   const clickRef = useRef(null);
   const [exceptionLable, setExceptionLable] = React.useState("No Exception");
   const [eventNameToTrigger, setEventNameToTrigger] = React.useState("");
@@ -92,9 +92,6 @@ export default function DynamicScreen(props) {
     };
   }, []);
 
-  React.useEffect(() => {
-    userWillHandleDeepLink(isClickHandledByUser);
-  }, [isClickHandledByUser]);
 
   const removeCustomViews = () => {
     customPropertyList.map(property => {
@@ -178,7 +175,6 @@ export default function DynamicScreen(props) {
   const onCustomDataReceived = (weCampaignData) => {
 
     setCustomViewLabel(JSON.stringify(weCampaignData))
-    setIsClickHandledByUser(true)
 
     console.log(
       'Example: custom onDataReceived!!! triggered for ',
@@ -275,10 +271,6 @@ export default function DynamicScreen(props) {
       return <ScrollView>{renderRegularScreen()}</ScrollView>;
     }
   };
-  const toggleSwitch = () => {
-    clickRef.current = !isClickHandledByUser;
-    setIsClickHandledByUser(!isClickHandledByUser);
-  };
 
   const openNavigation = () => {
     setShowNavigation(true);
@@ -299,16 +291,7 @@ export default function DynamicScreen(props) {
   return (
     <View style={styles.container}>
       <View style={styles.rowLine}>
-        <View style={styles.rowItem}>
-          <Text> isClickHandledByUser:</Text>
-          <Switch
-            trackColor={{ false: '#767577', true: '#81b0ff' }}
-            thumbColor={isClickHandledByUser ? '#f5dd4b' : '#f4f3f4'}
-            ios_backgroundColor="#3e3e3e"
-            onValueChange={toggleSwitch}
-            value={isClickHandledByUser}
-          />
-        </View>
+
         <TouchableOpacity style={styles.button} onPress={openNavigation}>
           <Text> Navigate </Text>
         </TouchableOpacity>

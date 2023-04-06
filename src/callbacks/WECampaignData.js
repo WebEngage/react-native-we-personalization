@@ -61,10 +61,6 @@ export const registerWECampaignCallback = (campaignCallbackList) => {
   }
 };
 
-export const userWillHandleDeepLink = (doesUserHandleCallbacks) => {
-  WEPersonalizationBridge.userWillHandleDeepLink(doesUserHandleCallbacks);
-};
-
 export const deregisterWECampaignCallback = () => {
   WEPersonalizationBridge.unRegisterCampaignCallback();
   campaignPreparedListener?.remove();

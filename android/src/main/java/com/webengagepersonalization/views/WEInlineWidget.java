@@ -8,29 +8,27 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
+import com.webengagepersonalization.regisrty.WEPropertyRegistry;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.WritableMap;
 import com.webengage.personalization.WEInlineView;
-import com.webengage.personalization.callbacks.WECampaignCallback;
 import com.webengage.personalization.callbacks.WEPlaceholderCallback;
 import com.webengage.personalization.data.WECampaignData;
 import com.webengage.sdk.android.Logger;
-import com.webengagepersonalization.handler.CallbackHandler;
+import com.webengagepersonalization.handler.WEPluginCallbackHandler;
 import com.webengagepersonalization.R;
-import com.webengagepersonalization.utils.Utils;
-import com.webengagepersonalization.utils.WEGConstants;
+import com.webengagepersonalization.utils.WEUtils;
+import com.webengagepersonalization.utils.WEConstants;
 import com.webengagepersonalization.model.ScreenNavigatorCallback;
-import com.webengagepersonalization.regisrty.DataRegistry;
 
 import java.util.HashMap;
 
-public class WEHInlineWidget extends FrameLayout implements WECampaignCallback, ScreenNavigatorCallback {
-  private static WEHInlineWidget instance = null;
+public class WEInlineWidget extends FrameLayout implements ScreenNavigatorCallback {
+  private static WEInlineWidget instance = null;
   WEInlineView weInlineView;
   private ReactApplicationContext applicationContext = null;
   int height = 0, width = 0;
@@ -39,23 +37,22 @@ public class WEHInlineWidget extends FrameLayout implements WECampaignCallback, 
   @Override
   protected void onAttachedToWindow() {
     super.onAttachedToWindow();
-    Logger.d(WEGConstants.TAG, "WEHInlineWidget: onAttachedToWindow: " + tagName);
-    CallbackHandler.setScreenNavigatorCallback(this.screenName, this.tagName, this);
+    Logger.d(WEConstants.TAG, "WEInlineWidget: onAttachedToWindow: " + tagName);
+    WEPluginCallbackHandler.setScreenNavigatorCallback(this.screenName, this.tagName, this);
   }
 
   @Override
   protected void onDetachedFromWindow() {
     super.onDetachedFromWindow();
-    Logger.d(WEGConstants.TAG, "WEHInlineWidget: onDetachedFromWindow: " + tagName);
-
-    CallbackHandler.removeScreenNavigatorCallback(this.screenName, this);
+    Logger.d(WEConstants.TAG, "WEInlineWidget: onDetachedFromWindow: " + tagName);
+    WEPluginCallbackHandler.removeScreenNavigatorCallback(this.screenName, this);
     View view = weInlineView.findViewWithTag("INLINE_PERSONALIZATION_TAG");
     if (view != null) {
       weInlineView.removeView(view);
     }
   }
 
-  public WEHInlineWidget(@NonNull ReactApplicationContext context, HashMap<String, Object> map, WEGPersonalizationViewManager ref) {
+  public WEInlineWidget(@NonNull ReactApplicationContext context, HashMap<String, Object> map, WEPersonalizationViewManager ref) {
     super(context);
     this.applicationContext = context;
     init(context);
@@ -64,7 +61,6 @@ public class WEHInlineWidget extends FrameLayout implements WECampaignCallback, 
   public void init(Context context) {
     View view = LayoutInflater.from(context).inflate(R.layout.view_inlinewidget, this, false);
     weInlineView = view.findViewById(R.id.weinline_widget);
-    Logger.d(WEGConstants.TAG, "WEHInlineWidget: Init called " + tagName);
     addView(view);
   }
 
@@ -81,15 +77,15 @@ public class WEHInlineWidget extends FrameLayout implements WECampaignCallback, 
         manuallyLayoutChildren(view, weCampaignData);
         ViewTreeObserver viewTreeObserver = view.getViewTreeObserver();
         viewTreeObserver.dispatchOnGlobalLayout();
-        boolean isScreenVisible = Utils.isVisible(view);
+        boolean isScreenVisible = WEUtils.isInlineWidgetVisible(view);
         if (!isScreenVisible) {
           viewTreeObserver.addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
             @Override
             public void onScrollChanged() {
-              boolean isUserScreenVisible = Utils.isVisible(view);
+              boolean isUserScreenVisible = WEUtils.isInlineWidgetVisible(view);
               if (isUserScreenVisible) {
                 trackImpression(weCampaignData);
-                Logger.d(WEGConstants.TAG, "WEHInlineWidget: Impression tracked for  " + tagName);
+                Logger.d(WEConstants.TAG, "WEInlineWidget: Impression tracked for  " + tagName);
                 view.getViewTreeObserver().removeOnScrollChangedListener(this);
               }
             }
@@ -104,10 +100,10 @@ public class WEHInlineWidget extends FrameLayout implements WECampaignCallback, 
   public void trackImpression(WECampaignData weCampaignData) {
     String targetViewId = weCampaignData.getTargetViewId();
     String campaignId = weCampaignData.getCampaignId();
-    if(!DataRegistry.get().isImpressionAlreadyTracked(targetViewId, campaignId)) {
+    if(!WEPropertyRegistry.get().isImpressionAlreadyTracked(targetViewId, campaignId)) {
       weCampaignData.trackImpression(null);
-      DataRegistry.get().setImpressionTrackedDetails(targetViewId, campaignId);
-      Logger.d(WEGConstants.TAG, "trackImpression: tracked "+targetViewId);
+      WEPropertyRegistry.get().setImpressionTrackedDetails(targetViewId, campaignId);
+      Logger.d(WEConstants.TAG, "trackImpression: tracked "+targetViewId);
     }
   }
 
@@ -151,37 +147,36 @@ public class WEHInlineWidget extends FrameLayout implements WECampaignCallback, 
     this.tagName = propertyId;
   }
 
-
   public void updateStyle(int heights, int widths) {
     height = heights;
     width = widths;
   }
 
   public void loadView(String tagName) {
-    Logger.d(WEGConstants.TAG, "loadView called for - " + tagName);
+    Logger.d(WEConstants.TAG, "loadView called for - " + tagName);
     weInlineView.load(tagName, new WEPlaceholderCallback() {
       @Override
       public void onDataReceived(WECampaignData weCampaignData) {
-        Logger.d(WEGConstants.TAG,"WEHInlineWidget: onDataReceived called " + weCampaignData.getTargetViewId() );
+        Logger.d(WEConstants.TAG,"WEInlineWidget: onDataReceived called " + weCampaignData.getTargetViewId() );
         WritableMap params = Arguments.createMap();
-        params = Utils.generateParams(weCampaignData);
-        Utils.sendEvent(applicationContext, "onDataReceived", params);
+        params = WEUtils.generateParams(weCampaignData);
+        WEUtils.sendEventToHybrid(applicationContext, "onDataReceived", params);
       }
 
       @Override
       public void onPlaceholderException(String campaignId, String targetViewId, Exception e) {
-        Logger.d(WEGConstants.TAG, "WEHInlineWidget: onPlaceholderException from personalization view manager-> \ncampaignId- " + campaignId + "\ntargetViewId- " + targetViewId + "\nerror-" + e);
+        Logger.d(WEConstants.TAG, "WEInlineWidget: onPlaceholderException from personalization view manager-> \ncampaignId- " + campaignId + "\ntargetViewId- " + targetViewId + "\nerror-" + e);
         WritableMap params = Arguments.createMap();
-        params = Utils.generateParams(campaignId, targetViewId, e);
-        Utils.sendEvent(applicationContext, "onPlaceholderException", params);
+        params = WEUtils.generateParams(campaignId, targetViewId, e);
+        WEUtils.sendEventToHybrid(applicationContext, "onPlaceholderException", params);
       }
 
       @Override
       public void onRendered(WECampaignData weCampaignData) {
-        Logger.d(WEGConstants.TAG,"WEHInlineWidget: onRendered called " + weCampaignData.getTargetViewId() );
+        Logger.d(WEConstants.TAG,"WEInlineWidget: onRendered called " + weCampaignData.getTargetViewId() );
         WritableMap params = Arguments.createMap();
-        params = Utils.generateParams(weCampaignData);
-        Utils.sendEvent(applicationContext, "onRendered", params);
+        params = WEUtils.generateParams(weCampaignData);
+        WEUtils.sendEventToHybrid(applicationContext, "onRendered", params);
         View view = null;
         if(weInlineView.getChildCount() > 1) {
           view = weInlineView.getChildAt(weInlineView.getChildCount()-1);
@@ -196,32 +191,8 @@ public class WEHInlineWidget extends FrameLayout implements WECampaignCallback, 
   }
 
   @Override
-  public boolean onCampaignClicked(@NonNull String s, @NonNull String s1, @NonNull WECampaignData weCampaignData) {
-    Logger.d(WEGConstants.TAG, "onCampaignClicked called ---- " + weCampaignData);
-    weCampaignData.trackClick(null);
-    return false;
-  }
-
-  @Override
-  public void onCampaignException(@Nullable String s, @NonNull String s1, @NonNull Exception e) {
-    Logger.d(WEGConstants.TAG, "onCampaignException shown ---- " + e);
-  }
-
-  @Nullable
-  @Override
-  public WECampaignData onCampaignPrepared(@NonNull WECampaignData weCampaignData) {
-    Logger.d(WEGConstants.TAG, "onCampaignPrepared shown ---- " + weCampaignData);
-    return null;
-  }
-
-  @Override
-  public void onCampaignShown(@NonNull WECampaignData weCampaignData) {
-    Logger.d(WEGConstants.TAG, "Campaign data shown ---- " + weCampaignData);
-  }
-
-  @Override
   public void screenNavigated(String screenName) {
-    Logger.d(WEGConstants.TAG, "WEHInlineWidget1: screenNavigated  called for screen - " + screenName + " for tagName- " + this.tagName);
+    Logger.d(WEConstants.TAG, "WEInlineWidget: screenNavigated  called for screen - " + screenName + " for tagName- " + this.tagName);
     if (!this.tagName.equals("")) {
       loadView(this.tagName);
     }

@@ -2,7 +2,6 @@ package com.webengagepersonalization.utils;
 
 import android.content.res.Resources;
 import android.graphics.Rect;
-import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.Nullable;
@@ -16,16 +15,17 @@ import com.facebook.react.bridge.ReadableMapKeySetIterator;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
 import com.webengage.personalization.data.WECampaignData;
+import com.webengage.sdk.android.Logger;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Utils {
-  public static  void sendEvent(ReactApplicationContext reactContext,
+public class WEUtils {
+  public static  void sendEventToHybrid(ReactApplicationContext reactContext,
                                 String eventName, @Nullable WritableMap params) {
-    Log.d(WEGConstants.TAG, "SendEvent triggered for "+eventName+" for "+params.getString("targetViewId"));
+    Logger.d(WEConstants.TAG, "sendEventToHybrid triggered for "+eventName+" for "+params.getString("targetViewId"));
     reactContext
       .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
       .emit(eventName, params);
@@ -34,36 +34,35 @@ public class Utils {
 
   public static WritableMap generateParams(WECampaignData weCampaignData) {
     WritableMap params = Arguments.createMap();
-    params.putString("targetViewId", weCampaignData.getTargetViewId());
-    params.putString("campaignId", weCampaignData.getCampaignId());
-      params.putString("payloadData", weCampaignData.toJSONString());
-      params.putString("trackImpression", "PersonalizationBridge.trackImpression");
-      params.putString("trackClick", "PersonalizationBridge.trackClick");
-
+    params.putString(WEConstants.TARGETVIEW_ID, weCampaignData.getTargetViewId());
+    params.putString(WEConstants.CAMPAIGN_ID, weCampaignData.getCampaignId());
+    params.putString(WEConstants.PAYLOAD_DATA, weCampaignData.toJSONString());
+    params.putString(WEConstants.TRACK_IMPRESSION, "WEPersonalizationBridge.trackImpression");
+    params.putString(WEConstants.TRACK_CLICK, "WEPersonalizationBridge.trackClick");
     return params;
   }
 
   public static WritableMap generateParams(String campaignId, String targetViewId, Exception e) {
     WritableMap params = Arguments.createMap();
-    params.putString("targetViewId", targetViewId);
-    params.putString("campaignId", campaignId);
-    params.putString("exception", e.toString());
+    params.putString(WEConstants.TARGETVIEW_ID, targetViewId);
+    params.putString(WEConstants.CAMPAIGN_ID, campaignId);
+    params.putString(WEConstants.EXCEPTION, e.toString());
     return params;
   }
 
   public static WritableMap generateParams(String actionId, String deepLink, WECampaignData weCampaignData) {
     WritableMap params = Arguments.createMap();
-    params.putString("targetViewId", weCampaignData.getTargetViewId());
-    params.putString("campaignId", weCampaignData.getCampaignId());
-    params.putString("payloadData", weCampaignData.toJSONString());
-    params.putString("actionId", actionId);
-    params.putString("deepLink", deepLink);
+    params.putString(WEConstants.TARGETVIEW_ID, weCampaignData.getTargetViewId());
+    params.putString(WEConstants.CAMPAIGN_ID, weCampaignData.getCampaignId());
+    params.putString(WEConstants.PAYLOAD_DATA, weCampaignData.toJSONString());
+    params.putString(WEConstants.ACTION_ID, actionId);
+    params.putString(WEConstants.DEEPLINK, deepLink);
     return params;
   }
 
 
   //  Checks if view is visible in the current viewport for the user
-  public static boolean isVisible(final View view) {
+  public static boolean isInlineWidgetVisible(final View view) {
     if (view == null) {
       return false;
     }
@@ -76,7 +75,7 @@ public class Utils {
     return actualPosition.intersect(screen);
   }
 
-  public static Map<String, Object> convertReadableMapToMap(ReadableMap readableMap) {
+  public static Map<String, Object> convertHybridMapToNativeMap(ReadableMap readableMap) {
     Map<String, Object> map = new HashMap<>();
     if(readableMap != null) {
       ReadableMapKeySetIterator iterator = readableMap.keySetIterator();
@@ -96,7 +95,7 @@ public class Utils {
             map.put(key, readableMap.getString(key));
             break;
           case Map:
-            map.put(key, convertReadableMapToMap(readableMap.getMap(key)));
+            map.put(key, convertHybridMapToNativeMap(readableMap.getMap(key)));
             break;
           case Array:
             map.put(key, convertReadableArrayToList(readableMap.getArray(key)));
@@ -109,7 +108,7 @@ public class Utils {
     }
   }
 
-  public static List<Object> convertReadableArrayToList(ReadableArray readableArray) {
+  private static List<Object> convertReadableArrayToList(ReadableArray readableArray) {
     List<Object> list = new ArrayList<>();
     for (int i = 0; i < readableArray.size(); i++) {
       switch (readableArray.getType(i)) {
@@ -126,7 +125,7 @@ public class Utils {
           list.add(readableArray.getString(i));
           break;
         case Map:
-          list.add(convertReadableMapToMap(readableArray.getMap(i)));
+          list.add(convertHybridMapToNativeMap(readableArray.getMap(i)));
           break;
         case Array:
           list.add(convertReadableArrayToList(readableArray.getArray(i)));

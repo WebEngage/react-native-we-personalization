@@ -1,14 +1,9 @@
-//
-//  WEGHInline.swift
-//  BEMCheckBox
-//
-//  Created by Akshaykumar Chilad on 16/03/23.
-//
 
 import Foundation
 import WEPersonalization
 
-public class WEGHInline{
+// WEProperty
+public class WEProperty{
     var id:Int
     var screenName:String
     var propertyID:Int

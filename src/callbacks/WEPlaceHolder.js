@@ -22,7 +22,7 @@ export const registerWEPlaceholderCallback = (
     'customPH: Registering for ',
     propertyId
   );
-  WEPersonalizationBridge.registerCallback(propertyId, screenName);
+  WEPersonalizationBridge.registerProperty(propertyId, screenName);
   customPropertyList = registerPropertyList(
     customPropertyList,
     screenName,
@@ -69,7 +69,7 @@ export const deregisterWEPlaceholderCallback = (propertyId, screen) => {
     'customPH: deregisterWEPlaceholderCallback! - Event Listener called ->'
   );
 
-  WEPersonalizationBridge.unRegisterCallback(propertyId);
+  WEPersonalizationBridge.deregisterProperty(propertyId);
   const listenersList = [customOnDataReceivedListener, customExceptionListener];
   const { updatedList, listenerFlag } = removePropertyFromPropertyList(
     customPropertyList,

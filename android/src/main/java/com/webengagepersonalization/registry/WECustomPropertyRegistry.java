@@ -3,28 +3,29 @@ package com.webengagepersonalization.registry;
 import com.webengage.personalization.data.WECampaignData;
 
 import java.util.HashMap;
-
-public class CustomRegistry {
-  private static CustomRegistry instance = null;
+public class WECustomPropertyRegistry {
+  private static WECustomPropertyRegistry instance = null;
   private static final Object lock  = new Object();
   HashMap<String, WECampaignData> customMap = new HashMap<>();
 
-  public static CustomRegistry get() {
+  public static WECustomPropertyRegistry get() {
     if (instance == null) {
       synchronized (lock) {
         if (instance == null) {
-          instance = new CustomRegistry();
+          instance = new WECustomPropertyRegistry();
         }
       }
     }
     return instance;
   }
 
-  public void registerData(String propertyId) {
+
+
+  public void registerProperty(String propertyId) {
     customMap.put(propertyId, null);
   }
 
-  public void registerData(String propertyId, WECampaignData weCampaignData) {
+  public void registerProperty(String propertyId, WECampaignData weCampaignData) {
     customMap.put(propertyId, weCampaignData);
   }
 
