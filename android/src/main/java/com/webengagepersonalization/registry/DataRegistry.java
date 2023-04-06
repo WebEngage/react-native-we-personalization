@@ -1,10 +1,7 @@
 package com.webengagepersonalization.regisrty;
 
-import android.os.Build;
-
 import com.webengage.sdk.android.Logger;
-import com.webengage.sdk.android.actions.database.DataHolder;
-import com.webengagepersonalization.Utils.WEGConstants;
+import com.webengagepersonalization.utils.WEGConstants;
 
 import java.util.ArrayList;
 

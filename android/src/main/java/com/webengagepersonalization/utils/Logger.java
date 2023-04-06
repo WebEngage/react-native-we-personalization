@@ -1,4 +1,4 @@
-package com.webengagepersonalization.Utils;
+package com.webengagepersonalization.utils;
 
 
 import android.util.Log;

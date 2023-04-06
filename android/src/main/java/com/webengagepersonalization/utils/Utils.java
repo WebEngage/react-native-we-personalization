@@ -1,8 +1,7 @@
-package com.webengagepersonalization.Utils;
+package com.webengagepersonalization.utils;
 
 import android.content.res.Resources;
 import android.graphics.Rect;
-import android.text.PrecomputedText;
 import android.util.Log;
 import android.view.View;
 
@@ -15,12 +14,8 @@ import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.ReadableMapKeySetIterator;
 import com.facebook.react.bridge.WritableMap;
-import com.facebook.react.bridge.WritableNativeMap;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
 import com.webengage.personalization.data.WECampaignData;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;

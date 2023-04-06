@@ -1,8 +1,7 @@
-package com.webengagepersonalization.Views;
+package com.webengagepersonalization.views;
 
 import android.content.Context;
 import android.content.res.Resources;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Choreographer;
 import android.view.LayoutInflater;
@@ -22,13 +21,11 @@ import com.webengage.personalization.callbacks.WEPlaceholderCallback;
 import com.webengage.personalization.data.WECampaignData;
 import com.webengagepersonalization.handler.CallbackHandler;
 import com.webengagepersonalization.R;
-import com.webengagepersonalization.Utils.Logger;
-import com.webengagepersonalization.Utils.Utils;
-import com.webengagepersonalization.Utils.WEGConstants;
+import com.webengagepersonalization.utils.Logger;
+import com.webengagepersonalization.utils.Utils;
+import com.webengagepersonalization.utils.WEGConstants;
 import com.webengagepersonalization.model.ScreenNavigatorCallback;
 import com.webengagepersonalization.regisrty.DataRegistry;
-
-import org.json.JSONObject;
 
 import java.util.HashMap;
 

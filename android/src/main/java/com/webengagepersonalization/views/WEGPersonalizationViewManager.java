@@ -1,4 +1,4 @@
-package com.webengagepersonalization.Views;
+package com.webengagepersonalization.views;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -9,7 +9,6 @@ import androidx.annotation.NonNull;
 import java.util.HashMap;
 
 import com.facebook.react.bridge.ReactApplicationContext;
-import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.uimanager.ReactStylesDiffMap;
 import com.facebook.react.uimanager.SimpleViewManager;
 import com.facebook.react.uimanager.ThemedReactContext;
@@ -19,9 +18,7 @@ import com.facebook.react.uimanager.annotations.ReactPropGroup;
 import com.webengage.personalization.WEPersonalization;
 //import  androidx.annotation..widget.CardView;
 //import com.webengage.personalization.utils.ConstantsKt;
-import com.webengagepersonalization.Utils.Logger;
-import com.webengagepersonalization.Utils.WEGConstants;
-import com.webengagepersonalization.Views.WEHInlineWidget;
+import com.webengagepersonalization.utils.WEGConstants;
 import com.webengagepersonalization.handler.CallbackHandler;
 
 import android.view.ViewGroup;

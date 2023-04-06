@@ -1,4 +1,4 @@
-package com.webengagepersonalization.Utils;
+package com.webengagepersonalization.utils;
 
 public class WEGConstants {
   public static final String TAG = "WebEngage-hybrid";

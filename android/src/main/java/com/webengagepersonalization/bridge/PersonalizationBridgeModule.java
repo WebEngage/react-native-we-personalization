@@ -1,36 +1,26 @@
-package com.webengagepersonalization.Bridge;
+package com.webengagepersonalization.bridge;
 
 import androidx.annotation.NonNull;
 
-import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.module.annotations.ReactModule;
-import com.facebook.react.bridge.Callback;
-import com.facebook.react.modules.core.DeviceEventManagerModule;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.bridge.Arguments;
 import com.webengage.personalization.WEPersonalization;
 import com.webengage.personalization.callbacks.WECampaignCallback;
 import com.webengage.personalization.callbacks.WEPlaceholderCallback;
 import com.webengage.personalization.data.WECampaignData;
-import com.webengage.sdk.android.Analytics;
-import com.webengage.sdk.android.WebEngage;
-import com.webengagepersonalization.Utils.Logger;
-import com.webengagepersonalization.Utils.Utils;
-import com.webengagepersonalization.Utils.WEGConstants;
-import com.webengagepersonalization.handler.CallbackHandler;
+import com.webengagepersonalization.utils.Logger;
+import com.webengagepersonalization.utils.Utils;
+import com.webengagepersonalization.utils.WEGConstants;
 import com.webengagepersonalization.registry.CustomRegistry;
 
 import androidx.annotation.Nullable;
 
-import android.os.Handler;
 import android.util.Log;
-
-import java.util.HashMap;
-import java.util.Map;
 
 // TODO - This might be required for custom part
 @ReactModule(name = WEGConstants.PERSONALIZATION_BRIDGE)

@@ -5,8 +5,8 @@ import android.os.Build;
 import androidx.annotation.NonNull;
 
 import com.webengage.personalization.callbacks.WEPropertyRegistryCallback;
-import com.webengagepersonalization.Utils.Logger;
-import com.webengagepersonalization.Utils.WEGConstants;
+import com.webengagepersonalization.utils.Logger;
+import com.webengagepersonalization.utils.WEGConstants;
 import com.webengagepersonalization.model.ScreenNavigatorCallback;
 import com.webengagepersonalization.regisrty.DataRegistry;
 

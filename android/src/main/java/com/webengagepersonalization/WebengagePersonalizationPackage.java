@@ -4,8 +4,8 @@ import com.facebook.react.ReactPackage;
 import com.facebook.react.bridge.NativeModule;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.uimanager.ViewManager;
-import com.webengagepersonalization.Bridge.PersonalizationBridgeModule;
-import com.webengagepersonalization.Views.WEGPersonalizationViewManager;
+import com.webengagepersonalization.bridge.PersonalizationBridgeModule;
+import com.webengagepersonalization.views.WEGPersonalizationViewManager;
 
 import java.util.Arrays;
 import java.util.List;
