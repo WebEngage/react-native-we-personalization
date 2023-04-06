@@ -40,7 +40,6 @@ const Navigation = () => {
             component={LoginScreen}
             options={{
               title: 'Login',
-
               headerBackVisible: false,
             }}
           />

@@ -21,7 +21,6 @@ import com.webengage.personalization.callbacks.WEPlaceholderCallback;
 import com.webengage.personalization.data.WECampaignData;
 import com.webengagepersonalization.handler.CallbackHandler;
 import com.webengagepersonalization.R;
-import com.webengagepersonalization.utils.Logger;
 import com.webengagepersonalization.utils.Utils;
 import com.webengagepersonalization.utils.WEGConstants;
 import com.webengagepersonalization.model.ScreenNavigatorCallback;

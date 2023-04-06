@@ -13,7 +13,7 @@ import com.webengage.personalization.WEPersonalization;
 import com.webengage.personalization.callbacks.WECampaignCallback;
 import com.webengage.personalization.callbacks.WEPlaceholderCallback;
 import com.webengage.personalization.data.WECampaignData;
-import com.webengagepersonalization.utils.Logger;
+import com.webengage.sdk.android.Logger;
 import com.webengagepersonalization.utils.Utils;
 import com.webengagepersonalization.utils.WEGConstants;
 import com.webengagepersonalization.registry.CustomRegistry;
@@ -30,18 +30,15 @@ public class PersonalizationBridgeModule extends ReactContextBaseJavaModule impl
   public PersonalizationBridgeModule(ReactApplicationContext reactContext) {
     super(reactContext);
     this.applicationContext = reactContext;
-    Logger.d(WEGConstants.TAG, "PersonalizationBridgeModule");
     WEPersonalization.Companion.get().init();
   }
   @ReactMethod
   public void registerCallback(String tagName, String screenName) {
-    Logger.d(WEGConstants.TAG,"PersonalizationBridgeModule: registercallback for  tagName "+tagName+ " | screen - "+screenName);
     WEPersonalization.Companion.get().registerWEPlaceholderCallback(tagName, this);
   }
 
   @ReactMethod
   public void unRegisterCallback(String tagName) {
-    Logger.d(WEGConstants.TAG,"PersonalizationBridgeModule: unRegistercallback "+tagName);
     WEPersonalization.Companion.get().unregisterWEPlaceholderCallback(tagName);
   }
 
