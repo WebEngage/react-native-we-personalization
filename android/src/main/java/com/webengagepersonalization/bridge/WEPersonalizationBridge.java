@@ -41,11 +41,11 @@ public class WEPersonalizationBridge extends ReactContextBaseJavaModule implemen
 
 
   @ReactMethod
-  public void registerCampaignCallback() {
+  public void registerWECampaignCallback() {
     WEPersonalization.Companion.get().registerWECampaignCallback(this);
   }
   @ReactMethod
-  public void unRegisterCampaignCallback() {
+  public void deregisterWECampaignCallback() {
     WEPersonalization.Companion.get().unregisterWECampaignCallback(this);
   }
 

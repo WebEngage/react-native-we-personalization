@@ -4,8 +4,9 @@ import UIKit
 import React
 import WEPersonalization
 
-
-public class WEHInlineView: UIView{
+// WEInlineWidget - file and class
+// print to be removed
+public class WEInlineWidget: UIView{
     var inlineView: WEInlineView? = nil
     var campaignData: WECampaignData? = nil
     @objc var width: CGFloat = 0.1 {
@@ -22,38 +23,38 @@ public class WEHInlineView: UIView{
 
     @objc var screenName: String = ""{
         didSet {
-            print(WEGConstants.TAG+"InlineWidget: Initialization for screenName- \(screenName)")
+            print(WEConstants.TAG+"InlineWidget: Initialization for screenName- \(screenName)")
             self.setupView()
         }
     }
 
     @objc var propertyId: Int = 0 {
         didSet {
-            print(WEGConstants.TAG+"InlineWidget: Initialization for propertyId - \(propertyId)")
+            print(WEConstants.TAG+"InlineWidget: Initialization for propertyId - \(propertyId)")
             self.setupView()
         }
     }
 
     @objc func reloadViews(){
-        print(WEGConstants.TAG+"InlineWidget: reloadView called for \(self.propertyId)")
+        print(WEConstants.TAG+"InlineWidget: reloadView called for \(self.propertyId)")
         DispatchQueue.main.async {
             if let viewToreload = self.inlineView,
                viewToreload.superview != nil{
                 self.inlineView?.load(tag: self.propertyId, callbacks: self)
             }
         }
-
     }
+    
     override init(frame: CGRect) {
-        print(WEGConstants.TAG+"InlineWidget: init called for inlineWidget")
+        print(WEConstants.TAG+"InlineWidget: init called for inlineWidget")
         super.init(frame: frame)
         setupView()
-        NotificationCenter.default.addObserver(self, selector: #selector(reloadViews), name: Notification.Name(WEGConstants.SCREEN_NAVIGATED), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(reloadViews), name: Notification.Name(WEConstants.SCREEN_NAVIGATED), object: nil)
 
     }
 
     deinit{
-        print(WEGConstants.TAG+"InlineWidget: deInit called for \(self.propertyId)")
+        print(WEConstants.TAG+"InlineWidget: deInit called for \(self.propertyId)")
         NotificationCenter.default.removeObserver(self)
         if let scrollview = self.getScrollview(view: self){
             scrollview.removeObserver(self, forKeyPath:  #keyPath(UIScrollView.contentOffset))
@@ -73,7 +74,7 @@ public class WEHInlineView: UIView{
             inlineView = WEInlineView(frame: CGRect(x: 0, y: 0, width: self.width, height: self.height))
             inlineView?.tag = self.propertyId
             if(self.propertyId != 0) {
-                print(WEGConstants.TAG+" InlineWidget: LoadView called for - \(self.propertyId)")
+                print(WEConstants.TAG+" InlineWidget: LoadView called for - \(self.propertyId)")
                 inlineView?.load(tag: self.propertyId, callbacks: self)
             }
             addSubview(inlineView!)
@@ -82,11 +83,11 @@ public class WEHInlineView: UIView{
 }
 
 
-extension WEHInlineView : WEPlaceholderCallback{
+extension WEInlineWidget : WEPlaceholderCallback{
     public func onRendered(data: WECampaignData) {
-        print(WEGConstants.TAG+" InlineWidget: onRendered \(self.propertyId)")
-        let campaignData: [String: Any] = [WEGConstants.PAYLOAD_TARGET_VIEW_ID: data.targetViewTag, WEGConstants.PAYLOAD_CAMPAIGN_ID: data.campaignId ?? "", WEGConstants.PAYLOAD: data.toJSONString()]
-        WEPersonalizationBridge.emitter.sendEvent(withName: WEGConstants.METHOD_NAME_ON_RENDERED, body: campaignData)
+        print(WEConstants.TAG+" InlineWidget: onRendered \(self.propertyId)")
+        let campaignData: [String: Any] = [WEConstants.PAYLOAD_TARGET_VIEW_ID: data.targetViewTag, WEConstants.PAYLOAD_CAMPAIGN_ID: data.campaignId ?? "", WEConstants.PAYLOAD: data.toJSONString() ?? ""]
+        WEPersonalizationBridge.emitter.sendEvent(withName: WEConstants.METHOD_NAME_ON_RENDERED, body: campaignData)
         if(self.isVisibleToUser) {
             data.trackImpression(attributes: nil)
         } else {
@@ -98,19 +99,19 @@ extension WEHInlineView : WEPlaceholderCallback{
     }
     public func onDataReceived(_ data: WECampaignData) {
         self.campaignData = data;
-        print(WEGConstants.TAG+" InlineWidget: onDataReceived \(self.propertyId)")
-        let campaignData: [String: Any] = [WEGConstants.PAYLOAD_TARGET_VIEW_ID: data.targetViewTag, WEGConstants.PAYLOAD_CAMPAIGN_ID: data.campaignId, WEGConstants.PAYLOAD: data.toJSONString()]
+        print(WEConstants.TAG+" InlineWidget: onDataReceived \(self.propertyId)")
+        let campaignData: [String: Any] = [WEConstants.PAYLOAD_TARGET_VIEW_ID: data.targetViewTag, WEConstants.PAYLOAD_CAMPAIGN_ID: data.campaignId ?? "", WEConstants.PAYLOAD: data.toJSONString() ?? ""]
 
-        WEPersonalizationBridge.emitter.sendEvent(withName: WEGConstants.METHOD_NAME_ON_DATA_RECEIVED, body: campaignData)
+        WEPersonalizationBridge.emitter.sendEvent(withName: WEConstants.METHOD_NAME_ON_DATA_RECEIVED, body: campaignData)
     }
     public func onPlaceholderException(_ campaignId: String?, _ targetViewId: String, _ exception: Error) {
-        print(WEGConstants.TAG+" InlineWidget: onPlaceholderException \(self.propertyId)")
-        let campaignData: [String: Any] = [WEGConstants.PAYLOAD_TARGET_VIEW_ID: targetViewId, WEGConstants.PAYLOAD_CAMPAIGN_ID: campaignId ?? "", WEGConstants.EXCEPTION: exception.localizedDescription]
-        WEPersonalizationBridge.emitter.sendEvent(withName: WEGConstants.METHOD_NAME_ON_PLACEHOLDER_EXCEPTION, body: campaignData)
+        print(WEConstants.TAG+" InlineWidget: onPlaceholderException \(self.propertyId)")
+        let campaignData: [String: Any] = [WEConstants.PAYLOAD_TARGET_VIEW_ID: targetViewId, WEConstants.PAYLOAD_CAMPAIGN_ID: campaignId ?? "", WEConstants.EXCEPTION: exception.localizedDescription]
+        WEPersonalizationBridge.emitter.sendEvent(withName: WEConstants.METHOD_NAME_ON_PLACEHOLDER_EXCEPTION, body: campaignData)
     }
 }
 
-extension WEHInlineView {
+extension WEInlineWidget {
     func getScrollview(view:UIView)->UIScrollView?{
         if let superview = view.superview, superview is UIScrollView{
             return view.superview as? UIScrollView

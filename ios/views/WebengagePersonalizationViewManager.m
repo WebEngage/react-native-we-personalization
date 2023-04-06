@@ -2,7 +2,7 @@
 #import <React/RCTBridgeModule.h>
 #import <React/RCTEventEmitter.h>
 
-@interface RCT_EXTERN_MODULE(WebengagePersonalizationViewManager, RCTViewManager)
+@interface RCT_EXTERN_MODULE(WEPersonalizationViewManager, RCTViewManager)
 
 RCT_EXPORT_VIEW_PROPERTY(propertyId, NSInteger)
 RCT_EXPORT_VIEW_PROPERTY(screenName, NSString)

@@ -1,4 +1,5 @@
-struct WEGConstants{
+
+struct WEConstants{
     static let PERSONALIZATION_SDK = "react_personalization_sdk";
     static let CHANNEL_INLINE_VIEW = "channel_inline_view"
     static let PAYLOAD_IOS_PROPERTY_ID = "iosPropertyId"
@@ -31,5 +32,4 @@ struct WEGConstants{
     static let METHOD_NAME_ON_CAMPAIGN_PREPARED = "onCampaignPrepared"
     static let METHOD_NAME_ON_CAMPAIGN_SHOWN = "onCampaignShown"
     
-    static let METHOD_NAME_AUTO_HANDLE_CLICK = "autoHandleClick"
 }

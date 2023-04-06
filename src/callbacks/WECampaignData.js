@@ -17,7 +17,7 @@ export const registerWECampaignCallback = (campaignCallbackList) => {
   } = campaignCallbackList;
 
   if (!isCampaignListenerAdded) {
-    WEPersonalizationBridge.registerCampaignCallback();
+    WEPersonalizationBridge.registerWECampaignCallback();
     if (onCampaignPrepared) {
       campaignPreparedListener = eventEmitter.addListener(
         'onCampaignPrepared',
@@ -62,7 +62,7 @@ export const registerWECampaignCallback = (campaignCallbackList) => {
 };
 
 export const deregisterWECampaignCallback = () => {
-  WEPersonalizationBridge.unRegisterCampaignCallback();
+  WEPersonalizationBridge.deregisterWECampaignCallback();
   campaignPreparedListener?.remove();
   campaignClickedListener?.remove();
   campaignExceptionListener?.remove();

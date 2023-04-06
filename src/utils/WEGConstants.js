@@ -1,4 +1,4 @@
-export const COMPONENT_NAME = 'WebengagePersonalizationView';
+export const COMPONENT_NAME = 'WEPersonalizationView';
 
 export const LINKING_ERROR =
   `The package 'react-native-webengage-personalization' doesn't seem to be linked. Make sure: \n\n` +

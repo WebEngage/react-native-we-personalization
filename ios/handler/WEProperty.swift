@@ -2,7 +2,6 @@
 import Foundation
 import WEPersonalization
 
-// WEProperty
 public class WEProperty{
     var id:Int
     var screenName:String
