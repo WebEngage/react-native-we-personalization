@@ -196,7 +196,7 @@ export default function DynamicScreen(props) {
       weCampaignData?.targetViewId,
       weCampaignData
     );
-    const exceptionText = "Exception occured for id - "+d?.targetViewId+" Exception - "+d?.exception
+    const exceptionText = "Exception occured for id - "+weCampaignData?.targetViewId+" Exception - "+weCampaignData?.exception
     setExceptionLable(exceptionText)
   };
 
