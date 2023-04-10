@@ -3,7 +3,7 @@ package com.webengagepersonalization.utils;
 // WEConstants
 public class WEConstants {
   public static final String TAG = "WebEngage-hybrid";
-  public static final String REACT_CLASS = "WebengagePersonalizationView";
+  public static final String REACT_CLASS = "WEPersonalizationView";
 
   public static final String PERSONALIZATION_BRIDGE = "WEPersonalizationBridge";
 

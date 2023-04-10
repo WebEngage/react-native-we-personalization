@@ -6,6 +6,7 @@ import {
   sendOnDataReceivedEvent,
   sendOnExceptionEvent,
 } from '../utils/PropertyListUtils';
+import { Platform } from 'react-native';
 
 let customOnDataReceivedListener = null;
 let customExceptionListener = null;
@@ -13,11 +14,14 @@ let isCustomListenerAdded = false;
 let customPropertyList = [];
 
 export const registerWEPlaceholderCallback = (
-  propertyId,
+  androidPropertyId,
+  iosPropertyId,
   screenName,
   onDataReceivedCb,
   onPlaceholderExceptionCb
 ) => {
+  const propertyId = Platform.OS === 'ios'? iosPropertyId : androidPropertyId;
+
   MyLogs(
     'customPH: Registering for ',
     propertyId
@@ -64,7 +68,8 @@ export const registerWEPlaceholderCallback = (
   }
 };
 
-export const deregisterWEPlaceholderCallback = (propertyId, screen) => {
+export const deregisterWEPlaceholderCallback = (androidPropertyId, iosPropertyId, screen) => {
+  const propertyId = Platform.OS === 'ios' ? iosPropertyId :  androidPropertyId;
   MyLogs(
     'customPH: deregisterWEPlaceholderCallback! - Event Listener called ->'
   );

@@ -114,10 +114,12 @@ export default function ScreenDetails(props) {
     let isDuplicate = false;
     for (const viewItem of viewList) {
       if (
-        viewItem.propertyId === data.propertyId ||
+        viewItem.androidPropertyId === data.androidPropertyId ||
+        viewItem.iosPropertyId === data.iosPropertyId ||
         viewItem.position === data.position ||
         data.position < 0 ||
-        data.propertyId === ''
+        data.androidPropertyId === '' ||
+        data.iosPropertyId === 0
       ) {
         isDuplicate = true;
         break;

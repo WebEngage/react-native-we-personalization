@@ -2,6 +2,7 @@ import React, { useRef } from 'react';
 import {
   Dimensions,
   FlatList,
+  Platform,
   ScrollView,
   StyleSheet,
   Switch,
@@ -13,13 +14,13 @@ import {
 } from 'react-native';
 import { webengageInstance } from '../Utils/WebEngageManager';
 import { WEInlineWidget, trackClick, trackImpression, registerWECampaignCallback,
+  registerWEPlaceholderCallback,
   deregisterWEPlaceholderCallback,
   deregisterWECampaignCallback,
 } from 'react-native-webengage-personalization';
 import { getValueFromAsyncStorage } from '../Utils';
 import NavigationModal from '../Utils/NavigationModal';
 import { useFocusEffect } from '@react-navigation/native';
-import { registerWEPlaceholderCallback } from 'react-native-webengage-personalization'
 
 export default function DynamicScreen(props) {
   const { navigation = {}, route: { params: { item = {} } = {} } = {} } = props;
@@ -78,14 +79,13 @@ export default function DynamicScreen(props) {
       screenListRef.current = screenArrData;
     })();
 
-    const callbacks = {
+    const WECampaignCallback = {
       onCampaignPrepared,
       onCampaignShown,
       onCampaignClicked,
       onCampaignException,
     };
-    const doesUserHandelCallbacks = true;
-    registerWECampaignCallback(callbacks);
+    registerWECampaignCallback(WECampaignCallback);
     return () => {
       deregisterWECampaignCallback();
       removeCustomViews()
@@ -95,7 +95,9 @@ export default function DynamicScreen(props) {
 
   const removeCustomViews = () => {
     customPropertyList.map(property => {
-      deregisterWEPlaceholderCallback(property, screenName)
+      const androidPropertyId = property
+      const iosPropertyId = property
+      deregisterWEPlaceholderCallback(androidPropertyId, iosPropertyId, screenName)
     })
     customPropertyList?.splice(0, customPropertyList.length);
   }
@@ -103,17 +105,20 @@ export default function DynamicScreen(props) {
 
   const checkForCustomView = () => {
     viewData.map( (viewItem) => {
-      const {isCustomView =
-         false, propertyId} = viewItem
+      const {isCustomView = false, propertyId : viewPropertyId} = viewItem
+      const iosPropertyId = viewPropertyId
+      const androidPropertyId = viewPropertyId
+      const propertyId = Platform.OS === 'ios' ? iosPropertyId :  androidPropertyId
       if(isCustomView) {
         customPropertyList.push(propertyId)
         registerWEPlaceholderCallback(
-        propertyId,
-        screenName,
-        onCustomDataReceived,
-        onCustomPlaceholderException
+          androidPropertyId,
+          iosPropertyId,
+          screenName,
+          onCustomDataReceived,
+          onCustomPlaceholderException
         )
-        }
+      }
     })
   }
 
@@ -234,7 +239,8 @@ export default function DynamicScreen(props) {
         <WEInlineWidget
           style={[styles.box, { height: inlineHeight, width: inlineWidth }]}
           screenName={screenName}
-          propertyId={inlineView.propertyId}
+          androidPropertyId={inlineView.propertyId}
+          iosPropertyId={inlineView.propertyId}
           onRendered={onRendered_1}
           onDataReceived={onDataReceived_1}
           onPlaceholderException={onPlaceholderException_1}

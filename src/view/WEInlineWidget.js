@@ -11,6 +11,7 @@ import {
   sendOnExceptionEvent,
   sendOnRenderedEvent,
 } from '../utils/PropertyListUtils';
+import { Platform } from 'react-native';
 
 let dataReceivedListener = null;
 let renderListerner = null;
@@ -20,12 +21,16 @@ let propertyProcessor = [];
 
 const WEInlineWidget = (props) => {
   const {
-    propertyId = 0,
+    androidPropertyId = '',
+    iosPropertyId = 0,
     screenName = '',
     onRendered = null,
     onDataReceived = null,
     onPlaceholderException = null,
+    style = {},
   } = props;
+  const propertyId = Platform.OS === 'ios'? iosPropertyId : androidPropertyId;
+  const updatedProps = { propertyId, screenName, onDataReceived, onRendered, onPlaceholderException, style };
 
 
   React.useEffect(() => {
@@ -85,7 +90,7 @@ const WEInlineWidget = (props) => {
     isListenerAdded = true;
   }
 
-  return <WebengagePersonalizationView {...props} />;
+  return <WebengagePersonalizationView {...updatedProps} />;
 };
 
 export default React.memo(WEInlineWidget);

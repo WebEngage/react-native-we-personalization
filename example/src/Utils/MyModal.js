@@ -16,13 +16,14 @@ const MyModal = (props) => {
   const [position, setPosition] = React.useState(1);
   const [height, setHeight] = React.useState(0);
   const [width, setWidth] = React.useState(0);
-  const [propertyId, setPropertyId] = React.useState('');
+  const [androidPropertyId, setAndroidPropertyId] = React.useState('');
+  const [iosPropertyId, setIosPropertyId] = React.useState();
   const [isCustomView, setIsCustomView] = React.useState(false);
 
   const addViewData = () => {
-    if (position > 0 && propertyId != '') {
+    if (position > 0 && androidPropertyId != '' && iosPropertyId !== 0) {
       const propertyIdToSave =
-        Platform.OS === 'ios' ? parseInt(propertyId, 10) : propertyId;
+        Platform.OS === 'ios' ? parseInt(iosPropertyId, 10) : androidPropertyId;
 
       const viewData = {
         position: parseInt(position, 10) || 0,
@@ -37,8 +38,6 @@ const MyModal = (props) => {
       alert('Add valid Data');
     }
   };
-  const propertyIdLabel =
-    Platform.OS === 'ios' ? 'Property Id:(Numeric)' : 'PropertyId: ';
 
   return (
     <View style={{ flex: 1 }}>
@@ -86,11 +85,21 @@ const MyModal = (props) => {
             </View>
 
             <View style={styles.ViewLine}>
-              <Text>{propertyIdLabel} </Text>
+              <Text> Android PropertyId </Text>
               <TextInput
                 style={styles.textViewStyle}
-                onChangeText={(val) => setPropertyId(val)}
-                value={propertyId}
+                onChangeText={(val) => setAndroidPropertyId(val)}
+                value={androidPropertyId}
+                autoCapitalize="none"
+              />
+            </View>
+
+            <View style={styles.ViewLine}>
+              <Text> ios PropertyId </Text>
+              <TextInput
+                style={styles.textViewStyle}
+                onChangeText={(val) => setIosPropertyId(val)}
+                value={iosPropertyId}
                 autoCapitalize="none"
               />
             </View>

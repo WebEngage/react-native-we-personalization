@@ -2,7 +2,6 @@ import WEInlineWidget from './view/WEInlineWidget';
 import {
   registerWECampaignCallback,
   deregisterWECampaignCallback,
-
 } from './callbacks/WECampaignData';
 import {
   registerWEPlaceholderCallback,

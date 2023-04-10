@@ -153,7 +153,7 @@ public class WEInlineWidget extends FrameLayout implements ScreenNavigatorCallba
   }
 
   public void loadView(String tagName) {
-    Logger.d(WEConstants.TAG, "loadView called for - " + tagName);
+    Logger.d(WEConstants.TAG, "WEInlineWidget: loadView called for - " + tagName);
     weInlineView.load(tagName, new WEPlaceholderCallback() {
       @Override
       public void onDataReceived(WECampaignData weCampaignData) {
