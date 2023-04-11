@@ -14,7 +14,7 @@ import java.util.ArrayList;
 public class WEPersonalizationPackage implements ReactPackage {
   @Override
   public List<NativeModule> createNativeModules(ReactApplicationContext reactContext) {
- List<NativeModule> modules = new ArrayList<>();
+    List<NativeModule> modules = new ArrayList<>();
     modules.add(new WEPersonalizationBridge(reactContext)); //
     return modules;
   }

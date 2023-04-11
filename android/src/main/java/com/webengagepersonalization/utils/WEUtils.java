@@ -23,9 +23,9 @@ import java.util.List;
 import java.util.Map;
 
 public class WEUtils {
-  public static  void sendEventToHybrid(ReactApplicationContext reactContext,
-                                String eventName, @Nullable WritableMap params) {
-    Logger.d(WEConstants.TAG, "sendEventToHybrid triggered for "+eventName+" for "+params.getString("targetViewId"));
+  public static void sendEventToHybrid(ReactApplicationContext reactContext,
+                                       String eventName, @Nullable WritableMap params) {
+    Logger.d(WEConstants.TAG, "sendEventToHybrid triggered for " + eventName + " for " + params.getString("targetViewId"));
     reactContext
       .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
       .emit(eventName, params);
@@ -77,7 +77,7 @@ public class WEUtils {
 
   public static Map<String, Object> convertHybridMapToNativeMap(ReadableMap readableMap) {
     Map<String, Object> map = new HashMap<>();
-    if(readableMap != null) {
+    if (readableMap != null) {
       ReadableMapKeySetIterator iterator = readableMap.keySetIterator();
       while (iterator.hasNextKey()) {
         String key = iterator.nextKey();
@@ -104,7 +104,7 @@ public class WEUtils {
       }
       return map;
     } else {
-      return  null;
+      return null;
     }
   }
 

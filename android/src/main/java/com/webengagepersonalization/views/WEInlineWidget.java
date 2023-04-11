@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
+
 import com.webengagepersonalization.regisrty.WEPropertyRegistry;
 
 import androidx.annotation.NonNull;
@@ -90,7 +91,7 @@ public class WEInlineWidget extends FrameLayout implements ScreenNavigatorCallba
             }
           });
         } else {
-            trackImpression(weCampaignData);
+          trackImpression(weCampaignData);
         }
       }
     });
@@ -99,10 +100,10 @@ public class WEInlineWidget extends FrameLayout implements ScreenNavigatorCallba
   public void trackImpression(WECampaignData weCampaignData) {
     String targetViewId = weCampaignData.getTargetViewId();
     String campaignId = weCampaignData.getCampaignId();
-    if(!WEPropertyRegistry.get().isImpressionAlreadyTracked(targetViewId, campaignId)) {
+    if (!WEPropertyRegistry.get().isImpressionAlreadyTracked(targetViewId, campaignId)) {
       weCampaignData.trackImpression(null);
       WEPropertyRegistry.get().setImpressionTrackedDetails(targetViewId, campaignId);
-      Logger.d(WEConstants.TAG, "trackImpression: tracked "+targetViewId);
+      Logger.d(WEConstants.TAG, "trackImpression: tracked " + targetViewId);
     }
   }
 
@@ -136,8 +137,8 @@ public class WEInlineWidget extends FrameLayout implements ScreenNavigatorCallba
       View.MeasureSpec.makeMeasureSpec(heightInPixel, View.MeasureSpec.EXACTLY));
 
 //    Positioning of the view - including the margin
-   view.layout(weInlineView.getLeft() + lm, weInlineView.getTop() + tm,
-     widthInPixel + rm, heightInPixel + bm);
+    view.layout(weInlineView.getLeft() + lm, weInlineView.getTop() + tm,
+      widthInPixel + rm, heightInPixel + bm);
 
   }
 
@@ -156,7 +157,7 @@ public class WEInlineWidget extends FrameLayout implements ScreenNavigatorCallba
     weInlineView.load(tagName, new WEPlaceholderCallback() {
       @Override
       public void onDataReceived(WECampaignData weCampaignData) {
-        Logger.d(WEConstants.TAG,"WEInlineWidget: onDataReceived called " + weCampaignData.getTargetViewId() );
+        Logger.d(WEConstants.TAG, "WEInlineWidget: onDataReceived called " + weCampaignData.getTargetViewId());
         WritableMap params = Arguments.createMap();
         params = WEUtils.generateParams(weCampaignData);
         WEUtils.sendEventToHybrid(applicationContext, "onDataReceived", params);
@@ -172,13 +173,13 @@ public class WEInlineWidget extends FrameLayout implements ScreenNavigatorCallba
 
       @Override
       public void onRendered(WECampaignData weCampaignData) {
-        Logger.d(WEConstants.TAG,"WEInlineWidget: onRendered called " + weCampaignData.getTargetViewId() );
+        Logger.d(WEConstants.TAG, "WEInlineWidget: onRendered called " + weCampaignData.getTargetViewId());
         WritableMap params = Arguments.createMap();
         params = WEUtils.generateParams(weCampaignData);
         WEUtils.sendEventToHybrid(applicationContext, "onRendered", params);
         View view = null;
-        if(weInlineView.getChildCount() > 1) {
-          view = weInlineView.getChildAt(weInlineView.getChildCount()-1);
+        if (weInlineView.getChildCount() > 1) {
+          view = weInlineView.getChildAt(weInlineView.getChildCount() - 1);
         } else {
           view = weInlineView.findViewWithTag("INLINE_PERSONALIZATION_TAG");
         }

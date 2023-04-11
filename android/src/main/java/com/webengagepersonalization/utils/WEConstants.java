@@ -26,6 +26,4 @@ public class WEConstants {
   public static final String DEEPLINK = "deepLink";
 
 
-
-
 }

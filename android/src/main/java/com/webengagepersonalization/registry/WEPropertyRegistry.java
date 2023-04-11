@@ -9,7 +9,7 @@ public class WEPropertyRegistry {
   private static WEPropertyRegistry instance = null;
   ArrayList<String> impressionTrackedForTargetViews = new ArrayList<>();
 
-  private static final Object lock  = new Object();
+  private static final Object lock = new Object();
 
 
   public static WEPropertyRegistry get() {
@@ -31,13 +31,13 @@ public class WEPropertyRegistry {
   public Boolean isImpressionAlreadyTracked(String targetViewId, String campaignId) {
     String value = targetViewId + "_" + campaignId;
     Boolean flag = impressionTrackedForTargetViews.contains(value);
-    Logger.d(WEConstants.TAG,"trackImpression: isImpressionAlreadyTracked "+flag);
+    Logger.d(WEConstants.TAG, "trackImpression: isImpressionAlreadyTracked " + flag);
     return flag;
   }
 
   public void clearCacheData() {
     impressionTrackedForTargetViews.clear();
-    Logger.d(WEConstants.TAG,"trackImpression: Clear impression tracked data ");
+    Logger.d(WEConstants.TAG, "trackImpression: Clear impression tracked data ");
 
   }
 }
