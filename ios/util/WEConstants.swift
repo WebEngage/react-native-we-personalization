@@ -18,8 +18,6 @@ struct WEConstants{
     static let TAG = "WEH: "
     static let EXCEPTION = "exception"
     static let PAYLOAD_WEGDATA = "wegData"
-
-
     static let METHOD_NAME_ON_DATA_RECEIVED = "onDataReceived"
     static let METHOD_NAME_ON_PLACEHOLDER_EXCEPTION = "onPlaceholderException"
     static let METHOD_NAME_ON_RENDERED = "onRendered"
@@ -31,5 +29,4 @@ struct WEConstants{
     static let METHOD_NAME_ON_CAMPAIGN_EXCEPTION = "onCampaignException"
     static let METHOD_NAME_ON_CAMPAIGN_PREPARED = "onCampaignPrepared"
     static let METHOD_NAME_ON_CAMPAIGN_SHOWN = "onCampaignShown"
-    
 }

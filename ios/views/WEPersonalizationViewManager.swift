@@ -1,4 +1,3 @@
-// WEPersonalizationViewManager - file and class also objc
 @objc(WEPersonalizationViewManager)
 class WEPersonalizationViewManager: RCTViewManager {
 
