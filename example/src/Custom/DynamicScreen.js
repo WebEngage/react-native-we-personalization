@@ -17,7 +17,7 @@ import {WEInlineWidget, trackClick, trackImpression, registerWECampaignCallback,
   registerWEPlaceholderCallback,
   deregisterWEPlaceholderCallback,
   deregisterWECampaignCallback,
-} from 'react-native-webengage-personalization';
+} from 'rn-we-personalization';
 import {getValueFromAsyncStorage} from '../Utils';
 import NavigationModal from '../Utils/NavigationModal';
 import {useFocusEffect} from '@react-navigation/native';
