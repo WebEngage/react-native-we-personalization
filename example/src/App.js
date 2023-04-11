@@ -1,11 +1,9 @@
 import * as React from 'react';
-import { registerWEPlaceholderCallback } from '../../src';
-import { enableDevMode } from '../../src/utils/MyLogs';
+import {enableDevMode} from '../../src/utils/weLogs';
 import LoginScreen from './LoginScreen';
 import Navigation from './Navigation';
-import { getValueFromAsyncStorage } from './Utils';
-import { initWebEngage } from './Utils/WebEngageManager';
-import WebEngage from 'react-native-webengage';
+import {getValueFromAsyncStorage} from './Utils';
+import {initWebEngage} from './Utils/WebEngageManager';
 
 
 export default function App() {
@@ -32,16 +30,19 @@ export default function App() {
   };
 
   const updateGuestState = () => {
-    setContinueAsGuest(true)
-  }
+    setContinueAsGuest(true);
+  };
 
   if (isUserLoggedIn) {
     return <Navigation />;
   } else {
-    if(!continueAsGuest) {
-    return (
-      <LoginScreen isUserLoggedIn updateLoginDetails={updateLoginDetails} updateGuestState={updateGuestState}  />
-    );
+    if (!continueAsGuest) {
+      return (
+        <LoginScreen
+          isUserLoggedIn
+          updateLoginDetails={updateLoginDetails}
+          updateGuestState={updateGuestState} />
+      );
     } else {
       return <Navigation />;
     }

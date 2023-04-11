@@ -17,6 +17,7 @@ import com.facebook.react.uimanager.annotations.ReactPropGroup;
 import com.webengage.personalization.WEPersonalization;
 import com.webengagepersonalization.utils.WEConstants;
 import com.webengagepersonalization.handler.WEPluginCallbackHandler;
+
 import android.view.ViewGroup;
 
 public class WEPersonalizationViewManager extends SimpleViewManager<ViewGroup> {
@@ -52,7 +53,7 @@ public class WEPersonalizationViewManager extends SimpleViewManager<ViewGroup> {
     map.put(WEConstants.HEIGHT, height);
     map.put(WEConstants.WIDTH, width);
     WEInlineWidget simpleUi;
-    simpleUi = new WEInlineWidget(reactContext.getReactApplicationContext(),map,this);
+    simpleUi = new WEInlineWidget(reactContext.getReactApplicationContext(), map, this);
     return simpleUi;
   }
 

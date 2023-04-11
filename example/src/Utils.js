@@ -1,6 +1,6 @@
 // import AsyncStorage from '@react-native-async-storage/async-storage';
 import { AsyncStorage } from 'react-native';
-import { MyLogs } from '../../src/utils/MyLogs';
+import { weLogs } from '../../src/utils/weLogs';
 
 
 export const saveToAsyncStorage = async (key, val) => {
@@ -8,7 +8,7 @@ export const saveToAsyncStorage = async (key, val) => {
     await AsyncStorage.setItem(key, val);
   } catch (error) {
     // Error saving data
-    MyLogs('Error while storing data');
+    weLogs('Error while storing data');
   }
 };
 
@@ -30,6 +30,6 @@ export const removeItem = async (key) => {
   try {
     await AsyncStorage.removeItem(key);
   } catch (error) {
-    MyLogs(error);
+    weLogs(error);
   }
 };

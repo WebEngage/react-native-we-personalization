@@ -23,6 +23,7 @@ import androidx.annotation.Nullable;
 @ReactModule(name = WEConstants.PERSONALIZATION_BRIDGE)
 public class WEPersonalizationBridge extends ReactContextBaseJavaModule implements WEPlaceholderCallback, WECampaignCallback {
   private ReactApplicationContext applicationContext = null;
+
   public WEPersonalizationBridge(ReactApplicationContext reactContext) {
     super(reactContext);
     this.applicationContext = reactContext;
@@ -44,6 +45,7 @@ public class WEPersonalizationBridge extends ReactContextBaseJavaModule implemen
   public void registerWECampaignCallback() {
     WEPersonalization.Companion.get().registerWECampaignCallback(this);
   }
+
   @ReactMethod
   public void deregisterWECampaignCallback() {
     WEPersonalization.Companion.get().unregisterWECampaignCallback(this);
@@ -52,7 +54,7 @@ public class WEPersonalizationBridge extends ReactContextBaseJavaModule implemen
   @ReactMethod
   public void trackImpression(String propertyId, ReadableMap attributes) {
     WECampaignData weCampaignData = WECustomPropertyRegistry.get().getMapData(propertyId);
-    if(weCampaignData != null) {
+    if (weCampaignData != null) {
       weCampaignData.trackImpression(WEUtils.convertHybridMapToNativeMap(attributes));
     }
   }
@@ -60,14 +62,14 @@ public class WEPersonalizationBridge extends ReactContextBaseJavaModule implemen
   @ReactMethod
   public void trackClick(String propertyId, ReadableMap attributes) {
     WECampaignData weCampaignData = WECustomPropertyRegistry.get().getMapData(propertyId);
-    if(weCampaignData != null) {
+    if (weCampaignData != null) {
       weCampaignData.trackClick(WEUtils.convertHybridMapToNativeMap(attributes));
     }
   }
 
   @Override
   public boolean onCampaignClicked(@NonNull String actionId, @NonNull String deepLink, @NonNull WECampaignData weCampaignData) {
-    Logger.d(WEConstants.TAG,"WEPersonalizationBridge: onCampaignClicked actionId- "+actionId+ " \n deepLink- "+deepLink);
+    Logger.d(WEConstants.TAG, "WEPersonalizationBridge: onCampaignClicked actionId- " + actionId + " \n deepLink- " + deepLink);
     WritableMap params = Arguments.createMap();
     params = WEUtils.generateParams(actionId, deepLink, weCampaignData);
     WEUtils.sendEventToHybrid(applicationContext, "onCampaignClicked", params);
@@ -76,7 +78,7 @@ public class WEPersonalizationBridge extends ReactContextBaseJavaModule implemen
 
   @Override
   public void onCampaignException(@Nullable String campaignId, @NonNull String targetViewId, @NonNull Exception e) {
-    Logger.d(WEConstants.TAG,"WEPersonalizationBridge: onCampaignException "+targetViewId);
+    Logger.d(WEConstants.TAG, "WEPersonalizationBridge: onCampaignException " + targetViewId);
     WritableMap params = Arguments.createMap();
     params = WEUtils.generateParams(campaignId, targetViewId, e);
     WEUtils.sendEventToHybrid(applicationContext, "onCampaignException", params);
@@ -85,7 +87,7 @@ public class WEPersonalizationBridge extends ReactContextBaseJavaModule implemen
   @Nullable
   @Override
   public WECampaignData onCampaignPrepared(@NonNull WECampaignData weCampaignData) {
-    Logger.d(WEConstants.TAG,"WEPersonalizationBridge: onCampaignPrepared "+weCampaignData.getTargetViewId());
+    Logger.d(WEConstants.TAG, "WEPersonalizationBridge: onCampaignPrepared " + weCampaignData.getTargetViewId());
     WritableMap params = Arguments.createMap();
     params = WEUtils.generateParams(weCampaignData);
     WEUtils.sendEventToHybrid(applicationContext, "onCampaignPrepared", params);
@@ -94,7 +96,7 @@ public class WEPersonalizationBridge extends ReactContextBaseJavaModule implemen
 
   @Override
   public void onCampaignShown(@NonNull WECampaignData weCampaignData) {
-    Logger.d(WEConstants.TAG,"WEPersonalizationBridge: onCampaignShown "+weCampaignData.getTargetViewId());
+    Logger.d(WEConstants.TAG, "WEPersonalizationBridge: onCampaignShown " + weCampaignData.getTargetViewId());
     WritableMap params = Arguments.createMap();
     params = WEUtils.generateParams(weCampaignData);
     WEUtils.sendEventToHybrid(applicationContext, "onCampaignShown", params);

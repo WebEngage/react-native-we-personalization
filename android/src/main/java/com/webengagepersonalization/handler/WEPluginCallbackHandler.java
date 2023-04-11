@@ -20,42 +20,42 @@ public class WEPluginCallbackHandler implements WEPropertyRegistryCallback {
     HashMap<String, ScreenNavigatorCallback> callback = new HashMap<>();
     if (mapOfScreenNavigatedCallbacks.containsKey(screenName)) {
       callback = mapOfScreenNavigatedCallbacks.get(screenName);
-      if(!callback.containsKey(propertyId)) {
+      if (!callback.containsKey(propertyId)) {
         callback.put(propertyId, screenNavigatedCallback);
       }
     } else {
       callback.put(propertyId, screenNavigatedCallback);
     }
-    if(screenName.equals(currentScreen)){
+    if (screenName.equals(currentScreen)) {
       screenNavigatedCallback.screenNavigated(screenName);
     }
     mapOfScreenNavigatedCallbacks.put(screenName, callback);
   }
 
   public static void removeScreenNavigatorCallback(String screenName, ScreenNavigatorCallback screenNavigatedCallback) {
-    if(mapOfScreenNavigatedCallbacks.containsKey(screenName)) {
+    if (mapOfScreenNavigatedCallbacks.containsKey(screenName)) {
       mapOfScreenNavigatedCallbacks.remove(screenName);
     }
   }
 
   @Override
   public void onPropertyCacheCleared(@NonNull String navigatedScreen) {
-    Logger.d(WEConstants.TAG, "WEPluginCallbackHandler: onPropertyCacheCleared: Screen changed! to "+navigatedScreen);
+    Logger.d(WEConstants.TAG, "WEPluginCallbackHandler: onPropertyCacheCleared: Screen changed! to " + navigatedScreen);
     currentScreen = navigatedScreen;
     WEPropertyRegistry.get().clearCacheData();
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
 
-        HashMap<String, ScreenNavigatorCallback> callbacksList = mapOfScreenNavigatedCallbacks.get(navigatedScreen);
-        try {
-          if(callbacksList != null) {
-            for (String propertyKey : callbacksList.keySet()) {
-              ScreenNavigatorCallback propertyCallback = callbacksList.get(propertyKey);
-              propertyCallback.screenNavigated(navigatedScreen);
-            }
+      HashMap<String, ScreenNavigatorCallback> callbacksList = mapOfScreenNavigatedCallbacks.get(navigatedScreen);
+      try {
+        if (callbacksList != null) {
+          for (String propertyKey : callbacksList.keySet()) {
+            ScreenNavigatorCallback propertyCallback = callbacksList.get(propertyKey);
+            propertyCallback.screenNavigated(navigatedScreen);
           }
-        } catch (Exception e) {
-          e.printStackTrace();
         }
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
     }
   }
 

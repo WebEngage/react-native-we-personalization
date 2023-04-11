@@ -3,9 +3,10 @@ package com.webengagepersonalization.registry;
 import com.webengage.personalization.data.WECampaignData;
 
 import java.util.HashMap;
+
 public class WECustomPropertyRegistry {
   private static WECustomPropertyRegistry instance = null;
-  private static final Object lock  = new Object();
+  private static final Object lock = new Object();
   HashMap<String, WECampaignData> customMap = new HashMap<>();
 
   public static WECustomPropertyRegistry get() {
@@ -18,7 +19,6 @@ public class WECustomPropertyRegistry {
     }
     return instance;
   }
-
 
 
   public void registerProperty(String propertyId) {

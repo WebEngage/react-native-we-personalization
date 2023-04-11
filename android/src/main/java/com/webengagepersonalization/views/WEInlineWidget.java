@@ -28,7 +28,6 @@ import com.webengagepersonalization.model.ScreenNavigatorCallback;
 import java.util.HashMap;
 
 public class WEInlineWidget extends FrameLayout implements ScreenNavigatorCallback {
-  private static WEInlineWidget instance = null;
   WEInlineView weInlineView;
   private ReactApplicationContext applicationContext = null;
   int height = 0, width = 0;

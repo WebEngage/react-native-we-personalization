@@ -1,13 +1,12 @@
-import { MyLogs } from "./MyLogs";
+import {weLogs} from './weLogs';
 
-let propertyProcessorList = []
 export const registerPropertyList = (
-  list,
-  screenName,
-  propertyId,
-  onDataReceived = null,
-  onRendered = null,
-  onPlaceholderException = null
+    list,
+    screenName,
+    propertyId,
+    onDataReceived = null,
+    onRendered = null,
+    onPlaceholderException = null,
 ) => {
   const screenIndex = getLatestScreenIndex(screenName, list);
   if (screenIndex === -1) {
@@ -18,10 +17,10 @@ export const registerPropertyList = (
   }
   if (
     !list[list?.length - 1]?.propertyList
-      .flatMap((curr) => curr.propertyId)
-      .includes(propertyId)
+        .flatMap((curr) => curr.propertyId)
+        .includes(propertyId)
   ) {
-    let obj = {};
+    const obj = {};
     obj.propertyId = propertyId;
     obj.callbacks = {
       onRendered: onRendered,
@@ -30,8 +29,7 @@ export const registerPropertyList = (
     };
     list[list?.length - 1].propertyList.push(obj);
   }
-  MyLogs("PropertyListUtils: screenList list after updation ",list)
-  propertyProcessorList = [...list];
+  weLogs('PropertyListUtils: screenList list after updation ', list);
   return list;
 };
 
@@ -40,41 +38,41 @@ export function getLatestScreenIndex(screen, list) {
 }
 
 export const removePropertyFromPropertyList = (
-  list,
-  screenName,
-  propertyId,
-  listenerList,
-  listenerFlag
+    list,
+    screenName,
+    propertyId,
+    listenerList,
+    listenerFlag,
 ) => {
-  let updatedList = list;
+  const updatedList = list;
   updatedList?.map((val, index) => {
     if (val.screenName === screenName) {
-          val?.propertyList?.forEach((property, propertyIndex) => {
-            if (property?.propertyId === propertyId) {
-              updatedList[index].propertyList.splice(propertyIndex, 1);
-            }
-          });
-          MyLogs(
-            'PropertyListUtils: updated list after removing property- ',
-            updatedList
-          );
-          if(!val.propertyList.length) {
-            updatedList.splice(index,1)
-          }
+      val?.propertyList?.forEach((property, propertyIndex) => {
+        if (property?.propertyId === propertyId) {
+          updatedList[index].propertyList.splice(propertyIndex, 1);
+        }
+      });
+      weLogs(
+          'PropertyListUtils: updated list after removing property- ',
+          updatedList,
+      );
+      if (!val.propertyList.length) {
+        updatedList.splice(index, 1);
+      }
     }
   });
 
   if (!updatedList?.length && listenerFlag) {
     listenerFlag = false;
-    MyLogs('PropertyListUtils: All the Listeners are removed ',listenerList);
+    weLogs('PropertyListUtils: All the Listeners are removed ', listenerList);
   }
 
-  return { updatedList, listenerFlag };
+  return {updatedList, listenerFlag};
 };
 
 export const getPropertyDetails = (list, weCampaignData) => {
   let res = null;
-  const { targetViewId = '' } = weCampaignData;
+  const {targetViewId = ''} = weCampaignData;
   if (list?.length) {
     list[list.length - 1]?.propertyList?.map((val) => {
       if (val.propertyId == targetViewId) {
@@ -86,15 +84,15 @@ export const getPropertyDetails = (list, weCampaignData) => {
 };
 
 export const sendOnDataReceivedEvent = (list, data) => {
-  const { targetViewId = '', campaignId = '', payloadData = '{}' } = data;
+  const {targetViewId = '', campaignId = '', payloadData = '{}'} = data;
   const payload = JSON.parse(payloadData);
   const weCampaignData = {
     targetViewId,
     campaignId,
-    payload,
-  };
+    payload};
   const propertyItem = getPropertyDetails(list, weCampaignData);
-  MyLogs('PropertyListUtils: onDataReceived! - Event Listener called ->', weCampaignData);
+  weLogs('PropertyListUtils: onDataReceived! - Event Listener called ->',
+      weCampaignData);
 
   if (propertyItem?.callbacks?.onDataReceived) {
     propertyItem?.callbacks?.onDataReceived(weCampaignData);
@@ -102,14 +100,15 @@ export const sendOnDataReceivedEvent = (list, data) => {
 };
 
 export const sendOnRenderedEvent = (list, data) => {
-  const { targetViewId = '', campaignId = '', payloadData = '{}' } = data;
+  const {targetViewId = '', campaignId = '', payloadData = '{}'} = data;
   const payload = JSON.parse(payloadData);
   const weCampaignData = {
     targetViewId,
     campaignId,
     payload,
   };
-  MyLogs('PropertyListUtils: onRendered - Event Listener called ->', weCampaignData);
+  weLogs('PropertyListUtils: onRendered - Event Listener called ->',
+      weCampaignData);
 
   const propertyItem = getPropertyDetails(list, weCampaignData);
   if (propertyItem?.callbacks?.onRendered) {
@@ -118,8 +117,9 @@ export const sendOnRenderedEvent = (list, data) => {
 };
 
 export const sendOnExceptionEvent = (list, data) => {
-  MyLogs('PropertyListUtils: onPlaceholderException - Event Listener called ->', data);
-  const { targetViewId = '' } = data;
+  weLogs('PropertyListUtils: onPlaceholderException - Event Listener called ->',
+      data);
+  const {targetViewId = ''} = data;
   const weCampaignData = {
     targetViewId,
   };
