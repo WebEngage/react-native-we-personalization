@@ -14,7 +14,7 @@ import {
 import { Platform } from 'react-native';
 
 let dataReceivedListener = null;
-let renderListerner = null;
+let renderListener = null;
 let exceptionalListener = null;
 let isListenerAdded = false;
 let propertyProcessor = [];
@@ -37,21 +37,21 @@ const WEInlineWidget = (props) => {
     MyLogs('WEInlineWidget: Attached/Mounted ', propertyId);
     return () => {
       MyLogs('WEInlineWidget: Destroyed/UnMounted ', propertyId);
-      const listenersList = [
+      const listenerList = [
         dataReceivedListener,
-        renderListerner,
+        renderListener,
         exceptionalListener,
       ];
       const { updatedList, listenerFlag } = removePropertyFromPropertyList(
         propertyProcessor,
         screenName,
         propertyId,
-        listenersList,
+        listenerList,
         isListenerAdded
       );
       if(!listenerFlag) {
         dataReceivedListener?.remove()
-        renderListerner?.remove()
+        renderListener?.remove()
         exceptionalListener?.remove()
       }
       isListenerAdded = listenerFlag;
@@ -77,7 +77,7 @@ const WEInlineWidget = (props) => {
       }
     );
 
-    renderListerner = eventEmitter.addListener('onRendered', (data) => {
+    renderListener = eventEmitter.addListener('onRendered', (data) => {
       sendOnRenderedEvent(propertyProcessor, data);
     });
 

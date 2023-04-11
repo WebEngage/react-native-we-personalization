@@ -43,7 +43,7 @@ export const removePropertyFromPropertyList = (
   list,
   screenName,
   propertyId,
-  listenersList,
+  listenerList,
   listenerFlag
 ) => {
   let updatedList = list;
@@ -66,7 +66,7 @@ export const removePropertyFromPropertyList = (
 
   if (!updatedList?.length && listenerFlag) {
     listenerFlag = false;
-    MyLogs('PropertyListUtils: All the Listeners are removed ',listenersList);
+    MyLogs('PropertyListUtils: All the Listeners are removed ',listenerList);
   }
 
   return { updatedList, listenerFlag };

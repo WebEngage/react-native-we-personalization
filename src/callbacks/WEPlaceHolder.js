@@ -75,12 +75,12 @@ export const deregisterWEPlaceholderCallback = (androidPropertyId, iosPropertyId
   );
 
   WEPersonalizationBridge.deregisterProperty(propertyId);
-  const listenersList = [customOnDataReceivedListener, customExceptionListener];
+  const listenerList = [customOnDataReceivedListener, customExceptionListener];
   const { updatedList, listenerFlag } = removePropertyFromPropertyList(
     customPropertyList,
     screen,
     propertyId,
-    listenersList,
+    listenerList,
     isCustomListenerAdded
   );
   isCustomListenerAdded = listenerFlag;

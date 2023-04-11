@@ -42,7 +42,7 @@ export default function DynamicScreen(props) {
   }
   const [screenList, setScreenList] = React.useState([]);
   const screenListRef = useRef(null);
-  const [customViewLabel, setCustomViewLabel] = React.useState("Custom View: Either campaign not Running / onRendered not triggered")
+  const [customViewLabel, setCustomViewLabel] = React.useState({})
   const [showNavigation, setShowNavigation] = React.useState(false);
 
   const clickRef = useRef(null);
@@ -104,8 +104,10 @@ export default function DynamicScreen(props) {
 
 
   const checkForCustomView = () => {
+    let customLabels = {};
     viewData.map( (viewItem) => {
       const {isCustomView = false, propertyId : viewPropertyId} = viewItem
+      customLabels = {...customLabels,[viewPropertyId]: "Custom View: Either campaign not Running / onRendered not triggered"}
       const iosPropertyId = viewPropertyId
       const androidPropertyId = viewPropertyId
       const propertyId = Platform.OS === 'ios' ? iosPropertyId :  androidPropertyId
@@ -120,6 +122,7 @@ export default function DynamicScreen(props) {
         )
       }
     })
+    setCustomViewLabel(customLabels)
   }
 
   const onCampaignClicked = (data) => {
@@ -178,16 +181,17 @@ export default function DynamicScreen(props) {
   }
 
   const onCustomDataReceived = (weCampaignData) => {
-
-    setCustomViewLabel(JSON.stringify(weCampaignData))
-
-    console.log(
-      'Example: custom onDataReceived!!! triggered for ',
-      weCampaignData?.targetViewId,
-      weCampaignData
-    );
-
-
+    const { targetViewId } = weCampaignData;
+      setCustomViewLabel(prevState => ({
+        ...prevState,
+        [targetViewId]: JSON.stringify(weCampaignData)
+      }));
+      console.log(
+        'Example: custom onDataReceived!!! triggered for ',
+        weCampaignData?.targetViewId,
+        weCampaignData,
+        customViewLabel
+      );
   };
 
   const onCustomPlaceholderException = (weCampaignData) => {
@@ -212,7 +216,7 @@ export default function DynamicScreen(props) {
     let inlineView = null;
     let isCustomView = false
     viewData?.forEach((viewItem) => {
-      const { position,  } = viewItem
+      const { position, propertyId } = viewItem
       if (position === index) {
         inlineView = viewItem;
         isCustomView = viewItem.isCustomView
@@ -224,7 +228,7 @@ export default function DynamicScreen(props) {
       const inlineWidth = inlineView?.width || Dimensions.get('window').width;
       if(isCustomView) {
         return(<View>
-          <Text> {customViewLabel} </Text>
+          <Text> {customViewLabel[inlineView.propertyId]} </Text>
           <View style={styles.rowLine}>
             <TouchableHighlight onPress={() => trackImpressions(inlineView.propertyId)} style={styles.customButton}>
               <Text>Impression</Text>
@@ -266,6 +270,8 @@ export default function DynamicScreen(props) {
   };
 
   const renderRegularScreen = () => {
+    console.log("customViewLabel in regular - ",customViewLabel)
+
     return arr.map((item, index) => {
       return renderRecycler({ item, index });
     });
