@@ -22,8 +22,8 @@ public class WECustomPropertyRegistry: WEPlaceholderCallback {
         let existingData = registryMap[id]
         let weghinline = WEProperty(id: existingData?.id ?? -1,
                                     screenName: (existingData?.screenName ?? "") as String,
-                                    propertyID: (existingData?.propertyID ?? 0) as! Int,
-                                    campaignData: map[WEConstants.PAYLOAD_WEGDATA] as! WECampaignData)
+                                    propertyID: (existingData?.propertyID ?? 0) ,
+                                    campaignData: map[WEConstants.PAYLOAD_WEGDATA] as? WECampaignData)
         
         registryMap[id] = weghinline
         WELogger.d("WEP: WECustomPropertyRegistry: updateRegisterData \(registryMap)")

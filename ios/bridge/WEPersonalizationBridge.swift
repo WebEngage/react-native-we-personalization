@@ -48,7 +48,7 @@ class WEPersonalizationBridge: RCTEventEmitter {
     
     @objc func deregisterProperty(_ propertyId: Int) {
         WELogger.d(WEConstants.TAG+" WEP: WEPersonalizationBridge: deregisterProperty called - \(propertyId)")
-        let id = propertyId as! Int
+        let id = propertyId
         WECustomPropertyRegistry.instance.removeRegisterData(id: id)
         WEPersonalization.shared.unregisterWEPlaceholderCallback(propertyId)
     }
