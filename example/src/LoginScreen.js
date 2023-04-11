@@ -1,9 +1,9 @@
-import { useNavigation } from '@react-navigation/native';
 import React from 'react';
-import { StyleSheet, TouchableHighlight } from 'react-native';
-import { TextInput, Text, Button, SafeAreaView } from 'react-native';
-import { saveToAsyncStorage } from './Utils';
-import { webengageInstance } from './Utils/WebEngageManager';
+import {StyleSheet, TouchableHighlight} from 'react-native';
+import PropTypes from 'prop-types';
+import {TextInput, Text, SafeAreaView} from 'react-native';
+import {saveToAsyncStorage} from './Utils';
+import {webengageInstance} from './Utils/WebEngageManager';
 
 export default function LoginScreen(props) {
   const {
@@ -30,8 +30,8 @@ export default function LoginScreen(props) {
     }
   };
   const skipLogin = () => {
-    updateGuestState()
-  }
+    updateGuestState();
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
     width: 200,
     height: 50,
     marginVertical: 20,
-    color: '#000'
+    color: '#000',
   },
   textDesc: {
     fontSize: 18,
@@ -83,3 +83,9 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
 });
+
+LoginScreen.propTypes = {
+  updateLoginDetails: PropTypes.func,
+  navigation: PropTypes.object,
+  updateGuestState: PropTypes.func,
+};

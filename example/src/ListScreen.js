@@ -1,24 +1,21 @@
-import { useFocusEffect } from '@react-navigation/native';
 import React from 'react';
 import {
-  View,
-  Button,
   Text,
   SafeAreaView,
   StyleSheet,
   Pressable,
   TouchableHighlight,
 } from 'react-native';
+import PropTypes from 'prop-types';
 import WebEngage from 'react-native-webengage';
-import { getValueFromAsyncStorage } from './Utils';
+import {getValueFromAsyncStorage} from './Utils';
 
-import { registerWEPlaceholderCallback } from '../../src';
-import { removeItem } from './Utils';
+import {removeItem} from './Utils';
 const ListScreen = (props) => {
-  const { navigation } = props
-  const [ isUserLoggedIn, setIsUserLoggedIn ] = React.useState(false)
+  const {navigation} = props;
+  const [isUserLoggedIn, setIsUserLoggedIn] = React.useState(false);
 
-  var webengage = new WebEngage();
+  const webengage = new WebEngage();
   const userNameRef = React.useRef(null);
 
   React.useEffect(() => {
@@ -77,7 +74,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   logout: {
-    // justifyContent: 'flex-end'
     alignSelf: 'flex-end',
     width: 100,
     height: 35,
@@ -85,9 +81,12 @@ const styles = StyleSheet.create({
     backgroundColor: '#f59518',
   },
   textStyle: {
-    // color: 'white',
     fontSize: 20,
     textAlign: 'center',
   },
 });
 export default ListScreen;
+
+ListScreen.propTypes = {
+  navigation: PropTypes.object,
+};

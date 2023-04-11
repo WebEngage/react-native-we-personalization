@@ -1,4 +1,5 @@
 import React, {useRef} from 'react';
+import PropTypes from 'prop-types';
 import {
   Dimensions,
   FlatList,
@@ -24,7 +25,6 @@ import {useFocusEffect} from '@react-navigation/native';
 export default function DynamicScreen(props) {
   const {navigation = {}, route: {params: {item = {}} = {}} = {}} = props;
   const {
-    id = 0,
     screenName = '',
     size = 0,
     eventName = '',
@@ -53,10 +53,13 @@ export default function DynamicScreen(props) {
       React.useCallback(() => {
         if (screenName) {
           if (screenProperty && screenValue) {
-            console.log('Example: dynamic navigating to  ' + screenName + ' with data', {[screenProperty]: screenValue});
-            webengageInstance.screen(screenName, {[screenProperty]: parseInt(screenValue)});
+            console.log('Example: dynamic navigating to  ' + screenName +
+            ' with data', {[screenProperty]: screenValue});
+            webengageInstance.screen(screenName,
+                {[screenProperty]: parseInt(screenValue)});
           } else {
-            console.log('Example: dynamic navigating to  ' + screenName + ' without data' );
+            console.log('Example: dynamic navigating to  '+screenName+
+            ' without data' );
             webengageInstance.screen(screenName);
           }
         }
@@ -96,7 +99,11 @@ export default function DynamicScreen(props) {
     customPropertyList.map((property) => {
       const androidPropertyId = property;
       const iosPropertyId = property;
-      deregisterWEPlaceholderCallback(androidPropertyId, iosPropertyId, screenName);
+      deregisterWEPlaceholderCallback(
+          androidPropertyId,
+          iosPropertyId,
+          screenName,
+      );
     });
     customPropertyList?.splice(0, customPropertyList.length);
   };
@@ -106,10 +113,12 @@ export default function DynamicScreen(props) {
     let customLabels = {};
     viewData.map( (viewItem) => {
       const {isCustomView = false, propertyId: viewPropertyId} = viewItem;
-      customLabels = {...customLabels, [viewPropertyId]: 'Custom View: Either campaign not Running / onRendered not triggered'};
+      customLabels = {...customLabels, [viewPropertyId]:
+        'Custom View: Either campaign not Running / onRendered not triggered'};
       const iosPropertyId = viewPropertyId;
       const androidPropertyId = viewPropertyId;
-      const propertyId = Platform.OS === 'ios' ? iosPropertyId : androidPropertyId;
+      const propertyId = Platform.OS === 'ios' ?
+        iosPropertyId : androidPropertyId;
       if (isCustomView) {
         customPropertyList.push(propertyId);
         registerWEPlaceholderCallback(
@@ -157,11 +166,12 @@ export default function DynamicScreen(props) {
     console.log('Example: dynamic: onCampaignException ', weCampaignData);
   };
 
-  const onRendered_1 = (weCampaignData) => {
-    console.log('Example: Dynamic onRendered triggered for -', weCampaignData?.targetViewId, weCampaignData);
+  const onRendered1 = (weCampaignData) => {
+    console.log('Example: Dynamic onRendered triggered for -',
+        weCampaignData?.targetViewId, weCampaignData);
   };
 
-  const onDataReceived_1 = (weCampaignData) => {
+  const onDataReceived1 = (weCampaignData) => {
     console.log(
         'Example: Dynamic onDataReceived triggered for ',
         weCampaignData?.targetViewId,
@@ -169,13 +179,14 @@ export default function DynamicScreen(props) {
     );
   };
 
-  const onPlaceholderException_1 = (weCampaignData) => {
+  const onPlaceholderException1 = (weCampaignData) => {
     console.log(
         'Example: Dynamic onPlaceholderException triggered for ',
         weCampaignData?.targetViewId,
         weCampaignData,
     );
-    const exceptionText = 'Exception occured for id - '+weCampaignData?.targetViewId+' Exception - '+weCampaignData?.exception;
+    const exceptionText = 'Exception occured for id - '+
+    weCampaignData?.targetViewId+' Exception - '+weCampaignData?.exception;
     setExceptionLable(exceptionText);
   };
 
@@ -199,7 +210,8 @@ export default function DynamicScreen(props) {
         weCampaignData?.targetViewId,
         weCampaignData,
     );
-    const exceptionText = 'Exception occured for id - '+weCampaignData?.targetViewId+' Exception - '+weCampaignData?.exception;
+    const exceptionText = 'Exception occured for id - '+
+      weCampaignData?.targetViewId+' Exception - '+weCampaignData?.exception;
     setExceptionLable(exceptionText);
   };
 
@@ -215,7 +227,7 @@ export default function DynamicScreen(props) {
     let inlineView = null;
     let isCustomView = false;
     viewData?.forEach((viewItem) => {
-      const {position, propertyId} = viewItem;
+      const {position} = viewItem;
       if (position === index) {
         inlineView = viewItem;
         isCustomView = viewItem.isCustomView;
@@ -229,10 +241,16 @@ export default function DynamicScreen(props) {
         return (<View>
           <Text> {customViewLabel[inlineView.propertyId]} </Text>
           <View style={styles.rowLine}>
-            <TouchableHighlight onPress={() => trackImpressions(inlineView.propertyId)} style={styles.customButton}>
+            <TouchableHighlight
+              onPress={() => trackImpressions(inlineView.propertyId)}
+              style={styles.customButton}
+            >
               <Text>Impression</Text>
             </TouchableHighlight>
-            <TouchableHighlight onPress={() => trackClicks(inlineView.propertyId)} style={styles.customButton}>
+            <TouchableHighlight
+              onPress={() => trackClicks(inlineView.propertyId)}
+              style={styles.customButton}
+            >
               <Text>Click</Text>
             </TouchableHighlight>
           </View>
@@ -244,9 +262,9 @@ export default function DynamicScreen(props) {
             screenName={screenName}
             androidPropertyId={inlineView.propertyId}
             iosPropertyId={inlineView.propertyId}
-            onRendered={onRendered_1}
-            onDataReceived={onDataReceived_1}
-            onPlaceholderException={onPlaceholderException_1}
+            onRendered={onRendered1}
+            onDataReceived={onDataReceived1}
+            onPlaceholderException={onPlaceholderException1}
           />
         );
       }
@@ -310,7 +328,12 @@ export default function DynamicScreen(props) {
       <Text> {exceptionLable}</Text>
       <View style={[styles.rowItem, styles.border]}>
 
-        <TextInput style={styles.textInput} placeholder="Enter Event Name" value={eventNameToTrigger} onChangeText={(text) => setEventNameToTrigger(text)} />
+        <TextInput
+          style={styles.textInput}
+          placeholder="Enter Event Name"
+          value={eventNameToTrigger}
+          onChangeText={(text) => setEventNameToTrigger(text)}
+        />
         <TouchableOpacity onPress={trackEvent} style={styles.trackButton} >
           <Text style={styles.trackText}> Track  </Text>
         </TouchableOpacity>
@@ -381,7 +404,6 @@ const styles = StyleSheet.create({
   },
   textStyle: {
     fontSize: 20,
-    // color: '#000',
   },
   rowLine: {
     flexDirection: 'row',
@@ -411,9 +433,10 @@ const styles = StyleSheet.create({
   box: {
     width: Dimensions.get('window').width,
     height: 200,
-
-    // borderWidth: 10,
-    // borderColor: 'red',
-    // padding: 50,
   },
 });
+
+DynamicScreen.propTypes = {
+  navigation: PropTypes.object,
+  route: PropTypes.object,
+};

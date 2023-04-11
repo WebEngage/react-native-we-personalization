@@ -7,6 +7,7 @@ import {
   TouchableHighlight,
   View,
 } from 'react-native';
+import PropTypes from 'prop-types';
 
 export default function NavigationModal(props) {
   const {
@@ -20,10 +21,10 @@ export default function NavigationModal(props) {
     sendNavigation(item);
     changeModalStatus(false);
   };
-  const renderScreenList = ({ item, index }) => {
-    const { screenName = '' } = item;
+  const renderScreenList = ({item, index}) => {
+    const {screenName = ''} = item;
 
-    if (currentScreen !== screenName)
+    if (currentScreen !== screenName) {
       return (
         <View style={styles.modalCard}>
           <Text style={styles.screenName}> {screenName}</Text>
@@ -35,6 +36,7 @@ export default function NavigationModal(props) {
           </TouchableHighlight>
         </View>
       );
+    }
   };
   return (
     <View style={styles.container}>
@@ -102,3 +104,11 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 });
+
+NavigationModal.propTypes = {
+  screenList: PropTypes.array,
+  showModal: PropTypes.bool,
+  changeModalStatus: PropTypes.func,
+  sendNavigation: PropTypes.func,
+  currentScreen: PropTypes.string,
+};

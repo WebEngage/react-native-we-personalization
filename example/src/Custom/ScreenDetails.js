@@ -1,32 +1,33 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import {
-  FlatList,
   Pressable,
   StyleSheet,
   Text,
   TextInput,
   View,
   ScrollView,
-  Button,
 } from 'react-native';
+import PropTypes from 'prop-types';
 import CheckBox from '@react-native-community/checkbox';
-import { getValueFromAsyncStorage, saveToAsyncStorage } from '../Utils';
+import {getValueFromAsyncStorage, saveToAsyncStorage} from '../Utils';
 import MyModal from '../Utils/MyModal';
 
 export default function ScreenDetails(props) {
-  const { navigation, route = {} } = props;
-  const { params = {} } = route;
-  const { screenData = {}, isEdit = false, itemIndex = 0 } = params;
+  const {navigation, route = {}} = props;
+  const {params = {}} = route;
+  const {screenData = {}, isEdit = false, itemIndex = 0} = params;
   const [size, setSize] = React.useState(screenData?.size || 0);
   const [screenName, setScreenName] = React.useState(
-    screenData?.screenName || ''
+      screenData?.screenName || '',
   );
   const [eventName, setEventName] = React.useState(screenData?.eventName || '');
-  const [screenProperty, setScreenProperty] = React.useState(screenData?.screenProperty || '');
-  const [screenValue, setScreenValue] = React.useState(screenData?.screenValue || '');
+  const [screenProperty, setScreenProperty] =
+    React.useState(screenData?.screenProperty || '');
+  const [screenValue, setScreenValue] =
+    React.useState(screenData?.screenValue || '');
 
   const [isRecyclerView, setIsRecyclerView] = useState(
-    screenData?.isRecyclerView || false
+      screenData?.isRecyclerView || false,
   );
   const [screenList, setScreenList] = React.useState([]);
   const [viewData, setViewData] = React.useState(screenData?.viewData || []);
@@ -61,9 +62,7 @@ export default function ScreenDetails(props) {
   };
 
   const addScreenDetails = () => {
-    const length = screenList.length + 1;
     if (size > 0 && screenName) {
-      // Store Data
       const randomNumber = Math.floor(Math.random() * 1000 + 1);
       const screenData = {
         size,
@@ -78,7 +77,7 @@ export default function ScreenDetails(props) {
 
       const screenListData = [...screenList];
       const index = screenListData.findIndex(
-        (item) => item.screenName === screenName
+          (item) => item.screenName === screenName,
       );
 
       if (isEdit) {
@@ -87,7 +86,7 @@ export default function ScreenDetails(props) {
           saveToAsyncStorage('screenData', JSON.stringify(screenListData));
           navigation.goBack();
         } else {
-          alert("screen Name already Exists")
+          alert('screen Name already Exists');
         }
       } else {
         if (index !== -1) {
@@ -132,10 +131,10 @@ export default function ScreenDetails(props) {
     }
     setIsModalVisible(false);
   };
-  const renderRow = (item) => {
+  const renderRow = (item, index) => {
     return Object.entries(item).map(([key, value]) => {
       return (
-        <View style={styles.cardRow}>
+        <View key={index} style={styles.cardRow}>
           <Text style={styles.cardTitle}> {key}</Text>
           <Text style={styles.cardText}> {value}</Text>
         </View>
@@ -152,7 +151,7 @@ export default function ScreenDetails(props) {
   const renderView = (item, index) => {
     return (
       <View style={styles.cardView}>
-        {renderRow(item)}
+        {renderRow(item, index)}
         <Pressable style={styles.deletebtn} onPress={() => deleteView(index)}>
           <Text> Delete </Text>
         </Pressable>
@@ -192,7 +191,6 @@ export default function ScreenDetails(props) {
             autoCapitalize="none"
             autoCorrect={false}
             value={screenName}
-            autoCapitalize="none"
           />
         </View>
 
@@ -311,7 +309,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   ViewLine: {
-    // flexDirection: 'row',
     marginTop: 30,
   },
   rowLine: {
@@ -326,7 +323,6 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     width: 300,
     height: 50,
-    // marginTop: 10,
   },
   form: {
     marginTop: 50,
@@ -339,7 +335,6 @@ const styles = StyleSheet.create({
   },
   cardView: {
     marginTop: 20,
-    // borderWidth: 1,
     borderRadius: 30,
     paddingVertical: 10,
     backgroundColor: '#dbdbdb',
@@ -355,6 +350,10 @@ const styles = StyleSheet.create({
   },
   cardRow: {
     flexDirection: 'row',
-    // justifyContent: 'space-evenly'
   },
 });
+
+ScreenDetails.propTypes = {
+  navigation: PropTypes.object,
+  route: PropTypes.object,
+};

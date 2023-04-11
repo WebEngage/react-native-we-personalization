@@ -1,4 +1,5 @@
 import CheckBox from '@react-native-community/checkbox';
+import PropTypes from 'prop-types';
 import React from 'react';
 import {
   Modal,
@@ -11,7 +12,7 @@ import {
 } from 'react-native';
 
 const MyModal = (props) => {
-  const { isModalVisible = false, setIsModalVisible, addViewListData } = props;
+  const {isModalVisible = false, setIsModalVisible, addViewListData} = props;
 
   const [position, setPosition] = React.useState(1);
   const [height, setHeight] = React.useState(0);
@@ -30,7 +31,7 @@ const MyModal = (props) => {
         height: parseInt(height, 10) || 0,
         width: parseInt(width, 10) || 0,
         propertyId: propertyIdToSave,
-        isCustomView
+        isCustomView,
       };
       addViewListData(viewData);
     } else {
@@ -40,7 +41,7 @@ const MyModal = (props) => {
   };
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{flex: 1}}>
       <Modal
         animationType="slide"
         transparent={true}
@@ -50,7 +51,7 @@ const MyModal = (props) => {
         }}
       >
         <View
-          style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
+          style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}
         >
           <View style={styles.modalCard}>
             <Text style={styles.headerTxt}>Add View Data!</Text>
@@ -106,18 +107,18 @@ const MyModal = (props) => {
 
 
             <View style={styles.rowLine}>
-          <Text>Custom View: </Text>
+              <Text>Custom View: </Text>
 
-          <CheckBox
-            offAnimationType="stroke"
-            onFillColor={'blue'}
-            onCheckColor={'white'}
-            disabled={false}
-            value={isCustomView}
-            style={styles.checkbox}
-            onValueChange={(newValue) => setIsCustomView(newValue)}
-          />
-        </View>
+              <CheckBox
+                offAnimationType="stroke"
+                onFillColor={'blue'}
+                onCheckColor={'white'}
+                disabled={false}
+                value={isCustomView}
+                style={styles.checkbox}
+                onValueChange={(newValue) => setIsCustomView(newValue)}
+              />
+            </View>
 
             <Pressable
               onPress={addViewData}
@@ -183,7 +184,13 @@ const styles = StyleSheet.create({
     height: 20,
     marginRight: 20,
   },
-  modalCard: { backgroundColor: '#fff', padding: 20 },
+  modalCard: {backgroundColor: '#fff', padding: 20},
 });
 
 export default MyModal;
+
+MyModal.propTypes = {
+  isModalVisible: PropTypes.bool,
+  setIsModalVisible: PropTypes.func,
+  addViewListData: PropTypes.func,
+};

@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import {NavigationContainer} from '@react-navigation/native';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import ListScreen from './ListScreen';
 import CustomScreens from './Custom/CustomScreens';
 import ScreenDetails from './Custom/ScreenDetails';
@@ -15,13 +15,13 @@ const Navigation = () => {
   const [screenNames, setScreenNames] = React.useState([]);
   const renderScreenName = () => {
     return screenNames?.map((item) => {
-      const { screenName } = item;
+      const {screenName} = item;
       return (
         <Stack.Screen
           key={screenName}
           name={screenName}
           component={DynamicScreen}
-          options={{ title: screenName }}
+          options={{title: screenName}}
         />
       );
     });
@@ -33,7 +33,7 @@ const Navigation = () => {
           <Stack.Screen
             name="main"
             component={ListScreen}
-            options={{ title: 'Welcome to App-Inline' }}
+            options={{title: 'Welcome to App-Inline'}}
           />
           <Stack.Screen
             name="login"
@@ -48,7 +48,7 @@ const Navigation = () => {
           <Stack.Screen
             name="dynamicScreen"
             component={DynamicScreen}
-            options={({ route }) => ({ title: route.params.item.screenName })}
+            options={({route}) => ({title: route.params.item.screenName})}
           />
           {renderScreenName()}
         </Stack.Navigator>

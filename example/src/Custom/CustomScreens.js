@@ -1,4 +1,5 @@
-import React, { useContext } from 'react';
+import React, {useContext} from 'react';
+import PropTypes from 'prop-types';
 import {
   FlatList,
   Pressable,
@@ -6,14 +7,14 @@ import {
   Text,
   View,
 } from 'react-native';
-import { ScreenNamesContext } from '../Navigation';
+import {ScreenNamesContext} from '../Navigation';
 import {
   getValueFromAsyncStorage,
   saveToAsyncStorage,
 } from '../Utils';
-import { webengageInstance } from '../Utils/WebEngageManager';
+import {webengageInstance} from '../Utils/WebEngageManager';
 
-export default function CustomScreens({ navigation }) {
+export default function CustomScreens({navigation}) {
   const [screenList, setScreenList] = React.useState([]);
   const [screenNames, setScreenNames] = useContext(ScreenNamesContext);
 
@@ -40,8 +41,7 @@ export default function CustomScreens({ navigation }) {
   };
 
   const openScreen = (item) => {
-    navigation.navigate(item.screenName, { item, screenId: item.screenName });
-
+    navigation.navigate(item.screenName, {item, screenId: item.screenName});
   };
 
   const editScreen = (item, index) => {
@@ -52,7 +52,7 @@ export default function CustomScreens({ navigation }) {
     });
   };
 
-  const renderItem = ({ item, index }) => {
+  const renderItem = ({item, index}) => {
     return (
       <View style={styles.item}>
         <View>
@@ -168,7 +168,6 @@ const styles = StyleSheet.create({
     borderColor: '#000',
   },
   textView: {
-    // flex: 0.9,
     width: 100,
   },
   itemText: {
@@ -198,3 +197,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#49b528',
   },
 });
+
+CustomScreens.propTypes = {
+  navigation: PropTypes.object,
+};
