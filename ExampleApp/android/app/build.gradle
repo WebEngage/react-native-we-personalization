@@ -151,6 +151,8 @@ android {
 dependencies {
     // The version of react-native is set by the React Native Gradle Plugin
     implementation("com.facebook.react:react-android")
+    implementation 'com.webengage:android-sdk:3.+'
+    implementation 'com.google.android.gms:play-services-ads:15.0.1'
 
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.0.0")
 
