@@ -1,4 +1,4 @@
-# WebEngage Personalization React-Native SDK
+# rn-we-personalization
 
 For more information checkout our [website](https://webengage.com/) and [documentation](https://docs.webengage.com/docs/react-native-app-in-line-content).
 
@@ -10,3 +10,4 @@ Reach out to our [Support Team](https://webengage.com/) for further assistance.
 
 ## Plugin info
 [WebEngage Personalization React-Native SDK](https://www.npmjs.com/package/rn-we-personalization)
+
