@@ -9,19 +9,7 @@
     "url": "https://github.com/WebEngage/react-native-we-personalization/issues"
   },
   "homepage": "https://docs.webengage.com/docs/react-native-app-in-line-content",
-  "module": "lib/module/index",
-  "types": "lib/typescript/index.d.ts",
   "main": "src/index.js",
-  "scripts": {
-    "test": "jest",
-    "typecheck": "tsc --noEmit",
-    "lint": "eslint \"**/*.{js,ts,tsx}\"",
-    "prepack": "bob build",
-    "release": "release-it",
-    "example": "yarn --cwd example",
-    "bootstrap": "yarn example && yarn install && yarn example pods",
-    "clean": "del-cli android/build example/android/build example/android/app/build example/ios/build"
-  },
   "keywords": [
     "webengage",
     "react",
