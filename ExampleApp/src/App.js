@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {enableDevMode} from 'rn-we-personalization/src/utils/weLogs';
+import {enableDevMode} from 'react-native-we-personalization/src/utils/weLogs';
 import LoginScreen from './LoginScreen';
 import Navigation from './Navigation';
 import {getValueFromAsyncStorage} from './Utils';
