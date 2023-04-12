@@ -1,0 +1,42 @@
+# rn-we-personalization
+
+Personalisation package for webengage react native
+
+## Installation
+
+```sh
+npm install rn-we-personalization
+```
+
+## Usage
+
+```js
+import { WebengagePersonalizationView } from "rn-we-personalization";
+
+// ...
+
+<WebengagePersonalizationView color="tomato" />
+
+```
+Steps to run
+1. Take pull and npm install
+2. go to example -> node_modules -> react-native-webengage -> Android
+3. Open build.gradlew from node_modules/react-native-webengage/android file and comment android-sdk import method
+4. create libs folder in node_modules/react-native-webengage/android  and add android-sdk.aar file (Copy it from example/android/libs)
+5. inside build.gradlew of node_modules/react-native-webengage/android file add below code
+  implementation fileTree(include: ['*.jar', '*.aar'], dir: 'libs')
+  implementation files('libs/android-sdk.aar')
+
+6. Try Running App now
+
+## Contributing
+
+See the [contributing guide](CONTRIBUTING.md) to learn how to contribute to the repository and the development workflow.
+
+## License
+
+MIT
+
+---
+
+Made with [create-react-native-library](https://github.com/callstack/react-native-builder-bob)

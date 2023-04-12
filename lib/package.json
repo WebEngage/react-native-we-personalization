@@ -1,0 +1,46 @@
+{
+  "name": "rn-we-personalization",
+  "version": "1.0.0",
+  "description": "React-Native WebEngage Personalization",
+  "repository": "https://github.com/WebEngage/react-native-we-personalization",
+  "author": "Webengage",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/WebEngage/react-native-we-personalization/issues"
+  },
+  "homepage": "https://docs.webengage.com/docs/react-native-app-in-line-content",
+  "module": "lib/module/index",
+  "types": "lib/typescript/index.d.ts",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "jest",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint \"**/*.{js,ts,tsx}\"",
+    "prepack": "bob build",
+    "release": "release-it",
+    "example": "yarn --cwd example",
+    "bootstrap": "yarn example && yarn install && yarn example pods",
+    "clean": "del-cli android/build example/android/build example/android/app/build example/ios/build"
+  },
+  "keywords": [
+    "webengage",
+    "react",
+    "react-native",
+    "analytics",
+    "push",
+    "in-app",
+    "notification",
+    "android",
+    "ios",
+    "personalization",
+    "webengage personalization",
+    "webengage inline"
+  ],
+  "devDependencies": {
+    "react": "18.1.0",
+    "react-native": "0.70.6"
+  },
+  "peerDependencies": {
+    "react-native": ">=0.39.0"
+  }
+}
