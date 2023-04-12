@@ -1,6 +1,6 @@
  import AsyncStorage from '@react-native-async-storage/async-storage';
 //import {AsyncStorage} from 'react-native';
-import {weLogs} from 'rn-we-personalization/src/utils/weLogs';
+import {weLogs} from 'react-native-we-personalization/src/utils/weLogs';
 
 
 export const saveToAsyncStorage = async (key, val) => {

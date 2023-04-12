@@ -24,7 +24,7 @@
     "react-native-screens": "^3.19.0",
     "react-native-webengage": "^1.3.0",
     "react-scripts": "^5.0.1",
-    "rn-we-personalization": "file:../lib"
+    "react-native-we-personalization": "file:../lib"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
