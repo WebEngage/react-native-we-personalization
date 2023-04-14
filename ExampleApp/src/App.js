@@ -4,7 +4,8 @@ import LoginScreen from './LoginScreen';
 import Navigation from './Navigation';
 import {getValueFromAsyncStorage} from './Utils';
 import {initWebEngage} from './Utils/WebEngageManager';
-
+import { LogBox } from 'react-native';
+LogBox.ignoreAllLogs()
 
 export default function App() {
   const [isUserLoggedIn, setIsUserLoggedIn] = React.useState(false);

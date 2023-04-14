@@ -53,7 +53,7 @@ const ListScreen = (props) => {
         style={styles.button}
         onPress={() => navigation.navigate('customScreens')}
       >
-        <Text style={styles.textStyle}> Custom Screens </Text>
+        <Text style={styles.textStyle}> Add Your Screens </Text>
       </Pressable>
     </SafeAreaView>
   );

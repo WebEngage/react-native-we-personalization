@@ -1,4 +1,4 @@
- import AsyncStorage from '@react-native-async-storage/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 //import {AsyncStorage} from 'react-native';
 import {weLogs} from 'react-native-we-personalization/src/utils/weLogs';
 

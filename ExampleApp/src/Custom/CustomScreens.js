@@ -27,7 +27,7 @@ export default function CustomScreens({navigation}) {
     const unsubscribe = navigation.addListener('focus', async () => {
       const screenData = await getValueFromAsyncStorage('screenData');
       const screenLists = JSON.parse(screenData);
-      setScreenNames(screenLists); // updating navigation context
+      setScreenNames(screenLists);
       setScreenList(screenLists);
     });
     return unsubscribe;
@@ -55,7 +55,7 @@ export default function CustomScreens({navigation}) {
   const renderItem = ({item, index}) => {
     return (
       <View style={styles.item}>
-        <View>
+        <View style={styles.itemRow}>
           <View style={styles.row}>
             <Text style={styles.textView}>Screen Name</Text>
             <Text style={styles.itemText}>{item.screenName}</Text>
@@ -78,7 +78,7 @@ export default function CustomScreens({navigation}) {
             )}
           </View>
         </View>
-        <View>
+        <View style={styles.buttonCol}>
           <Pressable
             style={[styles.remove, styles.open]}
             onPress={() => openScreen(item)}
@@ -114,6 +114,7 @@ export default function CustomScreens({navigation}) {
 
       <FlatList
         data={screenList}
+        style={styles.flatlistStyle}
         keyExtractor={(item) => item.id}
         renderItem={renderItem}
       />
@@ -123,12 +124,14 @@ export default function CustomScreens({navigation}) {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+  },
+  flatlistStyle: {
+    height: '100%'
   },
   button: {
     backgroundColor: '#5e74e0',
-    width: 100,
-    height: 25,
+    width: 200,
+    height: 40,
     borderRadius: 25,
     alignItems: 'center',
     justifyContent: 'center',
@@ -137,6 +140,8 @@ const styles = StyleSheet.create({
   },
   btnTxt: {
     color: '#FFFFFF',
+    fontSize: 22,
+    fontWeight: 'bold'
   },
   headerTxt: {
     fontSize: 18,
@@ -153,9 +158,16 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flex: 1,
   },
+  itemRow: {
+    flex: 0.9,
+  },
+  buttonCol: {
+    marginLeft: 5,
+  },
   row: {
     flexDirection: 'row',
     flex: 1,
+
   },
   rowLine: {
     flexDirection: 'row',
@@ -172,6 +184,7 @@ const styles = StyleSheet.create({
   },
   itemText: {
     fontWeight: 'bold',
+    width: 120
   },
   redText: {
     color: '#ff0000',
