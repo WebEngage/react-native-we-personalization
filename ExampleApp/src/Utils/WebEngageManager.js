@@ -1,4 +1,5 @@
 import WebEngage from 'react-native-webengage';
+import { Alert } from 'react-native';
 
 export let webengageInstance = null;
 
@@ -31,6 +32,7 @@ export const initWebEngage = () => {
   webengageInstance.push.onClick(function(notificationData) {
     console.log("MyLogs App: push-notiifcation clicked with deeplink: " + notificationData["deeplink"]);
     console.log("MyLogs App: push-notiifcation clicked with payload: " + JSON.stringify(notificationData["userData"]));
+    Alert.alert("It is a Simple Alert "+notificationData["deeplink"]);
 
   });
   webengageInstance.universalLink.onClick(function(location){
