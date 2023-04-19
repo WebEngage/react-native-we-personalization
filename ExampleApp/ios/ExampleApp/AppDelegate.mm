@@ -2,6 +2,7 @@
 #import <WebEngage/WebEngage.h>
 #import <React/RCTBundleURLProvider.h>
 
+
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
@@ -10,7 +11,10 @@
   // You can add your custom initial props in the dictionary below.
   // They will be passed down to the ViewController used by React Native.
   self.initialProps = @{};
-  [[WebEngage sharedInstance] application:application didFinishLaunchingWithOptions:launchOptions];
+  self.webEngageBridge = [WEGWebEngageBridge new];
+   [WebEngage sharedInstance].pushNotificationDelegate = self.webEngageBridge;
+   [[WebEngage sharedInstance] application:application
+             didFinishLaunchingWithOptions:launchOptions notificationDelegate:self.webEngageBridge];
 
   return [super application:application didFinishLaunchingWithOptions:launchOptions];
 }
