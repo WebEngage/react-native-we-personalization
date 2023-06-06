@@ -1,9 +1,19 @@
-package com.exampleapp;
+package com.webengage.sample;
+
+import android.content.pm.PackageManager;
+import android.os.Build;
+import android.os.Bundle;
+import android.os.PersistableBundle;
+import android.util.Log;
+
+import androidx.annotation.Nullable;
 
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;
 import com.facebook.react.defaults.DefaultNewArchitectureEntryPoint;
 import com.facebook.react.defaults.DefaultReactActivityDelegate;
+import com.webengage.sdk.android.Logger;
+import com.webengage.sdk.android.WebEngage;
 
 public class MainActivity extends ReactActivity {
 
@@ -15,6 +25,17 @@ public class MainActivity extends ReactActivity {
   protected String getMainComponentName() {
     return "ExampleApp";
   }
+
+  @Override
+  public void onCreate(@Nullable Bundle savedInstanceState, @Nullable PersistableBundle persistentState) {
+    super.onCreate(savedInstanceState, persistentState);
+    Log.e("WebEngage", "onCreate!!!");
+    Log.d("WebEngage", "opt_in_push -> oncreate");
+    Log.d("WebEngage", "YourLogs Constructor called!!!");
+
+
+  }
+
 
   /**
    * Returns the instance of the {@link ReactActivityDelegate}. Here we use a util class {@link

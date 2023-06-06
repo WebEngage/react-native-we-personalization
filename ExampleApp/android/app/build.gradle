@@ -1,5 +1,6 @@
 apply plugin: "com.android.application"
 apply plugin: "com.facebook.react"
+apply plugin: 'com.google.gms.google-services'
 
 import com.android.build.OutputFile
 
@@ -93,9 +94,9 @@ android {
 
     compileSdkVersion rootProject.ext.compileSdkVersion
 
-    namespace "com.exampleapp"
+    namespace "com.webengage.sample"
     defaultConfig {
-        applicationId "com.exampleapp"
+        applicationId "com.webengage.sample"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
@@ -149,10 +150,21 @@ android {
 }
 
 dependencies {
+
+    implementation fileTree(include: ['*.jar','*.aar'], dir: 'libs')
+    api 'net.sourceforge.htmlcleaner:htmlcleaner:2.26'
+
+    implementation files('libs/android-sdk-debug.aar')
+    implementation files('libs/we-personalization-debug')
+
+
     // The version of react-native is set by the React Native Gradle Plugin
     implementation("com.facebook.react:react-android")
-    implementation 'com.webengage:android-sdk:3.+'
-    implementation 'com.google.android.gms:play-services-ads:15.0.1'
+    implementation platform('com.google.firebase:firebase-bom:32.1.0')
+    implementation 'com.google.firebase:firebase-analytics'
+    implementation 'com.google.firebase:firebase-messaging:22.0.0'
+//     implementation 'com.webengage:android-sdk:3.+'
+    implementation 'com.google.android.gms:play-services-ads:20.5.0'
 
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.0.0")
 

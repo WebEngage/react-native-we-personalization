@@ -5,18 +5,23 @@ import {
   StyleSheet,
   Pressable,
   TouchableHighlight,
+  TextComponent,
+  TextInput,
 } from 'react-native';
 import PropTypes from 'prop-types';
 import WebEngage from 'react-native-webengage';
 import {getValueFromAsyncStorage} from './Utils';
 
 import {removeItem} from './Utils';
+import { webengageInstance } from './Utils/WebEngageManager';
 const ListScreen = (props) => {
   const {navigation} = props;
+  
   const [isUserLoggedIn, setIsUserLoggedIn] = React.useState(false);
 
   const webengage = new WebEngage();
   const userNameRef = React.useRef(null);
+  const [eventName, setEventName] = React.useState("")
 
   React.useEffect(() => {
     webengage.screen('test');
@@ -32,6 +37,17 @@ const ListScreen = (props) => {
       userNameRef.current = name;
     })();
   });
+
+  const updateEventName = (text) => {
+    setEventName(text)
+  }
+
+  const trackEvent = () => {
+    if(eventName) {
+      webengageInstance.track(eventName);
+    }
+
+  }
 
   const logout = () => {
     removeItem('userName');
@@ -55,6 +71,21 @@ const ListScreen = (props) => {
       >
         <Text style={styles.textStyle}> Add Your Screens </Text>
       </Pressable>
+
+
+      <TextInput
+      value={eventName}
+      style={styles.textBox}
+      onChangeText={updateEventName}
+      placeholder="Add Your Event"
+
+      />
+      <Pressable
+        style={styles.trackButton}
+        onPress={trackEvent}
+      >
+        <Text style={styles.textStyle}> Track Event </Text>
+      </Pressable>
     </SafeAreaView>
   );
 };
@@ -72,6 +103,22 @@ const styles = StyleSheet.create({
     height: 50,
     borderRadius: 30,
     justifyContent: 'center',
+  },
+  trackButton: {
+    marginBottom: 25,
+    backgroundColor: '#ffffffe',
+    borderWidth: 1,
+    width: 150,
+    height: 40,
+    borderRadius: 10,
+    justifyContent: 'center',
+  },
+  textBox: {
+    fontSize: 18,
+    borderBottomWidth: 2,
+    height: 40,
+    width: 350,
+    marginVertical: 25
   },
   logout: {
     alignSelf: 'flex-end',
