@@ -1,18 +1,37 @@
 #import "AppDelegate.h"
+#import <Firebase.h>
 #import <WebEngage/WebEngage.h>
 #import <React/RCTBundleURLProvider.h>
+#import <FirebaseMessaging/FirebaseMessaging.h>
 
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+  [FIRApp configure];
   self.moduleName = @"ExampleApp";
   // You can add your custom initial props in the dictionary below.
   // They will be passed down to the ViewController used by React Native.
   self.initialProps = @{};
+  self.webEngageBridge = [WEGWebEngageBridge new];
+  [WebEngage sharedInstance].pushNotificationDelegate = self.webEngageBridge;
   [[WebEngage sharedInstance] application:application didFinishLaunchingWithOptions:launchOptions];
 
+  if (@available(iOS 10.0, *)) {
+    [UNUserNotificationCenter currentNotificationCenter].delegate = (id<UNUserNotificationCenterDelegate>) self;
+  }
   return [super application:application didFinishLaunchingWithOptions:launchOptions];
+}
+
+
+- (void)userNotificationCenter:(UNUserNotificationCenter *)center willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(UNNotificationPresentationOptions))completionHandler {
+  [WEGManualIntegration userNotificationCenter: center willPresentNotification:notification];
+    completionHandler(UNNotificationPresentationOptionAlert | UNNotificationPresentationOptionBadge | UNNotificationPresentationOptionSound);
+}
+
+- (void)userNotificationCenter:(UNUserNotificationCenter *)center didReceiveNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void (^)())completionHandler {
+  [WEGManualIntegration userNotificationCenter:center didReceiveNotificationResponse: response];
+  completionHandler();
 }
 
 - (NSURL *)sourceURLForBridge:(RCTBridge *)bridge
