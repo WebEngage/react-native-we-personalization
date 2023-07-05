@@ -1,0 +1,427 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		2B8EFD6E6937F338C1C77363 /* libPods-libRNWEPersonalization.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DC6646B09E563D340F20E770 /* libPods-libRNWEPersonalization.a */; };
+		CEFBDF2F2A54604B00CC8757 /* WEPersonalizationBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEFBDF1F2A54604B00CC8757 /* WEPersonalizationBridge.swift */; };
+		CEFBDF302A54604B00CC8757 /* WEPersonalizationBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = CEFBDF202A54604B00CC8757 /* WEPersonalizationBridge.m */; };
+		CEFBDF312A54604B00CC8757 /* WEUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEFBDF252A54604B00CC8757 /* WEUtils.swift */; };
+		CEFBDF322A54604B00CC8757 /* WEConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEFBDF262A54604B00CC8757 /* WEConstants.swift */; };
+		CEFBDF332A54604B00CC8757 /* WEInlineWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEFBDF282A54604B00CC8757 /* WEInlineWidget.swift */; };
+		CEFBDF342A54604B00CC8757 /* WebengagePersonalizationViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CEFBDF292A54604B00CC8757 /* WebengagePersonalizationViewManager.m */; };
+		CEFBDF352A54604B00CC8757 /* WEPersonalizationViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEFBDF2A2A54604B00CC8757 /* WEPersonalizationViewManager.swift */; };
+		CEFBDF362A54604B00CC8757 /* WECampaignCallbackHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEFBDF2C2A54604B00CC8757 /* WECampaignCallbackHandler.swift */; };
+		CEFBDF372A54604B00CC8757 /* WEProperty.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEFBDF2D2A54604B00CC8757 /* WEProperty.swift */; };
+		CEFBDF382A54604B00CC8757 /* WECustomPropertyRegistry.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEFBDF2E2A54604B00CC8757 /* WECustomPropertyRegistry.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		CEFBDF102A54602900CC8757 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "include/$(PRODUCT_NAME)";
+			dstSubfolderSpec = 16;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		4FA7ED92312257A72F0FDFF0 /* Pods-libRNWEPersonalization.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-libRNWEPersonalization.debug.xcconfig"; path = "Target Support Files/Pods-libRNWEPersonalization/Pods-libRNWEPersonalization.debug.xcconfig"; sourceTree = "<group>"; };
+		7F72C1B86E9362AB9671A614 /* Pods-libRNWEPersonalization.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-libRNWEPersonalization.release.xcconfig"; path = "Target Support Files/Pods-libRNWEPersonalization/Pods-libRNWEPersonalization.release.xcconfig"; sourceTree = "<group>"; };
+		CEFBDF122A54602900CC8757 /* liblibRNWEPersonalization.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = liblibRNWEPersonalization.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		CEFBDF1F2A54604B00CC8757 /* WEPersonalizationBridge.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WEPersonalizationBridge.swift; sourceTree = "<group>"; };
+		CEFBDF202A54604B00CC8757 /* WEPersonalizationBridge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WEPersonalizationBridge.m; sourceTree = "<group>"; };
+		CEFBDF222A54604B00CC8757 /* PersonalizationBridge-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PersonalizationBridge-Bridging-Header.h"; sourceTree = "<group>"; };
+		CEFBDF232A54604B00CC8757 /* WebengagePersonalization-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WebengagePersonalization-Bridging-Header.h"; sourceTree = "<group>"; };
+		CEFBDF252A54604B00CC8757 /* WEUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WEUtils.swift; sourceTree = "<group>"; };
+		CEFBDF262A54604B00CC8757 /* WEConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WEConstants.swift; sourceTree = "<group>"; };
+		CEFBDF282A54604B00CC8757 /* WEInlineWidget.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WEInlineWidget.swift; sourceTree = "<group>"; };
+		CEFBDF292A54604B00CC8757 /* WebengagePersonalizationViewManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebengagePersonalizationViewManager.m; sourceTree = "<group>"; };
+		CEFBDF2A2A54604B00CC8757 /* WEPersonalizationViewManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WEPersonalizationViewManager.swift; sourceTree = "<group>"; };
+		CEFBDF2C2A54604B00CC8757 /* WECampaignCallbackHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WECampaignCallbackHandler.swift; sourceTree = "<group>"; };
+		CEFBDF2D2A54604B00CC8757 /* WEProperty.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WEProperty.swift; sourceTree = "<group>"; };
+		CEFBDF2E2A54604B00CC8757 /* WECustomPropertyRegistry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WECustomPropertyRegistry.swift; sourceTree = "<group>"; };
+		DC6646B09E563D340F20E770 /* libPods-libRNWEPersonalization.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-libRNWEPersonalization.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		CEFBDF0F2A54602900CC8757 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2B8EFD6E6937F338C1C77363 /* libPods-libRNWEPersonalization.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		820DABE5430E6AB358EB37BB /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				DC6646B09E563D340F20E770 /* libPods-libRNWEPersonalization.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		8A79D748628BF41B69C6ED4B /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				4FA7ED92312257A72F0FDFF0 /* Pods-libRNWEPersonalization.debug.xcconfig */,
+				7F72C1B86E9362AB9671A614 /* Pods-libRNWEPersonalization.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
+		CEFBDF092A54602900CC8757 = {
+			isa = PBXGroup;
+			children = (
+				CEFBDF142A54602900CC8757 /* libRNWEPersonalization */,
+				CEFBDF132A54602900CC8757 /* Products */,
+				8A79D748628BF41B69C6ED4B /* Pods */,
+				820DABE5430E6AB358EB37BB /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		CEFBDF132A54602900CC8757 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				CEFBDF122A54602900CC8757 /* liblibRNWEPersonalization.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		CEFBDF142A54602900CC8757 /* libRNWEPersonalization */ = {
+			isa = PBXGroup;
+			children = (
+				CEFBDF1E2A54604B00CC8757 /* bridge */,
+				CEFBDF2B2A54604B00CC8757 /* handler */,
+				CEFBDF212A54604B00CC8757 /* headers */,
+				CEFBDF242A54604B00CC8757 /* util */,
+				CEFBDF272A54604B00CC8757 /* views */,
+			);
+			path = libRNWEPersonalization;
+			sourceTree = "<group>";
+		};
+		CEFBDF1E2A54604B00CC8757 /* bridge */ = {
+			isa = PBXGroup;
+			children = (
+				CEFBDF1F2A54604B00CC8757 /* WEPersonalizationBridge.swift */,
+				CEFBDF202A54604B00CC8757 /* WEPersonalizationBridge.m */,
+			);
+			path = bridge;
+			sourceTree = "<group>";
+		};
+		CEFBDF212A54604B00CC8757 /* headers */ = {
+			isa = PBXGroup;
+			children = (
+				CEFBDF222A54604B00CC8757 /* PersonalizationBridge-Bridging-Header.h */,
+				CEFBDF232A54604B00CC8757 /* WebengagePersonalization-Bridging-Header.h */,
+			);
+			path = headers;
+			sourceTree = "<group>";
+		};
+		CEFBDF242A54604B00CC8757 /* util */ = {
+			isa = PBXGroup;
+			children = (
+				CEFBDF252A54604B00CC8757 /* WEUtils.swift */,
+				CEFBDF262A54604B00CC8757 /* WEConstants.swift */,
+			);
+			path = util;
+			sourceTree = "<group>";
+		};
+		CEFBDF272A54604B00CC8757 /* views */ = {
+			isa = PBXGroup;
+			children = (
+				CEFBDF282A54604B00CC8757 /* WEInlineWidget.swift */,
+				CEFBDF292A54604B00CC8757 /* WebengagePersonalizationViewManager.m */,
+				CEFBDF2A2A54604B00CC8757 /* WEPersonalizationViewManager.swift */,
+			);
+			path = views;
+			sourceTree = "<group>";
+		};
+		CEFBDF2B2A54604B00CC8757 /* handler */ = {
+			isa = PBXGroup;
+			children = (
+				CEFBDF2C2A54604B00CC8757 /* WECampaignCallbackHandler.swift */,
+				CEFBDF2D2A54604B00CC8757 /* WEProperty.swift */,
+				CEFBDF2E2A54604B00CC8757 /* WECustomPropertyRegistry.swift */,
+			);
+			path = handler;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		CEFBDF112A54602900CC8757 /* libRNWEPersonalization */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CEFBDF1B2A54602900CC8757 /* Build configuration list for PBXNativeTarget "libRNWEPersonalization" */;
+			buildPhases = (
+				6B1474E883FA3CB6FD398808 /* [CP] Check Pods Manifest.lock */,
+				CEFBDF0E2A54602900CC8757 /* Sources */,
+				CEFBDF0F2A54602900CC8757 /* Frameworks */,
+				CEFBDF102A54602900CC8757 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = libRNWEPersonalization;
+			productName = libRNWEPersonalization;
+			productReference = CEFBDF122A54602900CC8757 /* liblibRNWEPersonalization.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		CEFBDF0A2A54602900CC8757 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastUpgradeCheck = 1500;
+				TargetAttributes = {
+					CEFBDF112A54602900CC8757 = {
+						CreatedOnToolsVersion = 15.0;
+					};
+				};
+			};
+			buildConfigurationList = CEFBDF0D2A54602900CC8757 /* Build configuration list for PBXProject "libRNWEPersonalization" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = CEFBDF092A54602900CC8757;
+			productRefGroup = CEFBDF132A54602900CC8757 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				CEFBDF112A54602900CC8757 /* libRNWEPersonalization */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		6B1474E883FA3CB6FD398808 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-libRNWEPersonalization-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		CEFBDF0E2A54602900CC8757 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CEFBDF322A54604B00CC8757 /* WEConstants.swift in Sources */,
+				CEFBDF372A54604B00CC8757 /* WEProperty.swift in Sources */,
+				CEFBDF362A54604B00CC8757 /* WECampaignCallbackHandler.swift in Sources */,
+				CEFBDF342A54604B00CC8757 /* WebengagePersonalizationViewManager.m in Sources */,
+				CEFBDF312A54604B00CC8757 /* WEUtils.swift in Sources */,
+				CEFBDF2F2A54604B00CC8757 /* WEPersonalizationBridge.swift in Sources */,
+				CEFBDF352A54604B00CC8757 /* WEPersonalizationViewManager.swift in Sources */,
+				CEFBDF332A54604B00CC8757 /* WEInlineWidget.swift in Sources */,
+				CEFBDF302A54604B00CC8757 /* WEPersonalizationBridge.m in Sources */,
+				CEFBDF382A54604B00CC8757 /* WECustomPropertyRegistry.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		CEFBDF192A54602900CC8757 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		CEFBDF1A2A54602900CC8757 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		CEFBDF1C2A54602900CC8757 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4FA7ED92312257A72F0FDFF0 /* Pods-libRNWEPersonalization.debug.xcconfig */;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 2WR2VVTMNL;
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		CEFBDF1D2A54602900CC8757 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 7F72C1B86E9362AB9671A614 /* Pods-libRNWEPersonalization.release.xcconfig */;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 2WR2VVTMNL;
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		CEFBDF0D2A54602900CC8757 /* Build configuration list for PBXProject "libRNWEPersonalization" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CEFBDF192A54602900CC8757 /* Debug */,
+				CEFBDF1A2A54602900CC8757 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		CEFBDF1B2A54602900CC8757 /* Build configuration list for PBXNativeTarget "libRNWEPersonalization" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CEFBDF1C2A54602900CC8757 /* Debug */,
+				CEFBDF1D2A54602900CC8757 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = CEFBDF0A2A54602900CC8757 /* Project object */;
+}
