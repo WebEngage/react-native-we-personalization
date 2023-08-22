@@ -6,6 +6,8 @@
 
 RCT_EXTERN_METHOD(supportedEvents)
 
+RCT_EXTERN_METHOD(initWePersonalization)
+
 
 RCT_EXTERN_METHOD(registerWECampaignCallback)
 

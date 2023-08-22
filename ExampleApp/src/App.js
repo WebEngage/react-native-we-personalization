@@ -4,6 +4,7 @@ import LoginScreen from './LoginScreen';
 import Navigation from './Navigation';
 import {getValueFromAsyncStorage} from './Utils';
 import {initWebEngage} from './Utils/WebEngageManager';
+import { initWePersonalization } from 'rn-we-personalization'
 
 
 export default function App() {
@@ -11,6 +12,7 @@ export default function App() {
   const [continueAsGuest, setContinueAsGuest] = React.useState(false);
 
   initWebEngage();
+  initWePersonalization();
   const userNameRef = React.useRef(null);
 
   React.useEffect(() => {
