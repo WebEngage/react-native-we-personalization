@@ -62,7 +62,7 @@ public class MainApplication extends Application implements ReactApplication {
       DefaultNewArchitectureEntryPoint.load();
     }
     WebEngageConfig webEngageConfig = new WebEngageConfig.Builder()
-      .setWebEngageKey("~47b66161")
+      .setWebEngageKey("YOUR_LICENSE_KEY")
       .setDebugMode(true) // only in development mode
       .build();
     registerActivityLifecycleCallbacks(new WebEngageActivityLifeCycleCallbacks(this, webEngageConfig));

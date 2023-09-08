@@ -1,6 +1,7 @@
 import React, {useContext} from 'react';
 import PropTypes from 'prop-types';
 import {
+  Button,
   FlatList,
   Pressable,
   StyleSheet,
@@ -8,10 +9,7 @@ import {
   View,
 } from 'react-native';
 import {ScreenNamesContext} from '../Navigation';
-import {
-  getValueFromAsyncStorage,
-  saveToAsyncStorage,
-} from '../Utils';
+import {getValueFromAsyncStorage, saveToAsyncStorage} from '../Utils';
 import {webengageInstance} from '../Utils/WebEngageManager';
 
 export default function CustomScreens({navigation}) {
@@ -33,14 +31,14 @@ export default function CustomScreens({navigation}) {
     return unsubscribe;
   }, [navigation]);
 
-  const removeScreenData = (index) => {
+  const removeScreenData = index => {
     const screenListData = [...screenList];
     screenListData.splice(index, 1);
     setScreenList(screenListData);
     saveToAsyncStorage('screenData', JSON.stringify(screenListData));
   };
 
-  const openScreen = (item) => {
+  const openScreen = item => {
     navigation.navigate(item.screenName, {item, screenId: item.screenName});
   };
 
@@ -50,6 +48,10 @@ export default function CustomScreens({navigation}) {
       isEdit: true,
       itemIndex: index,
     });
+  };
+
+  const goToTestScreen = () => {
+    navigation.navigate('testScreen');
   };
 
   const renderItem = ({item, index}) => {
@@ -81,20 +83,17 @@ export default function CustomScreens({navigation}) {
         <View style={styles.buttonCol}>
           <Pressable
             style={[styles.remove, styles.open]}
-            onPress={() => openScreen(item)}
-          >
+            onPress={() => openScreen(item)}>
             <Text>Open</Text>
           </Pressable>
           <Pressable
             style={[styles.remove, styles.edit]}
-            onPress={() => editScreen(item, index)}
-          >
+            onPress={() => editScreen(item, index)}>
             <Text>Edit</Text>
           </Pressable>
           <Pressable
             style={styles.remove}
-            onPress={() => removeScreenData(index)}
-          >
+            onPress={() => removeScreenData(index)}>
             <Text>Remove</Text>
           </Pressable>
         </View>
@@ -108,6 +107,11 @@ export default function CustomScreens({navigation}) {
         <Text style={styles.btnTxt}> Add Screen </Text>
       </Pressable>
 
+
+      <Pressable style={styles.button} onPress={goToTestScreen}>
+        <Text style={styles.btnTxt}> Sample Screen </Text>
+      </Pressable>
+
       <View style={styles.container}>
         <Text style={styles.headerTxt}> List of Screens Added </Text>
       </View>
@@ -115,7 +119,7 @@ export default function CustomScreens({navigation}) {
       <FlatList
         data={screenList}
         style={styles.flatlistStyle}
-        keyExtractor={(item) => item.id}
+        keyExtractor={item => item.id}
         renderItem={renderItem}
       />
     </View>
@@ -123,10 +127,9 @@ export default function CustomScreens({navigation}) {
 }
 
 const styles = StyleSheet.create({
-  container: {
-  },
+  container: {},
   flatlistStyle: {
-    height: '100%'
+    height: '100%',
   },
   button: {
     backgroundColor: '#5e74e0',
@@ -141,7 +144,7 @@ const styles = StyleSheet.create({
   btnTxt: {
     color: '#FFFFFF',
     fontSize: 22,
-    fontWeight: 'bold'
+    fontWeight: 'bold',
   },
   headerTxt: {
     fontSize: 18,
@@ -167,7 +170,6 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
     flex: 1,
-
   },
   rowLine: {
     flexDirection: 'row',
@@ -184,7 +186,7 @@ const styles = StyleSheet.create({
   },
   itemText: {
     fontWeight: 'bold',
-    width: 120
+    width: 120,
   },
   redText: {
     color: '#ff0000',

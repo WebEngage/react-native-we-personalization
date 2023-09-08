@@ -7,7 +7,7 @@ import CustomScreens from './Custom/CustomScreens';
 import ScreenDetails from './Custom/ScreenDetails';
 import DynamicScreen from './Custom/DynamicScreen';
 import LoginScreen from './LoginScreen';
-
+import TestScreen from './Custom/TestScreen';
 import Offers from './TabScreens/Offers';
 import Cart from './TabScreens/Cart';
 import MyAccount from './TabScreens/MyAccount';
@@ -63,6 +63,7 @@ const Navigation = () => {
           />
           <Stack.Screen name="customScreens" component={CustomScreens} />
           <Stack.Screen name="screenDetails" component={ScreenDetails} />
+          <Stack.Screen name="testScreen" component={TestScreen} />
           <Stack.Screen
             name="dynamicScreen"
             component={DynamicScreen}

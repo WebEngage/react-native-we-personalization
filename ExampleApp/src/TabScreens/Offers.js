@@ -1,23 +1,17 @@
 import React from 'react';
 import {View, Text, StyleSheet} from 'react-native';
-import {WEInlineWidget} from 'react-native-we-personalization';
 import {webengageInstance} from '../Utils/WebEngageManager';
 import {useIsFocused} from '@react-navigation/native';
+import WEInlineWidgetTemplate from './WEInlineWidgetTemplate';
 
 const Offers = () => {
-  React.useEffect(() => {
-    webengageInstance.track('offer');
-  });
   const isFocused = useIsFocused();
 
   React.useEffect(() => {
     if (isFocused) {
-      // The screen is focused, you can perform actions here
+      // The screen is focused, you can track your screen here
       console.log('Offer screen is focused');
       webengageInstance.screen('offer');
-    } else {
-      // The screen is not focused
-      console.log('Offer screen is not focused');
     }
   }, [isFocused]);
 
@@ -43,14 +37,16 @@ const Offers = () => {
         <Text style={styles.offerText}>50% off on selected items!</Text>
         <Text style={styles.offerText}>Hurry, limited time offer.</Text>
       </View>
-      <WEInlineWidget
+      <WEInlineWidgetTemplate
         screenName="offer"
         androidPropertyId={'off1_scr1'}
-        style={{height: 200, width: 300, borderWidth: 1}}
+        iosPropertyId={75991}
+        style={styles.weINlineStyle}
         onDataReceived={handleDataReceived}
         onPlaceholderException={handlePlaceholderException}
         onRendered={handleRendered}
       />
+      <Text style={styles.welcomeText}> Welcome to Offers!</Text>
     </View>
   );
 };
@@ -60,6 +56,16 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  welcomeText: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginTop: 20,
+  },
+  weINlineStyle: {
+    height: 200,
+    width: 300,
   },
   header: {
     fontSize: 24,

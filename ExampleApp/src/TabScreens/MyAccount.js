@@ -3,23 +3,18 @@ import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import {WEInlineWidget} from 'react-native-we-personalization';
 import {webengageInstance} from '../Utils/WebEngageManager';
 import {useIsFocused} from '@react-navigation/native';
+import WEInlineWidgetTemplate from './WEInlineWidgetTemplate';
 
 const MyAccount = () => {
-
-
   const isFocused = useIsFocused();
 
   React.useEffect(() => {
     if (isFocused) {
-      // The screen is focused, you can perform actions here
+      // The screen is focused, you can track your screen here
       console.log('My Account screen is focused');
       webengageInstance.screen('account');
-    } else {
-      // The screen is not focused
-      console.log('My Account screen is not focused');
     }
   }, [isFocused]);
-
 
   const userInfo = {
     name: 'userName',
@@ -60,14 +55,16 @@ const MyAccount = () => {
       <TouchableOpacity style={styles.logoutButton}>
         <Text style={styles.logoutButtonText}>Logout</Text>
       </TouchableOpacity>
-      <WEInlineWidget
+      <WEInlineWidgetTemplate
         screenName="account"
         androidPropertyId={'acc1_scr1'}
-        style={{height: 200, width: 300, borderWidth: 1}}
+        iosPropertyId={75993}
+        style={styles.weINlineStyle}
         onDataReceived={handleDataReceived}
         onPlaceholderException={handlePlaceholderException}
         onRendered={handleRendered}
       />
+      <Text style={styles.welcomeText}> Welcome to Account Screen!</Text>
     </View>
   );
 };
@@ -81,6 +78,16 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 20,
+  },
+  weINlineStyle: {
+    height: 300,
+    width: 400,
+  },
+  welcomeText: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginTop: 20,
   },
   userInfoContainer: {
     flexDirection: 'row',
