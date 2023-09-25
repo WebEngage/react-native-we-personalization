@@ -58,3 +58,14 @@ target 'ExampleApp' do
     end
 end
 end
+target 'ServiceExtension' do
+  inherit! :complete
+  # Pods for testing
+  pod 'WebEngageBannerPush'
+end
+
+target 'ContentExtension' do
+  inherit! :complete
+  # Pods for testing
+  pod 'WebEngageAppEx/ContentExtension'
+end
