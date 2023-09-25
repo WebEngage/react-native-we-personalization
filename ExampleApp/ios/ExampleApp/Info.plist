@@ -59,5 +59,7 @@
 	<string>~47b66161</string>
 	<key>WEGLogLevel</key>
 	<string>VERBOSE</string>
+	<key>WEGManualIntegration</key>
+	<true/>
 </dict>
 </plist>

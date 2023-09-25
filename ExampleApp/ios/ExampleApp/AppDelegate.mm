@@ -15,7 +15,9 @@
    [WebEngage sharedInstance].pushNotificationDelegate = self.webEngageBridge;
    [[WebEngage sharedInstance] application:application
              didFinishLaunchingWithOptions:launchOptions notificationDelegate:self.webEngageBridge];
-
+  if (@available(iOS 10.0, *)) {
+    [UNUserNotificationCenter currentNotificationCenter].delegate = (id<UNUserNotificationCenterDelegate>) self;
+  }
   return [super application:application didFinishLaunchingWithOptions:launchOptions];
 }
 
@@ -36,6 +38,28 @@
 - (BOOL)concurrentRootEnabled
 {
   return true;
+}
+
+- (void)userNotificationCenter:(UNUserNotificationCenter *)center
+       willPresentNotification:(UNNotification *)notification
+         withCompletionHandler:(void (^)(UNNotificationPresentationOptions))completionHandler{
+    
+    NSLog(@"center: %@, notification: %@", center, notification);
+    
+    [WEGManualIntegration userNotificationCenter:center willPresentNotification:notification];
+    
+    completionHandler(UNNotificationPresentationOptionAlert | UNNotificationPresentationOptionSound | UNNotificationPresentationOptionBadge);
+}
+
+- (void)userNotificationCenter:(UNUserNotificationCenter *)center
+didReceiveNotificationResponse:(UNNotificationResponse *)response
+         withCompletionHandler:(void (^)(void))completionHandler {
+    
+    NSLog(@"center: %@, response: %@", center, response);
+    
+    [WEGManualIntegration userNotificationCenter:center didReceiveNotificationResponse:response];
+    
+    completionHandler();
 }
 
 @end
