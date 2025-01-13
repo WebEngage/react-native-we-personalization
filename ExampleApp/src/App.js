@@ -1,9 +1,9 @@
 import * as React from 'react';
-import {enableDevMode} from 'react-native-we-personalization/src/utils/weLogs';
+
 import LoginScreen from './LoginScreen';
 import Navigation from './Navigation';
-import {getValueFromAsyncStorage} from './Utils';
-import {initWebEngage} from './Utils/WebEngageManager';
+import { getValueFromAsyncStorage } from './Utils';
+import { initWebEngage } from './Utils/WebEngageManager';
 import { LogBox } from 'react-native';
 LogBox.ignoreAllLogs()
 
@@ -21,7 +21,7 @@ export default function App() {
         setIsUserLoggedIn(true);
       }
       userNameRef.current = name;
-      enableDevMode();
+      //enableDevMode();
     })();
   }, []);
 
