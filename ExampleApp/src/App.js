@@ -7,11 +7,13 @@ import { initWebEngage } from './Utils/WebEngageManager';
 import { LogBox } from 'react-native';
 LogBox.ignoreAllLogs()
 
+
 export default function App() {
   const [isUserLoggedIn, setIsUserLoggedIn] = React.useState(false);
   const [continueAsGuest, setContinueAsGuest] = React.useState(false);
 
   initWebEngage();
+  initWePersonalization();
   const userNameRef = React.useRef(null);
 
   React.useEffect(() => {
