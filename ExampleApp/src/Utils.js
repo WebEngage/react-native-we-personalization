@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 //import {AsyncStorage} from 'react-native';
-// import {weLogs} from 'react-native-we-personalization/src/utils/weLogs';
+import {weLogs} from 'react-native-we-personalization/src/utils/weLogs';
 
 
 export const saveToAsyncStorage = async (key, val) => {
@@ -8,7 +8,7 @@ export const saveToAsyncStorage = async (key, val) => {
     await AsyncStorage.setItem(key, val);
   } catch (error) {
     // Error saving data
-    // weLogs('Error while storing data'+ error);
+    weLogs('Error while storing data'+ error);
   }
 };
 
@@ -30,6 +30,6 @@ export const removeItem = async (key) => {
   try {
     await AsyncStorage.removeItem(key);
   } catch (error) {
-    //weLogs(error);
+    weLogs(error);
   }
 };
