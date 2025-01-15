@@ -10,16 +10,27 @@ class WEPersonalizationBridge: RCTEventEmitter {
     var propertyId = 0;
     var weCampaignData: WECampaignData? = nil
     var customPropertiesList = [Int]()
+    var WEGPEPluginVersion = "1.1.0"
     
     
     static let shared = WEPersonalizationBridge()
     override init() {
         super.init()
         WELogger.initLogger()
+        initialiseWEGVersion()
         WEPersonalizationBridge.emitter = self
         WEPersonalization.shared.initialise()
         UserDefaults.standard.setValue(false, forKey: WEPersonalization.Constants.KEY_SHOULD_AUTO_TRACK_IMPRESSIONS)
         WEPersonalization.shared.registerPropertyRegistryCallbacks(WECampaignCallbackHandler.shared)
+        
+    }
+    
+    func initialiseWEGVersion() {
+        let key: WegVersionKey = .RNPE
+        WebEngage.sharedInstance().setVersionForChildSDK(WEGPEPluginVersion, for: key)
+      }
+    
+    @objc func initWePersonalization() {
         
     }
     

@@ -1,6 +1,6 @@
 {
   "name": "react-native-we-personalization",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "React-Native WebEngage Personalization",
   "repository": "https://github.com/WebEngage/react-native-we-personalization",
   "author": "Webengage",
@@ -32,7 +32,6 @@
     "react-native": ">=0.39.0"
   },
   "dependencies": {
-  "prop-types": "^15.8.1"
+    "prop-types": "^15.8.1"
   }
-
 }

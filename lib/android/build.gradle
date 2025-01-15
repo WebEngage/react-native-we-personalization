@@ -37,6 +37,7 @@ android {
   defaultConfig {
     minSdkVersion getExtOrIntegerDefault("minSdkVersion")
     targetSdkVersion getExtOrIntegerDefault("targetSdkVersion")
+    manifestPlaceholders = [we_rn_pe_version: readVersion()]
     buildConfigField "boolean", "IS_NEW_ARCHITECTURE_ENABLED", isNewArchitectureEnabled().toString()
   }
   buildTypes {
@@ -61,14 +62,30 @@ repositories {
   google()
 }
 
+String readVersion() {
+  def version = new Properties()
+  def stream
+  try {
+    stream = new FileInputStream(new File(projectDir, 'version.properties'))
+    version.load(stream)
+  } catch (FileNotFoundException ignore) {
+  } finally {
+    if (stream != null) stream.close()
+  }
+  // safety defaults in case file is missing
+  if(!version['major']) version['major'] = "1"
+  if(!version['minor']) version['minor'] = "0"
+  if(!version['patch']) version['patch'] = "0"
+  return "${version['major']}.${version['minor']}.${version['patch']}"
+}
 
 dependencies {
 
-  implementation "com.facebook.react:react-native:0.20.1"
+  implementation 'com.facebook.react:react-native:+'
   implementation 'androidx.cardview:cardview:1.0.0'
   implementation 'androidx.core:core:1.3.2'
 
-  api 'com.webengage:we-personalization:[1,)'
+ api 'com.webengage:we-personalization:[1,)'
   api 'com.webengage:android-sdk:4.+'
 
 

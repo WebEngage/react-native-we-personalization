@@ -58,6 +58,7 @@ public class WEInlineWidget: UIView{
             scrollview.removeObserver(self, forKeyPath:  #keyPath(UIScrollView.contentOffset))
         }
         WEPersonalization.shared.unregisterWEPlaceholderCallback(self.propertyId)
+        WEPersonalization.shared.deRegisterCampaignControlGroupCallback(tag: self.propertyId)
     }
     
     
@@ -74,15 +75,36 @@ public class WEInlineWidget: UIView{
             if(self.propertyId != 0) {
                 WELogger.d(WEConstants.TAG+"WEP: WEInlineWidget: LoadView called for - \(self.propertyId)")
                 inlineView?.load(tag: self.propertyId, callbacks: self)
+                monitorVisibilityAndFireEvent()
             }
             addSubview(inlineView!)
         }
     }
+    
+    func fireCGEvent(){
+        WEPersonalization.shared.trackCGEvent(forPropertyId: inlineView!.tag)
+        WEPersonalization.shared.registerCampaignControlGroupCallback(tag: inlineView!.tag, callback: self)
+    }
+    
+    private var observerContextCG = 0
+    
+    func monitorVisibilityAndFireEvent(){
+            // for cg
+            if(self.isVisibleToUser){
+                fireCGEvent()
+            }else{
+                if let scrollview = self.getScrollview(view: self){
+                    scrollview.addObserver(self, forKeyPath: #keyPath(UIScrollView.contentOffset), options: [.old, .new], context: &observerContextCG)
+                }
+                
+            }
+        }
 }
 
 
 extension WEInlineWidget : WEPlaceholderCallback{
     public func onRendered(data: WECampaignData) {
+        self.monitorVisibilityAndFireEvent();
         WELogger.d(WEConstants.TAG+"WEP: WEInlineWidget: onRendered \(self.propertyId)")
         let campaignData: [String: Any] = [WEConstants.PAYLOAD_TARGET_VIEW_ID: data.targetViewTag, WEConstants.PAYLOAD_CAMPAIGN_ID: data.campaignId ?? "", WEConstants.PAYLOAD: data.toJSONString() ?? ""]
         WEPersonalizationBridge.emitter.sendEvent(withName: WEConstants.METHOD_NAME_ON_RENDERED, body: campaignData)
@@ -123,7 +145,9 @@ extension WEInlineWidget {
                 if let scrollview = self.getScrollview(view: self){
                     // removes observer added to scrollview
                     scrollview.removeObserver(self, forKeyPath:  #keyPath(UIScrollView.contentOffset))
-                    if let data = self.campaignData{
+                    if context == &self.observerContextCG {
+                        fireCGEvent()
+                    }else if let data = self.campaignData{
                         data.trackImpression(attributes: nil)
                     }
                 }
@@ -160,6 +184,14 @@ extension UIView{
         viewFrame.minX <= rootViewController.view.bounds.width &&
         viewFrame.maxY >= topSafeArea &&
         viewFrame.minY <= rootViewController.view.bounds.height - bottomSafeArea
+    }
+    
+       
+}
+
+extension WEInlineWidget : WECampaignControlInternalCallback{
+    public func onControlGroupTriggered(propertyID: Int) {
+        self.monitorVisibilityAndFireEvent()
     }
 }
 
