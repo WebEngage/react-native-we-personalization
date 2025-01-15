@@ -31,6 +31,9 @@ public class WEPersonalizationBridge extends ReactContextBaseJavaModule implemen
   }
 
   @ReactMethod
+  public void initWePersonalization() {}
+  
+  @ReactMethod
   public void registerProperty(String tagName, String screenName) {
     WEPersonalization.Companion.get().registerWEPlaceholderCallback(tagName, this);
   }
