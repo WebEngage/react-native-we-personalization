@@ -1,4 +1,4 @@
-package com.webengagepersonalization.bridge;
+package com.webengage.we_personalization_rn.bridge;
 
 import androidx.annotation.NonNull;
 
@@ -14,9 +14,9 @@ import com.webengage.personalization.callbacks.WECampaignCallback;
 import com.webengage.personalization.callbacks.WEPlaceholderCallback;
 import com.webengage.personalization.data.WECampaignData;
 import com.webengage.sdk.android.Logger;
-import com.webengagepersonalization.utils.WEUtils;
-import com.webengagepersonalization.utils.WEConstants;
-import com.webengagepersonalization.registry.WECustomPropertyRegistry;
+import com.webengage.we_personalization_rn.utils.WEUtils;
+import com.webengage.we_personalization_rn.utils.WEConstants;
+import com.webengage.we_personalization_rn.registry.WECustomPropertyRegistry;
 
 import androidx.annotation.Nullable;
 

@@ -1,4 +1,4 @@
-package com.webengagepersonalization.utils;
+package com.webengage.we_personalization_rn.utils;
 
 // WEConstants
 public class WEConstants {

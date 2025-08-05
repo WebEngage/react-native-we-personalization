@@ -1,4 +1,4 @@
-package com.webengagepersonalization.utils;
+package com.webengage.we_personalization_rn.utils;
 
 import android.content.res.Resources;
 import android.graphics.Rect;
