@@ -1,4 +1,4 @@
-package com.webengagepersonalization.registry;
+package com.webengage.we_personalization_rn.registry;
 
 import com.webengage.personalization.data.WECampaignData;
 

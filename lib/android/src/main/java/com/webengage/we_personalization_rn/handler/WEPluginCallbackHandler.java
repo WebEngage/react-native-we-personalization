@@ -1,4 +1,4 @@
-package com.webengagepersonalization.handler;
+package com.webengage.we_personalization_rn.handler;
 
 import android.os.Build;
 
@@ -6,9 +6,9 @@ import androidx.annotation.NonNull;
 
 import com.webengage.personalization.callbacks.WEPropertyRegistryCallback;
 import com.webengage.sdk.android.Logger;
-import com.webengagepersonalization.utils.WEConstants;
-import com.webengagepersonalization.model.ScreenNavigatorCallback;
-import com.webengagepersonalization.regisrty.WEPropertyRegistry;
+import com.webengage.we_personalization_rn.utils.WEConstants;
+import com.webengage.we_personalization_rn.model.ScreenNavigatorCallback;
+import com.webengage.we_personalization_rn.regisrty.WEPropertyRegistry;
 
 import java.util.HashMap;
 
