@@ -1,4 +1,4 @@
-package com.webengagepersonalization.views;
+package com.webengage.we_personalization_rn.views;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -12,7 +12,7 @@ import android.widget.Toast;
 
 import com.webengage.personalization.WEPersonalization;
 import com.webengage.personalization.callbacks.WECampaignControlInternalCallback;
-import com.webengagepersonalization.regisrty.WEPropertyRegistry;
+import com.webengage.we_personalization_rn.regisrty.WEPropertyRegistry;
 
 import androidx.annotation.NonNull;
 
@@ -23,11 +23,11 @@ import com.webengage.personalization.WEInlineView;
 import com.webengage.personalization.callbacks.WEPlaceholderCallback;
 import com.webengage.personalization.data.WECampaignData;
 import com.webengage.sdk.android.Logger;
-import com.webengagepersonalization.handler.WEPluginCallbackHandler;
-import com.webengagepersonalization.R;
-import com.webengagepersonalization.utils.WEUtils;
-import com.webengagepersonalization.utils.WEConstants;
-import com.webengagepersonalization.model.ScreenNavigatorCallback;
+import com.webengage.we_personalization_rn.handler.WEPluginCallbackHandler;
+import com.webengage.we_personalization_rn.R;
+import com.webengage.we_personalization_rn.utils.WEUtils;
+import com.webengage.we_personalization_rn.utils.WEConstants;
+import com.webengage.we_personalization_rn.model.ScreenNavigatorCallback;
 
 import java.util.HashMap;
 

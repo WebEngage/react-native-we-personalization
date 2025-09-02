@@ -46,7 +46,7 @@ class MainApplication : Application(), ReactApplication {
     WebengageBridge.getInstance();        // Add This
     // ... Webengage Initialization
     val webEngageConfig = WebEngageConfig.Builder()
-        .setWebEngageKey("d3a4b5a9")
+        .setWebEngageKey("UPDATE_YOUR_LICENSE_CODE")
         .setDebugMode(true) // only in development mode
         .build()
     registerActivityLifecycleCallbacks(

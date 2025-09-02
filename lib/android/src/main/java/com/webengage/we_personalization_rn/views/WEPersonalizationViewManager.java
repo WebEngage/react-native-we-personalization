@@ -1,4 +1,4 @@
-package com.webengagepersonalization.views;
+package com.webengage.we_personalization_rn.views;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -15,8 +15,8 @@ import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.annotations.ReactProp;
 import com.facebook.react.uimanager.annotations.ReactPropGroup;
 import com.webengage.personalization.WEPersonalization;
-import com.webengagepersonalization.utils.WEConstants;
-import com.webengagepersonalization.handler.WEPluginCallbackHandler;
+import com.webengage.we_personalization_rn.utils.WEConstants;
+import com.webengage.we_personalization_rn.handler.WEPluginCallbackHandler;
 
 import android.view.ViewGroup;
 
