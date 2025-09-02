@@ -10,7 +10,7 @@ class WEPersonalizationBridge: RCTEventEmitter {
     var propertyId = 0;
     var weCampaignData: WECampaignData? = nil
     var customPropertiesList = [Int]()
-    var WEGPEPluginVersion = "1.1.0"
+    var WEGPEPluginVersion = "1.1.1"
     
     
     static let shared = WEPersonalizationBridge()

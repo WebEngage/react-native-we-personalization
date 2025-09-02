@@ -1,7 +1,7 @@
-package com.webengagepersonalization.regisrty;
+package com.webengage.we_personalization_rn.regisrty;
 
 import com.webengage.sdk.android.Logger;
-import com.webengagepersonalization.utils.WEConstants;
+import com.webengage.we_personalization_rn.utils.WEConstants;
 
 import java.util.ArrayList;
 

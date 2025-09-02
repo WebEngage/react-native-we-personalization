@@ -1,11 +1,11 @@
-package com.webengagepersonalization;
+package com.webengage.we_personalization_rn;
 
 import com.facebook.react.ReactPackage;
 import com.facebook.react.bridge.NativeModule;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.uimanager.ViewManager;
-import com.webengagepersonalization.bridge.WEPersonalizationBridge;
-import com.webengagepersonalization.views.WEPersonalizationViewManager;
+import com.webengage.we_personalization_rn.bridge.WEPersonalizationBridge;
+import com.webengage.we_personalization_rn.views.WEPersonalizationViewManager;
 
 import java.util.Arrays;
 import java.util.List;
