@@ -4,7 +4,6 @@ import com.facebook.react.ReactPackage;
 import com.facebook.react.bridge.NativeModule;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.uimanager.ViewManager;
-import com.webengage.we_personalization_rn.bridge.WEPersonalizationBridge;
 import com.webengage.we_personalization_rn.views.WEPersonalizationViewManager;
 
 import java.util.Arrays;
@@ -15,7 +14,7 @@ public class WEPersonalizationPackage implements ReactPackage {
   @Override
   public List<NativeModule> createNativeModules(ReactApplicationContext reactContext) {
     List<NativeModule> modules = new ArrayList<>();
-    modules.add(new WEPersonalizationBridge(reactContext)); //
+    modules.add(new WEPersonalizationModule(reactContext));
     return modules;
   }
 

@@ -5,6 +5,7 @@ import Navigation from './Navigation';
 import { getValueFromAsyncStorage } from './Utils';
 import { initWebEngage } from './Utils/WebEngageManager';
 import { LogBox } from 'react-native';
+import { initWePersonalization } from 'react-native-we-personalization';
 LogBox.ignoreAllLogs()
 
 export default function App() {
@@ -12,6 +13,7 @@ export default function App() {
   const [continueAsGuest, setContinueAsGuest] = React.useState(false);
 
   initWebEngage();
+  initWePersonalization();
   const userNameRef = React.useRef(null);
 
   React.useEffect(() => {

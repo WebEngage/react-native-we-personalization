@@ -3,3 +3,5 @@ lib/android/.gradle/
 lib/android/.idea/
 lib/android/build/
 lib/android/.idea/workspace.xml
+lib/android/bin/.project
+lib/android/bin/
