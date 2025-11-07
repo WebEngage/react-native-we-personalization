@@ -5,7 +5,7 @@ import com.facebook.react.bridge.ReadableMap
 import com.webengage.we_personalization_rn.bridge.WEPersonalizationBridge
 
 class WEPersonalizationModule(reactContext: ReactApplicationContext) :
-    NativeWEPersonalizationBridgeSpec(reactContext) {
+    com.webengage.we_personalization_rn.NativeWEPersonalizationBridgeSpec(reactContext) {
 
     private val bridge: WEPersonalizationBridge = WEPersonalizationBridge(reactContext)
 

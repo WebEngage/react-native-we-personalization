@@ -3,8 +3,23 @@ import React
 import WEPersonalization
 import WebEngage
 
+#if RCT_NEW_ARCH_ENABLED
+import WEPersonalizationSpec
+#endif
+
 @objc(WEPersonalizationBridge)
 class WEPersonalizationBridge: RCTEventEmitter {
+    
+#if RCT_NEW_ARCH_ENABLED
+    // MARK: - TurboModule conformance
+    static func moduleName() -> String! {
+        return "WEPersonalizationBridge"
+    }
+    
+    static func requiresMainQueueSetup() -> Bool {
+        return false
+    }
+#endif
     
     public static var emitter: RCTEventEmitter!
     var propertyId = 0;
@@ -44,34 +59,49 @@ class WEPersonalizationBridge: RCTEventEmitter {
         WEPersonalization.shared.unregisterWECampaignCallback(WECampaignCallbackHandler.shared)
     }
     
-    @objc func registerProperty(_ propertyId: Int, screenName: String) {
+    @objc func registerProperty(_ propertyId: String, screenName: String) {
         WELogger.d(WEConstants.TAG+" WEP: WEPersonalizationBridge: registerProperty called - \(propertyId)")
-        self.propertyId = propertyId
-        let data: [String: Any] = [
-            WEConstants.PAYLOAD_ID: propertyId,
-            WEConstants.PAYLOAD_SCREEN_NAME: screenName,
-            WEConstants.PAYLOAD_IOS_PROPERTY_ID: propertyId
-        ]
-        WECustomPropertyRegistry.instance.registerData(map: data)
-        WEPersonalization.shared.registerWEPlaceholderCallback(propertyId, CustomCallbackHandler.shared.self)
+        if let intPropertyId = Int(propertyId) {
+            self.propertyId = intPropertyId
+            let data: [String: Any] = [
+                WEConstants.PAYLOAD_ID: intPropertyId,
+                WEConstants.PAYLOAD_SCREEN_NAME: screenName,
+                WEConstants.PAYLOAD_IOS_PROPERTY_ID: intPropertyId
+            ]
+            WECustomPropertyRegistry.instance.registerData(map: data)
+            WEPersonalization.shared.registerWEPlaceholderCallback(intPropertyId, CustomCallbackHandler.shared.self)
+        }
     }
     
     
-    @objc func deregisterProperty(_ propertyId: Int) {
+    @objc func deregisterProperty(_ propertyId: String) {
         WELogger.d(WEConstants.TAG+" WEP: WEPersonalizationBridge: deregisterProperty called - \(propertyId)")
-        let id = propertyId
-        WECustomPropertyRegistry.instance.removeRegisterData(id: id)
-        WEPersonalization.shared.unregisterWEPlaceholderCallback(propertyId)
+        if let intPropertyId = Int(propertyId) {
+            WECustomPropertyRegistry.instance.removeRegisterData(id: intPropertyId)
+            WEPersonalization.shared.unregisterWEPlaceholderCallback(intPropertyId)
+        }
     }
     
-    @objc func trackClick(_ propertyId: Int, attributes: [String: Any]) -> Void {
-        let weginline = WECustomPropertyRegistry.instance.getWEGHinline(targetViewTag: propertyId)
-        weginline?.campaignData?.trackClick(attributes: attributes)
+    @objc func trackClick(_ propertyId: String, attributes: [String: Any]) -> Void {
+        if let intPropertyId = Int(propertyId) {
+            let weginline = WECustomPropertyRegistry.instance.getWEGHinline(targetViewTag: intPropertyId)
+            weginline?.campaignData?.trackClick(attributes: attributes)
+        }
     }
     
-    @objc func trackImpression(_ propertyId: Int, attributes: [String: Any]) -> Void {
-        let weginline = WECustomPropertyRegistry.instance.getWEGHinline(targetViewTag: propertyId)
-        weginline?.campaignData?.trackImpression(attributes: attributes)
+    @objc func trackImpression(_ propertyId: String, attributes: [String: Any]) -> Void {
+        if let intPropertyId = Int(propertyId) {
+            let weginline = WECustomPropertyRegistry.instance.getWEGHinline(targetViewTag: intPropertyId)
+            weginline?.campaignData?.trackImpression(attributes: attributes)
+        }
+    }
+    
+    @objc func addListener(_ eventType: String) {
+        // Handled by React Native
+    }
+    
+    @objc func removeListeners(_ count: Double) {
+        // Handled by React Native
     }
     
     

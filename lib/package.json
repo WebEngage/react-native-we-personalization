@@ -1,6 +1,6 @@
 {
   "name": "react-native-we-personalization",
-  "version": "1.1.15",
+  "version": "1.1.24",
   "description": "React-Native WebEngage Personalization",
   "repository": "https://github.com/WebEngage/react-native-we-personalization",
   "author": "Webengage",
@@ -37,10 +37,13 @@
   },
   "codegenConfig": {
     "name": "WEPersonalizationSpec",
-    "type": "modules",
+    "type": "all",
     "jsSrcsDir": "src/bridge",
     "android": {
       "javaPackageName": "com.webengage.we_personalization_rn"
+    },
+    "ios": {
+      "moduleName": "WEPersonalizationSpec"
     }
   }
 }
