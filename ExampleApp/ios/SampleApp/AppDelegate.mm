@@ -2,6 +2,8 @@
 
 #import <React/RCTBundleURLProvider.h>
 #import <WebEngage/WebEngage.h>
+#import "WebEngageReact.h"
+
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
@@ -10,7 +12,12 @@
   // You can add your custom initial props in the dictionary below.
   // They will be passed down to the ViewController used by React Native.
   self.initialProps = @{};
-  [[WebEngage sharedInstance] application:application didFinishLaunchingWithOptions:launchOptions];
+  
+  // Initialize WebEngage
+  // Docs: Add below 2 lines to Docs
+  self.weManager = [WebEngageReact new];
+  
+  [self.weManager autoRegister:application launchOptions:launchOptions];
   return [super application:application didFinishLaunchingWithOptions:launchOptions];
 }
 
@@ -26,6 +33,16 @@
 #else
   return [[NSBundle mainBundle] URLForResource:@"main" withExtension:@"jsbundle"];
 #endif
+}
+
+- (BOOL) bridgelessEnabled {
+  return NO;
+}
+
+
+- (BOOL)newArchEnabled
+{
+  return NO;
 }
 
 @end

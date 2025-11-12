@@ -33,6 +33,17 @@ public class WEInlineWidget: UIView{
         }
     }
     
+    /**
+     * Updates the widget properties from the view manager
+     * Converts string propertyId to int for internal use
+     */
+    @objc func updateProperties(propertyId: String, screenName: String) {
+        if let propertyIdInt = Int(propertyId) {
+            self.propertyId = propertyIdInt
+        }
+        self.screenName = screenName
+    }
+    
     @objc func reloadViews(){
         WELogger.d(WEConstants.TAG+"WEP:  WEInlineWidget: reloadView called for \(self.propertyId)")
         DispatchQueue.main.async {

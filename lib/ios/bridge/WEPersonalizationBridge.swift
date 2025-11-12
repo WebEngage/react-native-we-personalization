@@ -96,11 +96,11 @@ class WEPersonalizationBridge: RCTEventEmitter {
         }
     }
     
-    @objc func addListener(_ eventType: String) {
+    @objc override func addListener(_ eventType: String) {
         // Handled by React Native
     }
     
-    @objc func removeListeners(_ count: Double) {
+    @objc override func removeListeners(_ count: Double) {
         // Handled by React Native
     }
     

@@ -1,7 +1,7 @@
 #import <RCTAppDelegate.h>
 #import <UIKit/UIKit.h>
-#import <WEGWebEngageBridge.h>
+#import "WebEngageReact.h"
 
 @interface AppDelegate : RCTAppDelegate
-@property (nonatomic, strong) WEGWebEngageBridge *webEngageBridge;
+@property (nonatomic, strong) WebEngageReact *weManager; // Docs: Add this line to Docs
 @end
