@@ -118,7 +118,7 @@ extension WEInlineWidget : WEPlaceholderCallback{
         self.monitorVisibilityAndFireEvent();
         WELogger.d(WEConstants.TAG+"WEP: WEInlineWidget: onRendered \(self.propertyId)")
         let campaignData: [String: Any] = [WEConstants.PAYLOAD_TARGET_VIEW_ID: data.targetViewTag, WEConstants.PAYLOAD_CAMPAIGN_ID: data.campaignId ?? "", WEConstants.PAYLOAD: data.toJSONString() ?? ""]
-        WEPersonalizationBridge.emitter.sendEvent(withName: WEConstants.METHOD_NAME_ON_RENDERED, body: campaignData)
+        WEPersonalizationBridgeImpl.emitter.sendEvent(withName: WEConstants.METHOD_NAME_ON_RENDERED, body: campaignData)
         if(self.isVisibleToUser) {
             data.trackImpression(attributes: nil)
         } else {
@@ -133,12 +133,12 @@ extension WEInlineWidget : WEPlaceholderCallback{
         WELogger.d(WEConstants.TAG+"WEP: WEInlineWidget: onDataReceived \(self.propertyId)")
         let campaignData: [String: Any] = [WEConstants.PAYLOAD_TARGET_VIEW_ID: data.targetViewTag, WEConstants.PAYLOAD_CAMPAIGN_ID: data.campaignId ?? "", WEConstants.PAYLOAD: data.toJSONString() ?? ""]
         
-        WEPersonalizationBridge.emitter.sendEvent(withName: WEConstants.METHOD_NAME_ON_DATA_RECEIVED, body: campaignData)
+        WEPersonalizationBridgeImpl.emitter.sendEvent(withName: WEConstants.METHOD_NAME_ON_DATA_RECEIVED, body: campaignData)
     }
     public func onPlaceholderException(_ campaignId: String?, _ targetViewId: String, _ exception: Error) {
         WELogger.d(WEConstants.TAG+"WEP: WEInlineWidget: onPlaceholderException \(self.propertyId)")
         let campaignData: [String: Any] = [WEConstants.PAYLOAD_TARGET_VIEW_ID: targetViewId, WEConstants.PAYLOAD_CAMPAIGN_ID: campaignId ?? "", WEConstants.EXCEPTION: exception.localizedDescription]
-        WEPersonalizationBridge.emitter.sendEvent(withName: WEConstants.METHOD_NAME_ON_PLACEHOLDER_EXCEPTION, body: campaignData)
+        WEPersonalizationBridgeImpl.emitter.sendEvent(withName: WEConstants.METHOD_NAME_ON_PLACEHOLDER_EXCEPTION, body: campaignData)
     }
 }
 

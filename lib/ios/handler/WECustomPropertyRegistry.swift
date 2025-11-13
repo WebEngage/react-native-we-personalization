@@ -46,30 +46,46 @@ public class WECustomPropertyRegistry: WEPlaceholderCallback {
     
 }
 
-public class CustomCallbackHandler:WEPlaceholderCallback{
+public class CustomCallbackHandler: WEPlaceholderCallback {
     static let shared = CustomCallbackHandler()
     
-    public func onRendered(data: WECampaignData) {
+    public func onRendered(_ data: WECampaignData) {
         WELogger.d("WEP: WECustomPropertyRegistry: onRendered \(data.targetViewTag)")
-        let _: [String: Any] = ["targetViewId": data.targetViewTag, "campaingId": data.campaignId ?? "", "payloadData": data.toJSONString() ?? ""]
-        
+        let campaignData: [String: Any] = ["targetViewId": data.targetViewTag, "campaingId": data.campaignId ?? "", "payloadData": data.toJSONString() ?? ""]
+        WEPersonalizationBridgeImpl.emitter.sendEvent(withName: "onRendered", body: campaignData)
     }
+    
     public func onDataReceived(_ data: WECampaignData) {
         WELogger.d("WEP: WECustomPropertyRegistry: onCustomDataReceived \(data.targetViewTag)")
         
-        let campaignData: [String: Any] = ["targetViewId": data.targetViewTag, "campaingId": data.campaignId ?? "", "payloadData": data.toJSONString() ?? "", "trackImpression": "WEPersonalizationBridge.trackImpression","trackClick": "WEPersonalizationBridge.trackClick" ]
+        let campaignData: [String: Any] = ["targetViewId": data.targetViewTag, "campaingId": data.campaignId ?? "", "payloadData": data.toJSONString() ?? "", "trackImpression": "WEPersonalizationBridgeImpl.trackImpression","trackClick": "WEPersonalizationBridgeImpl.trackClick" ]
         let customData: [String: Any] = [
             WEConstants.PAYLOAD_IOS_PROPERTY_ID: data.targetViewTag,
             WEConstants.PAYLOAD_WEGDATA: data,
         ]
         WECustomPropertyRegistry.instance.updateRegisterData(map: customData)
         
-        WEPersonalizationBridge.emitter.sendEvent(withName: "onCustomDataReceived", body: campaignData)
+        WEPersonalizationBridgeImpl.emitter.sendEvent(withName: "onCustomDataReceived", body: campaignData)
     }
-    public func onPlaceholderException(_ campaignId: String?, _ targetViewId: String, _ exception: Error) {
+    
+    public func onPlaceholderException(_ campaignId: String?, _ targetViewId: Int, _ exception: Error) {
         WELogger.d("WEP: WECustomPropertyRegistry: onCustomPlaceholderException \(targetViewId)")
         let campaignData: [String: Any] = ["targetViewId": targetViewId, "campaingId": campaignId ?? "", "exception": exception.localizedDescription]
-        WEPersonalizationBridge.emitter.sendEvent(withName: "onCustomPlaceholderException", body: campaignData)
+        WEPersonalizationBridgeImpl.emitter.sendEvent(withName: "onCustomPlaceholderException", body: campaignData)
+    }
+}
+
+extension CustomCallbackHandler: WECampaignControlInternalCallback {
+    public func onCampaignPrepared(_ data: WECampaignData) -> WECampaignData {
+        return data
+    }
+    
+    public func onCampaignShown(data: WECampaignData) {
+        // Handle if needed
+    }
+    
+    public func onCampaignClicked(actionId: String, deepLink: String, data: WECampaignData) -> Bool {
+        return true
     }
 }
 

@@ -15,6 +15,13 @@ Pod::Spec.new do |s|
   s.source       = { :git => "https://github.com/WebEngage/react-native-we-personalization.git", :tag => "#{s.version}" }
 
   s.source_files = "ios/**/*.{h,m,mm,swift}"
+  
+  # Swift configuration
+  s.swift_version = '5.0'
+  s.pod_target_xcconfig = {
+    'DEFINES_MODULE' => 'YES',
+    'SWIFT_OBJC_INTERFACE_HEADER_NAME' => 'react_native_we_personalization-Swift.h'
+  }
 
   s.dependency "React-Core"
   s.dependency "WebEngage/Core",'>= 6.9.0'
