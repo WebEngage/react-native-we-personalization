@@ -1,6 +1,7 @@
 import React, {useRef} from 'react';
 import PropTypes from 'prop-types';
 import {
+  Alert,
   Dimensions,
   FlatList,
   Platform,
@@ -39,6 +40,7 @@ export default function DynamicScreen(props) {
     const id = `item-${i}`;
     arr.push({id: id});
   }
+  // console.log('Arch: dynamic: Navigated to DynamicScreen with data', item);
   const [screenList, setScreenList] = React.useState([]);
   const screenListRef = useRef(null);
   const [customViewLabel, setCustomViewLabel] = React.useState({});
@@ -50,6 +52,7 @@ export default function DynamicScreen(props) {
 
 
   useFocusEffect(
+    
       React.useCallback(() => {
         if (screenName) {
           if (screenProperty && screenValue) {
@@ -74,12 +77,8 @@ export default function DynamicScreen(props) {
   );
 
   React.useEffect(() => {
-    (async () => {
-      const screenListData = await getValueFromAsyncStorage('screenData');
-      const screenArrData = JSON.parse(screenListData);
-      setScreenList(screenArrData);
-      screenListRef.current = screenArrData;
-    })();
+    console.log('Arch: dynamic: App: Registering campaign callbacks');
+    Alert.alert("Registering campaign callbacks for DynamicScreen");
 
     const WECampaignCallback = {
       onCampaignPrepared,
@@ -92,6 +91,16 @@ export default function DynamicScreen(props) {
       deregisterWECampaignCallback();
       removeCustomViews();
     };
+  }, []);
+
+  React.useEffect(() => {
+    (async () => {
+      const screenListData = await getValueFromAsyncStorage('screenData');
+      const screenArrData = JSON.parse(screenListData);
+      setScreenList(screenArrData);
+      screenListRef.current = screenArrData;
+    })();
+
   }, []);
 
 
@@ -121,6 +130,7 @@ export default function DynamicScreen(props) {
         iosPropertyId : androidPropertyId;
       if (isCustomView) {
         customPropertyList.push(propertyId);
+        console.log('Example: dynamic: Registering custom view for -', propertyId);
         registerWEPlaceholderCallback(
             androidPropertyId,
             iosPropertyId,

@@ -11,6 +11,20 @@
 		BA58F9542EC5CAD8007BC8C6 /* WEPersonalizationBridge.mm in Sources */ = {isa = PBXBuildFile; fileRef = BA58F9502EC5CAD8007BC8C6 /* WEPersonalizationBridge.mm */; };
 		BA58F9552EC5CAD8007BC8C6 /* WEPersonalizationBridge-Bridging-Header.h in Headers */ = {isa = PBXBuildFile; fileRef = BA58F9512EC5CAD8007BC8C6 /* WEPersonalizationBridge-Bridging-Header.h */; };
 		BA58F9562EC5CAD8007BC8C6 /* WEPersonalizationBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = BA58F94F2EC5CAD8007BC8C6 /* WEPersonalizationBridge.h */; };
+		BA76153A2ECC7DC70035F179 /* WEPersonalizationBridge.h in Sources */ = {isa = PBXBuildFile; fileRef = BA58F94F2EC5CAD8007BC8C6 /* WEPersonalizationBridge.h */; };
+		BA76153B2ECC7DC70035F179 /* WEPersonalizationBridge-Bridging-Header.h in Sources */ = {isa = PBXBuildFile; fileRef = BA58F9512EC5CAD8007BC8C6 /* WEPersonalizationBridge-Bridging-Header.h */; };
+		BA76153D2ECC7DE40035F179 /* WECampaignCallbackHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAA66F022EC58F5D00D2737D /* WECampaignCallbackHandler.swift */; };
+		BA76153E2ECC7DE40035F179 /* WECustomPropertyRegistry.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAA66F032EC58F5D00D2737D /* WECustomPropertyRegistry.swift */; };
+		BA76153F2ECC7DE40035F179 /* WEProperty.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAA66F042EC58F5D00D2737D /* WEProperty.swift */; };
+		BA7615402ECC7DE40035F179 /* PersonalizationBridge-Bridging-Header.h in Sources */ = {isa = PBXBuildFile; fileRef = BAA66F0A2EC58F9C00D2737D /* PersonalizationBridge-Bridging-Header.h */; };
+		BA7615412ECC7DE40035F179 /* WebengagePersonalization-Bridging-Header.h in Sources */ = {isa = PBXBuildFile; fileRef = BAA66F0B2EC58F9C00D2737D /* WebengagePersonalization-Bridging-Header.h */; };
+		BA7615422ECC7DE40035F179 /* util in Sources */ = {isa = PBXBuildFile; fileRef = 7033C41B2A52D8FF0040C70F /* util */; };
+		BA7615432ECC7DE40035F179 /* WebengagePersonalizationViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BA58F9492EC5CA68007BC8C6 /* WebengagePersonalizationViewManager.m */; };
+		BA7615442ECC7DE40035F179 /* WEInlineWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA58F94A2EC5CA68007BC8C6 /* WEInlineWidget.swift */; };
+		BA7615452ECC7DE40035F179 /* WEPersonalizationFabricViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA58F94B2EC5CA68007BC8C6 /* WEPersonalizationFabricViewManager.swift */; };
+		BA7615462ECC7DE40035F179 /* WEPersonalizationViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA58F94C2EC5CA68007BC8C6 /* WEPersonalizationViewManager.swift */; };
+		BA7615472ECC7DE40035F179 /* WEPersonalizationViewManagerImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA58F94D2EC5CA68007BC8C6 /* WEPersonalizationViewManagerImpl.swift */; };
+		BA7615532ECC86B60035F179 /* WEPersonalizationImports.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA7615522ECC86B60035F179 /* WEPersonalizationImports.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,6 +61,7 @@
 		BA58F9502EC5CAD8007BC8C6 /* WEPersonalizationBridge.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WEPersonalizationBridge.mm; sourceTree = "<group>"; };
 		BA58F9512EC5CAD8007BC8C6 /* WEPersonalizationBridge-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "WEPersonalizationBridge-Bridging-Header.h"; sourceTree = "<group>"; };
 		BA58F9522EC5CAD8007BC8C6 /* WEPersonalizationBridgeImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WEPersonalizationBridgeImpl.swift; sourceTree = "<group>"; };
+		BA7615522ECC86B60035F179 /* WEPersonalizationImports.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WEPersonalizationImports.swift; sourceTree = "<group>"; };
 		BAA66EF72EC58F5500D2737D /* WEPersonalization.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = WEPersonalization.xcodeproj; sourceTree = "<group>"; };
 		BAA66EF82EC58F5500D2737D /* WEPersonalization.xcworkspace */ = {isa = PBXFileReference; lastKnownFileType = wrapper.workspace; path = WEPersonalization.xcworkspace; sourceTree = "<group>"; };
 		BAA66F022EC58F5D00D2737D /* WECampaignCallbackHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WECampaignCallbackHandler.swift; sourceTree = "<group>"; };
@@ -105,6 +120,7 @@
 				BAA66EF72EC58F5500D2737D /* WEPersonalization.xcodeproj */,
 				BAA66EF82EC58F5500D2737D /* WEPersonalization.xcworkspace */,
 				BA58F94F2EC5CAD8007BC8C6 /* WEPersonalizationBridge.h */,
+				BA7615522ECC86B60035F179 /* WEPersonalizationImports.swift */,
 				BA58F9502EC5CAD8007BC8C6 /* WEPersonalizationBridge.mm */,
 				BA58F9512EC5CAD8007BC8C6 /* WEPersonalizationBridge-Bridging-Header.h */,
 				BA58F9522EC5CAD8007BC8C6 /* WEPersonalizationBridgeImpl.swift */,
@@ -225,6 +241,20 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BA76153D2ECC7DE40035F179 /* WECampaignCallbackHandler.swift in Sources */,
+				BA76153E2ECC7DE40035F179 /* WECustomPropertyRegistry.swift in Sources */,
+				BA76153F2ECC7DE40035F179 /* WEProperty.swift in Sources */,
+				BA7615402ECC7DE40035F179 /* PersonalizationBridge-Bridging-Header.h in Sources */,
+				BA7615412ECC7DE40035F179 /* WebengagePersonalization-Bridging-Header.h in Sources */,
+				BA7615532ECC86B60035F179 /* WEPersonalizationImports.swift in Sources */,
+				BA7615422ECC7DE40035F179 /* util in Sources */,
+				BA7615432ECC7DE40035F179 /* WebengagePersonalizationViewManager.m in Sources */,
+				BA7615442ECC7DE40035F179 /* WEInlineWidget.swift in Sources */,
+				BA7615452ECC7DE40035F179 /* WEPersonalizationFabricViewManager.swift in Sources */,
+				BA7615462ECC7DE40035F179 /* WEPersonalizationViewManager.swift in Sources */,
+				BA7615472ECC7DE40035F179 /* WEPersonalizationViewManagerImpl.swift in Sources */,
+				BA76153A2ECC7DC70035F179 /* WEPersonalizationBridge.h in Sources */,
+				BA76153B2ECC7DC70035F179 /* WEPersonalizationBridge-Bridging-Header.h in Sources */,
 				BA58F9532EC5CAD8007BC8C6 /* WEPersonalizationBridgeImpl.swift in Sources */,
 				BA58F9542EC5CAD8007BC8C6 /* WEPersonalizationBridge.mm in Sources */,
 			);

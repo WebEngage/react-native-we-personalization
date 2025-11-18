@@ -13,7 +13,7 @@ public class WEPersonalizationBridgeImpl: NSObject {
     @objc public var propertyId = 0
     @objc public var weCampaignData: WECampaignData? = nil
     @objc public var customPropertiesList = [Int]()
-    @objc public var WEGPEPluginVersion = "1.1.1"
+    @objc public var WEGPEPluginVersion = "1.1.2"
     
     @objc public func setEmitter(_ emitter: RCTEventEmitter) {
         WEPersonalizationBridgeImpl.emitter = emitter

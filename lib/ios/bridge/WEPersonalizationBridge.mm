@@ -1,6 +1,11 @@
 #import "WEPersonalizationBridge.h"
 #include <Foundation/NSObjCRuntime.h>
 #import "react_native_we_personalization-Swift.h"
+#import <WebEngage/WebEngage-Swift.h>
+
+#ifdef RCT_NEW_ARCH_ENABLED
+#import <WEPersonalizationSpec/WEPersonalizationSpec.h>
+#endif
 // https://github.com/react-native-community/RNNewArchitectureLibraries/tree/feat/swift-event-emitter
 @implementation WEPersonalizationBridge
 
@@ -81,5 +86,12 @@ RCT_EXPORT_METHOD(removeListeners:(double)count)
 {
   [[WEPersonalizationBridgeImpl shared] removeListeners:count];
 }
+
+#ifdef RCT_NEW_ARCH_ENABLED
+- (std::shared_ptr<facebook::react::TurboModule>)getTurboModule:(const facebook::react::ObjCTurboModule::InitParams &)params
+{
+  return std::make_shared<facebook::react::NativeWEPersonalizationBridgeSpecJSI>(params);
+}
+#endif
 
 @end
