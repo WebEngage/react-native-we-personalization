@@ -4,7 +4,8 @@
 #import <WebEngage/WebEngage-Swift.h>
 
 #ifdef RCT_NEW_ARCH_ENABLED
-#import <WEPersonalizationSpec/WEPersonalizationSpec.h>
+
+#import "WEPersonalizationSpec.h"
 #endif
 // https://github.com/react-native-community/RNNewArchitectureLibraries/tree/feat/swift-event-emitter
 @implementation WEPersonalizationBridge

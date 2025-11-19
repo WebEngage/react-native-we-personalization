@@ -5,7 +5,8 @@
 #import <WEPersonalization/WEPersonalization-Swift.h>
 
 #ifdef RCT_NEW_ARCH_ENABLED
-#import <WEPersonalizationSpec/WEPersonalizationSpec.h>
+
+#import "WEPersonalizationSpec.h"
 @interface WEPersonalizationBridge : RCTEventEmitter <NativeWEPersonalizationBridgeSpec>
 #else
 #import <React/RCTBridgeModule.h>
