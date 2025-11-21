@@ -35,7 +35,7 @@ export default function DynamicScreen(props) {
     viewData = [],
   } = item;
   const arr = [];
-  const customPropertyList = [];
+  const customPropertyListRef = useRef([]);
   for (let i = 0; i < size; i++) {
     const id = `item-${i}`;
     arr.push({id: id});
@@ -78,7 +78,6 @@ export default function DynamicScreen(props) {
 
   React.useEffect(() => {
     console.log('Arch: dynamic: App: Registering campaign callbacks');
-    Alert.alert("Registering campaign callbacks for DynamicScreen");
 
     const WECampaignCallback = {
       onCampaignPrepared,
@@ -105,16 +104,22 @@ export default function DynamicScreen(props) {
 
 
   const removeCustomViews = () => {
-    customPropertyList.map((property) => {
+    customPropertyListRef.current.map((property) => {
       const androidPropertyId = property;
       const iosPropertyId = property;
-      deregisterWEPlaceholderCallback(
-          androidPropertyId,
-          iosPropertyId,
-          screenName,
-      );
+      if (property && screenName) {
+        try {
+          deregisterWEPlaceholderCallback(
+              androidPropertyId,
+              iosPropertyId,
+              screenName,
+          );
+        } catch (error) {
+          console.error('Example: dynamic: Error deregistering custom view', error);
+        }
+      }
     });
-    customPropertyList?.splice(0, customPropertyList.length);
+    customPropertyListRef.current = [];
   };
 
 
@@ -128,16 +133,20 @@ export default function DynamicScreen(props) {
       const androidPropertyId = viewPropertyId;
       const propertyId = Platform.OS === 'ios' ?
         iosPropertyId : androidPropertyId;
-      if (isCustomView) {
-        customPropertyList.push(propertyId);
-        console.log('Example: dynamic: Registering custom view for -', propertyId);
-        registerWEPlaceholderCallback(
-            androidPropertyId,
-            iosPropertyId,
-            screenName,
-            onCustomDataReceived,
-            onCustomPlaceholderException,
-        );
+      if (isCustomView && propertyId && screenName) {
+        customPropertyListRef.current.push(propertyId);
+        console.log('Example: dynamic: Registering custom view for -', propertyId, 'screen:', screenName);
+        try {
+          registerWEPlaceholderCallback(
+              androidPropertyId,
+              iosPropertyId,
+              screenName,
+              onCustomDataReceived,
+              onCustomPlaceholderException,
+          );
+        } catch (error) {
+          console.error('Example: dynamic: Error registering custom view', error);
+        }
       }
     });
     setCustomViewLabel(customLabels);

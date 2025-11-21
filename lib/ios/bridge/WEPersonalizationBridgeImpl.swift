@@ -14,6 +14,7 @@ public class WEPersonalizationBridgeImpl: NSObject {
     @objc public var weCampaignData: WECampaignData? = nil
     @objc public var customPropertiesList = [Int]()
     @objc public var WEGPEPluginVersion = "1.1.2"
+    private var listenerCount: Int = 0
     
     @objc public func setEmitter(_ emitter: RCTEventEmitter) {
         WEPersonalizationBridgeImpl.emitter = emitter
@@ -56,47 +57,46 @@ public class WEPersonalizationBridgeImpl: NSObject {
         WEPersonalization.shared.unregisterWECampaignCallback(WECampaignCallbackHandler.shared)
     }
     
-    @objc public func registerProperty(_ propertyId: String, screenName: String) {
+    @objc public func registerProperty(_ propertyId: Int, screenName: String) {
         WELogger.d(WEConstants.TAG+" WEP: WEPersonalizationBridge: registerProperty called - \(propertyId)")
-        if let intPropertyId = Int(propertyId) {
-            self.propertyId = intPropertyId
-            let data: [String: Any] = [
-                WEConstants.PAYLOAD_ID: intPropertyId,
-                WEConstants.PAYLOAD_SCREEN_NAME: screenName,
-                WEConstants.PAYLOAD_IOS_PROPERTY_ID: intPropertyId
-            ]
-            WECustomPropertyRegistry.instance.registerData(map: data)
-            WEPersonalization.shared.registerWEPlaceholderCallback(intPropertyId, CustomCallbackHandler.shared)
-        }
+        self.propertyId = propertyId
+        let data: [String: Any] = [
+            WEConstants.PAYLOAD_ID: propertyId,
+            WEConstants.PAYLOAD_SCREEN_NAME: screenName,
+            WEConstants.PAYLOAD_IOS_PROPERTY_ID: propertyId
+        ]
+        WECustomPropertyRegistry.instance.registerData(map: data)
+        WEPersonalization.shared.registerWEPlaceholderCallback(propertyId, CustomCallbackHandler.shared)
     }
     
-    @objc public func deregisterProperty(_ propertyId: String) {
+    @objc public func deregisterProperty(_ propertyId: Int) {
         WELogger.d(WEConstants.TAG+" WEP: WEPersonalizationBridge: deregisterProperty called - \(propertyId)")
-        if let intPropertyId = Int(propertyId) {
-            WECustomPropertyRegistry.instance.removeRegisterData(id: intPropertyId)
-            WEPersonalization.shared.unregisterWEPlaceholderCallback(intPropertyId)
-        }
+        WECustomPropertyRegistry.instance.removeRegisterData(id: propertyId)
+        WEPersonalization.shared.unregisterWEPlaceholderCallback(propertyId)
     }
     
-    @objc public func trackClick(_ propertyId: String, attributes: [String: Any]) {
-        if let intPropertyId = Int(propertyId) {
-            let weginline = WECustomPropertyRegistry.instance.getWEGHinline(targetViewTag: intPropertyId)
-            weginline?.campaignData?.trackClick(attributes: attributes)
-        }
+    @objc public func trackClick(_ propertyId: Int, attributes: [String: Any]) {
+        let weginline = WECustomPropertyRegistry.instance.getWEGHinline(targetViewTag: propertyId)
+        weginline?.campaignData?.trackClick(attributes: attributes)
     }
     
-    @objc public func trackImpression(_ propertyId: String, attributes: [String: Any]) {
-        if let intPropertyId = Int(propertyId) {
-            let weginline = WECustomPropertyRegistry.instance.getWEGHinline(targetViewTag: intPropertyId)
-            weginline?.campaignData?.trackImpression(attributes: attributes)
-        }
+    @objc public func trackImpression(_ propertyId: Int, attributes: [String: Any]) {
+        let weginline = WECustomPropertyRegistry.instance.getWEGHinline(targetViewTag: propertyId)
+        weginline?.campaignData?.trackImpression(attributes: attributes)
     }
     
     @objc public func addListener(_ eventType: String) {
-        // Handled by React Native
+        listenerCount += 1
     }
     
     @objc public func removeListeners(_ count: Double) {
-        // Handled by React Native
+        listenerCount -= Int(count)
+        if listenerCount < 0 {
+            listenerCount = 0
+        }
+    }
+    
+    @objc public func hasListeners() -> Bool {
+        return listenerCount > 0
     }
 }

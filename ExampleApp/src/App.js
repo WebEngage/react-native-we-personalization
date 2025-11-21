@@ -5,7 +5,7 @@ import Navigation from './Navigation';
 import { getValueFromAsyncStorage } from './Utils';
 import { initWebEngage } from './Utils/WebEngageManager';
 import { Alert, LogBox } from 'react-native';
-import { initWePersonalization, registerWECampaignCallback } from 'react-native-we-personalization';
+import { initWePersonalization, registerWECampaignCallback, enableDevMode, deregisterWECampaignCallback } from 'react-native-we-personalization';
 LogBox.ignoreAllLogs()
 
 export default function App() {
@@ -23,20 +23,8 @@ export default function App() {
         setIsUserLoggedIn(true);
       }
       userNameRef.current = name;
-      enableDevMode();
+      // enableDevMode();
     })();
-  }, []);
-
-  React.useEffect(() => {
-    Alert.alert("App Mounted: Registering campaign callbacks");
-    console.log('Arch: js:  App.js: Registering campaign callbacks');
-    const WECampaignCallback = {
-      onCampaignPrepared,
-      onCampaignShown,
-      onCampaignClicked,
-      onCampaignException,
-    };
-    registerWECampaignCallback(WECampaignCallback);
   }, []);
 
   const onCampaignPrepared = (data) => {
@@ -54,6 +42,24 @@ export default function App() {
   const onCampaignException = (data) => {
     console.log('Arch: js:  App.js:  onCampaignException: ', data);
   }
+
+  React.useEffect(() => {
+    Alert.alert("App Mounted: Registering campaign callbacks");
+    const WECampaignCallback = {
+      onCampaignPrepared,
+      onCampaignShown,
+      onCampaignClicked,
+      onCampaignException,
+    };
+    console.log('Arch: js:  App.js: Registering campaign callbacks');
+
+    registerWECampaignCallback(WECampaignCallback);
+    return () => {
+      console.log("Arch: deRegistering campaign callback")
+      deregisterWECampaignCallback();
+      // removeCustomViews();
+    };
+  }, [])
 
   const updateLoginDetails = (loginState) => {
     setIsUserLoggedIn(loginState);

@@ -58,34 +58,158 @@ RCT_EXPORT_METHOD(deregisterWECampaignCallback)
   [[WEPersonalizationBridgeImpl shared] deregisterWECampaignCallback];
 }
 
-RCT_EXPORT_METHOD(registerProperty:(NSString *)propertyId screenName:(NSString *)screenName)
+RCT_EXPORT_METHOD(registerProperty:(nonnull id)propertyId screenName:(nonnull NSString *)screenName)
 {
-  [[WEPersonalizationBridgeImpl shared] registerProperty:propertyId screenName:screenName];
+  @try {
+    if (!propertyId || !screenName) {
+      NSLog(@"WEPersonalizationBridge: registerProperty called with nil parameters");
+      return;
+    }
+    
+    NSNumber *propertyIdNum = nil;
+    
+    if ([propertyId isKindOfClass:[NSNumber class]]) {
+      propertyIdNum = (NSNumber *)propertyId;
+    } else if ([propertyId isKindOfClass:[NSString class]]) {
+      NSString *strValue = (NSString *)propertyId;
+      NSScanner *scanner = [NSScanner scannerWithString:strValue];
+      NSInteger intValue;
+      if ([scanner scanInteger:&intValue] && [scanner isAtEnd]) {
+        propertyIdNum = @(intValue);
+      } else {
+        NSLog(@"WEPersonalizationBridge: Invalid propertyId. Must be a valid number. Got: %@", strValue);
+        return;
+      }
+    } else {
+      NSLog(@"WEPersonalizationBridge: Invalid propertyId type. Must be a number or numeric string. Got: %@", propertyId);
+      return;
+    }
+    
+    [[WEPersonalizationBridgeImpl shared] registerProperty:[propertyIdNum integerValue] screenName:screenName];
+  } @catch (NSException *exception) {
+    NSLog(@"WEPersonalizationBridge: Error in registerProperty: %@", exception.reason);
+  }
 }
 
-RCT_EXPORT_METHOD(deregisterProperty:(NSString *)propertyId)
+RCT_EXPORT_METHOD(deregisterProperty:(nonnull id)propertyId)
 {
-  [[WEPersonalizationBridgeImpl shared] deregisterProperty:propertyId];
+  @try {
+    if (!propertyId) {
+      NSLog(@"WEPersonalizationBridge: deregisterProperty called with nil propertyId");
+      return;
+    }
+    
+    NSNumber *propertyIdNum = nil;
+    
+    if ([propertyId isKindOfClass:[NSNumber class]]) {
+      propertyIdNum = (NSNumber *)propertyId;
+    } else if ([propertyId isKindOfClass:[NSString class]]) {
+      NSString *strValue = (NSString *)propertyId;
+      NSScanner *scanner = [NSScanner scannerWithString:strValue];
+      NSInteger intValue;
+      if ([scanner scanInteger:&intValue] && [scanner isAtEnd]) {
+        propertyIdNum = @(intValue);
+      } else {
+        NSLog(@"WEPersonalizationBridge: Invalid propertyId. Must be a valid number. Got: %@", strValue);
+        return;
+      }
+    } else {
+      NSLog(@"WEPersonalizationBridge: Invalid propertyId type. Must be a number or numeric string. Got: %@", propertyId);
+      return;
+    }
+    
+    [[WEPersonalizationBridgeImpl shared] deregisterProperty:[propertyIdNum integerValue]];
+  } @catch (NSException *exception) {
+    NSLog(@"WEPersonalizationBridge: Error in deregisterProperty: %@", exception.reason);
+  }
 }
 
-RCT_EXPORT_METHOD(trackClick:(NSString *)propertyId attributes:(NSDictionary *)attributes)
+RCT_EXPORT_METHOD(trackClick:(nonnull id)propertyId attributes:(NSDictionary *)attributes)
 {
-  [[WEPersonalizationBridgeImpl shared] trackClick:propertyId attributes:attributes];
+  @try {
+    if (!propertyId) {
+      NSLog(@"WEPersonalizationBridge: trackClick called with nil propertyId");
+      return;
+    }
+    
+    NSNumber *propertyIdNum = nil;
+    
+    if ([propertyId isKindOfClass:[NSNumber class]]) {
+      propertyIdNum = (NSNumber *)propertyId;
+    } else if ([propertyId isKindOfClass:[NSString class]]) {
+      NSString *strValue = (NSString *)propertyId;
+      NSScanner *scanner = [NSScanner scannerWithString:strValue];
+      NSInteger intValue;
+      if ([scanner scanInteger:&intValue] && [scanner isAtEnd]) {
+        propertyIdNum = @(intValue);
+      } else {
+        NSLog(@"WEPersonalizationBridge: Invalid propertyId for trackClick. Must be a valid number. Got: %@", strValue);
+        return;
+      }
+    } else {
+      NSLog(@"WEPersonalizationBridge: Invalid propertyId type for trackClick. Got: %@", propertyId);
+      return;
+    }
+    
+    [[WEPersonalizationBridgeImpl shared] trackClick:[propertyIdNum integerValue] attributes:attributes];
+  } @catch (NSException *exception) {
+    NSLog(@"WEPersonalizationBridge: Error in trackClick: %@", exception.reason);
+  }
 }
 
-RCT_EXPORT_METHOD(trackImpression:(NSString *)propertyId attributes:(NSDictionary *)attributes)
+RCT_EXPORT_METHOD(trackImpression:(nonnull id)propertyId attributes:(NSDictionary *)attributes)
 {
-  [[WEPersonalizationBridgeImpl shared] trackImpression:propertyId attributes:attributes];
+  @try {
+    if (!propertyId) {
+      NSLog(@"WEPersonalizationBridge: trackImpression called with nil propertyId");
+      return;
+    }
+    
+    NSNumber *propertyIdNum = nil;
+    
+    if ([propertyId isKindOfClass:[NSNumber class]]) {
+      propertyIdNum = (NSNumber *)propertyId;
+    } else if ([propertyId isKindOfClass:[NSString class]]) {
+      NSString *strValue = (NSString *)propertyId;
+      NSScanner *scanner = [NSScanner scannerWithString:strValue];
+      NSInteger intValue;
+      if ([scanner scanInteger:&intValue] && [scanner isAtEnd]) {
+        propertyIdNum = @(intValue);
+      } else {
+        NSLog(@"WEPersonalizationBridge: Invalid propertyId for trackImpression. Must be a valid number. Got: %@", strValue);
+        return;
+      }
+    } else {
+      NSLog(@"WEPersonalizationBridge: Invalid propertyId type for trackImpression. Got: %@", propertyId);
+      return;
+    }
+    
+    [[WEPersonalizationBridgeImpl shared] trackImpression:[propertyIdNum integerValue] attributes:attributes];
+  } @catch (NSException *exception) {
+    NSLog(@"WEPersonalizationBridge: Error in trackImpression: %@", exception.reason);
+  }
 }
 
 RCT_EXPORT_METHOD(addListener:(NSString *)eventType)
 {
+  [super addListener:eventType];
   [[WEPersonalizationBridgeImpl shared] addListener:eventType];
 }
 
 RCT_EXPORT_METHOD(removeListeners:(double)count)
 {
+  [super removeListeners:count];
   [[WEPersonalizationBridgeImpl shared] removeListeners:count];
+}
+
+- (void)startObserving
+{
+  // Called when the first listener is added
+}
+
+- (void)stopObserving
+{
+  // Called when the last listener is removed
 }
 
 #ifdef RCT_NEW_ARCH_ENABLED
