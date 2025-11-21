@@ -5,22 +5,26 @@ import {
   StyleSheet,
   Pressable,
   TouchableHighlight,
+  View,
 } from 'react-native';
 import PropTypes from 'prop-types';
 import WebEngage from 'react-native-webengage';
 import {getValueFromAsyncStorage} from './Utils';
+import {getArchitectureInfo} from './Utils/ArchitectureHelper';
 
 import {removeItem} from './Utils';
 const ListScreen = (props) => {
   const {navigation} = props;
   const [isUserLoggedIn, setIsUserLoggedIn] = React.useState(false);
+  const [archInfo, setArchInfo] = React.useState(null);
 
   const webengage = new WebEngage();
   const userNameRef = React.useRef(null);
 
   React.useEffect(() => {
     webengage.screen('test');
-  });
+    setArchInfo(getArchitectureInfo());
+  }, []);
 
 
   React.useEffect(() => {
@@ -48,6 +52,16 @@ const ListScreen = (props) => {
         <Text> Logout </Text>
       </TouchableHighlight>
       }
+
+      {archInfo && (
+        <View style={styles.archInfoContainer}>
+          <Text style={styles.archTitle}>Architecture Info</Text>
+          <Text style={styles.archText}>Mode: {archInfo.architectureMode}</Text>
+          <Text style={styles.archText}>Bridge: {archInfo.bridgeMode}</Text>
+          <Text style={styles.archText}>TurboModules: {archInfo.isTurboModuleEnabled ? 'Enabled' : 'Disabled'}</Text>
+          <Text style={styles.archText}>Fabric: {archInfo.isFabricEnabled ? 'Enabled' : 'Disabled'}</Text>
+        </View>
+      )}
 
       <Pressable
         style={styles.button}
@@ -83,6 +97,27 @@ const styles = StyleSheet.create({
   textStyle: {
     fontSize: 20,
     textAlign: 'center',
+  },
+  archInfoContainer: {
+    backgroundColor: '#e3f2fd',
+    padding: 15,
+    borderRadius: 10,
+    marginBottom: 20,
+    width: 250,
+    borderWidth: 1,
+    borderColor: '#2196f3',
+  },
+  archTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 10,
+    textAlign: 'center',
+    color: '#1976d2',
+  },
+  archText: {
+    fontSize: 14,
+    marginBottom: 5,
+    color: '#333',
   },
 });
 export default ListScreen;
