@@ -39,13 +39,13 @@
 }
 
 - (BOOL) bridgelessEnabled {
-  return NO;
+  return YES;
 }
 
 
 - (BOOL)newArchEnabled
 {
-  return NO;
+  return YES;
 }
 
 @end

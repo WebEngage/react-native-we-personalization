@@ -3,7 +3,6 @@ import Foundation
 import UIKit
 import React
 import WEPersonalization
-
 public class WEInlineWidget: UIView{
     var inlineView: WEInlineView? = nil
     var campaignData: WECampaignData? = nil
@@ -19,7 +18,7 @@ public class WEInlineWidget: UIView{
         }
     }
     
-    @objc var screenName: String = ""{
+    @objc public var screenName: String = ""{
         didSet {
             WELogger.d(WEConstants.TAG+"WEP: WEInlineWidget: Initialization for screenName- \(screenName)")
             self.setupView()
@@ -37,7 +36,7 @@ public class WEInlineWidget: UIView{
      * Updates the widget properties from the view manager
      * Converts string propertyId to int for internal use
      */
-    @objc func updateProperties(propertyId: String, screenName: String) {
+    @objc public func updateProperties(_ propertyId: String, screenName: String) {
         if let propertyIdInt = Int(propertyId) {
             self.propertyId = propertyIdInt
         }
@@ -57,9 +56,16 @@ public class WEInlineWidget: UIView{
     override init(frame: CGRect) {
         WELogger.d(WEConstants.TAG+"WEP: WEInlineWidget: init called for inlineWidget")
         super.init(frame: frame)
-        setupView()
         NotificationCenter.default.addObserver(self, selector: #selector(reloadViews), name: Notification.Name(WEConstants.SCREEN_NAVIGATED), object: nil)
-        
+    }
+    
+    public override func layoutSubviews() {
+        super.layoutSubviews()
+        WELogger.d(WEConstants.TAG+"WEP: WEInlineWidget: layoutSubviews - bounds: \(self.bounds)")
+        if self.width != self.bounds.width || self.height != self.bounds.height {
+            self.width = self.bounds.width
+            self.height = self.bounds.height
+        }
     }
     
     deinit{
@@ -80,7 +86,9 @@ public class WEInlineWidget: UIView{
     
     
     private func setupView(){
+        WELogger.d(WEConstants.TAG+"WEP: WEInlineWidget: setupView - width: \(self.width), height: \(self.height), propertyId: \(self.propertyId)")
         if(self.height > 0.1 && self.width > 0.1 && propertyId != 0) {
+            inlineView?.removeFromSuperview()
             inlineView = WEInlineView(frame: CGRect(x: 0, y: 0, width: self.width, height: self.height))
             inlineView?.tag = self.propertyId
             if(self.propertyId != 0) {
