@@ -26,6 +26,7 @@ using namespace facebook::react;
 + (void)load
 {
     [super load];
+    NSLog(@"WEPersonalization: WEPersonalizationView: +load called - Registering Fabric component");
 }
 
 - (instancetype)initWithFrame:(CGRect)frame
