@@ -8,21 +8,12 @@
 @interface WEPersonalizationViewManager : RCTViewManager
 @end
 
-@implementation WEPersonalizationViewManager {
-    WEPersonalizationViewManagerImpl *_viewManagerImpl;
-}
+@implementation WEPersonalizationViewManager
 
 RCT_EXPORT_MODULE(WEPersonalizationView)
 
-- (instancetype)init {
-    if (self = [super init]) {
-        _viewManagerImpl = [[WEPersonalizationViewManagerImpl alloc] init];
-    }
-    return self;
-}
-
 - (UIView *)view {
-    return [_viewManagerImpl createViewInstance];
+    return [WEPersonalizationViewManagerImpl createView];
 }
 
 + (BOOL)requiresMainQueueSetup {
