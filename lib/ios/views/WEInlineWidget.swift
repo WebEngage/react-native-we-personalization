@@ -37,6 +37,7 @@ public class WEInlineWidget: UIView{
      * Converts string propertyId to int for internal use
      */
     @objc public func updateProperties(_ propertyId: String, screenName: String) {
+        NSLog("WEPersonalization: WEInlineWidget: updateProperties: propertyId=%@, screenName=%@", propertyId, screenName)
         if let propertyIdInt = Int(propertyId) {
             self.propertyId = propertyIdInt
         }
@@ -54,6 +55,7 @@ public class WEInlineWidget: UIView{
     }
     
     override init(frame: CGRect) {
+        NSLog("WEPersonalization: WEInlineWidget: init: frame=%@", NSCoder.string(for: frame))
         WELogger.d(WEConstants.TAG+"WEP: WEInlineWidget: init called for inlineWidget")
         super.init(frame: frame)
         NotificationCenter.default.addObserver(self, selector: #selector(reloadViews), name: Notification.Name(WEConstants.SCREEN_NAVIGATED), object: nil)

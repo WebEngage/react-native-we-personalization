@@ -11,4 +11,6 @@
 #import <React/RCTBridgeModule.h>
 #import <React/RCTEventEmitter.h>
 
+#import <WebEngage/WebEngage.h>
+#import <WEPersonalization/WEPersonalization-Swift.h>
 #endif /* WEPersonalizationBridge_Bridging_Header_h */

@@ -6,14 +6,13 @@ require Pod::Executable.execute_command('node', ['-p',
   )', __dir__]).strip
 
 platform :ios, min_ios_version_supported
-prepare_react_native_project!
 
 # Enable New Architecture
 ENV['RCT_NEW_ARCH_ENABLED'] = '1'
 # Enable bridgeless mode
 ENV['RCT_BRIDGELESS_ENABLED'] = '1'
-ENV['USE_HERMES'] = '1'
- 
+
+prepare_react_native_project!
 
 linkage = ENV['USE_FRAMEWORKS']
 if linkage != nil
@@ -40,5 +39,11 @@ target 'SampleApp' do
       :mac_catalyst_enabled => false,
       # :ccache_enabled => true
     )
+    
+    installer.pods_project.targets.each do |target|
+      target.build_configurations.each do |config|
+        config.build_settings['CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER'] = 'NO'
+      end
+    end
   end
 end

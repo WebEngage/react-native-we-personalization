@@ -9,3 +9,5 @@ Example_oldArch
 ExampleApp/yarn.lock
 ExampleApp/ios/Podfile.lock
 lib/react-native-we-personalization-*
+react-native-webview/
+example-component/

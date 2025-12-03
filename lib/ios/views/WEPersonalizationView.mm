@@ -7,7 +7,7 @@
 #import <react/renderer/components/WEPersonalizationSpec/Props.h>
 #import <react/renderer/components/WEPersonalizationSpec/RCTComponentViewHelpers.h>
 
-#import "RCTFabricComponentsPlugins.h"
+#import <React/RCTFabricComponentsPlugins.h>
 
 using namespace facebook::react;
 
@@ -23,13 +23,20 @@ using namespace facebook::react;
     return concreteComponentDescriptorProvider<WEPersonalizationViewComponentDescriptor>();
 }
 
++ (void)load
+{
+    [super load];
+}
+
 - (instancetype)initWithFrame:(CGRect)frame
 {
+    NSLog(@"WEPersonalization: WEPersonalizationView: initWithFrame: frame=%@", NSStringFromCGRect(frame));
     if (self = [super initWithFrame:frame]) {
         static const auto defaultProps = std::make_shared<const WEPersonalizationViewProps>();
         _props = defaultProps;
         
         _view = [WEPersonalizationViewManagerImpl createView];
+        NSLog(@"WEPersonalization: WEPersonalizationView: initWithFrame: _view created=%@", _view);
         self.contentView = _view;
     }
     return self;
@@ -37,12 +44,14 @@ using namespace facebook::react;
 
 - (void)updateProps:(Props::Shared const &)props oldProps:(Props::Shared const &)oldProps
 {
+    NSLog(@"WEPersonalization: WEPersonalizationView: updateProps: called");
     const auto &oldViewProps = *std::static_pointer_cast<WEPersonalizationViewProps const>(_props);
     const auto &newViewProps = *std::static_pointer_cast<WEPersonalizationViewProps const>(props);
 
     if (oldViewProps.propertyId != newViewProps.propertyId || oldViewProps.screenName != newViewProps.screenName) {
         NSString *propertyId = [[NSString alloc] initWithUTF8String: newViewProps.propertyId.c_str()];
         NSString *screenName = [[NSString alloc] initWithUTF8String: newViewProps.screenName.c_str()];
+        NSLog(@"WEPersonalization: WEPersonalizationView: updateProps: propertyId=%@, screenName=%@", propertyId, screenName);
         [WEPersonalizationViewManagerImpl updateView:_view propertyId:propertyId screenName:screenName];
     }
 
