@@ -1,6 +1,11 @@
 #ifdef RCT_NEW_ARCH_ENABLED
 #import "WEPersonalizationView.h"
+
+#if __has_include(<react_native_we_personalization/react_native_we_personalization-Swift.h>)
+#import <react_native_we_personalization/react_native_we_personalization-Swift.h>
+#else
 #import "react_native_we_personalization-Swift.h"
+#endif
 
 #import <react/renderer/components/WEPersonalizationSpec/ComponentDescriptors.h>
 #import <react/renderer/components/WEPersonalizationSpec/EventEmitters.h>

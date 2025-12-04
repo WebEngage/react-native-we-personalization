@@ -3,7 +3,12 @@
 
 #import <WebEngage/WebEngage.h>
 #import <WEPersonalization/WEPersonalization-Swift.h>
+
+#if __has_include(<react_native_we_personalization/react_native_we_personalization-Swift.h>)
+#import <react_native_we_personalization/react_native_we_personalization-Swift.h>
+#else
 #import "react_native_we_personalization-Swift.h"
+#endif
 
 @interface WEPersonalizationViewManager : RCTViewManager
 @end
@@ -24,11 +29,11 @@ RCT_EXPORT_MODULE(WEPersonalizationView)
     return NO;
 }
 
-RCT_CUSTOM_VIEW_PROPERTY(propertyId, NSNumber, WEInlineWidget) {
+RCT_CUSTOM_VIEW_PROPERTY(propertyId, NSString, WEInlineWidget) {
     NSLog(@"WEH: LegacyView: ViewManager: RCT_CUSTOM_VIEW_PROPERTY propertyId = %@", json);
-    NSNumber *propertyIdNumber = json ? [RCTConvert NSNumber:json] : nil;
-    if (propertyIdNumber && view) {
-        [view updateProperties:[propertyIdNumber stringValue] screenName:view.screenName ?: @""];
+    NSString *propertyIdValue = json ? [RCTConvert NSString:json] : nil;
+    if (propertyIdValue && view) {
+        [view updateProperties:propertyIdValue screenName:view.screenName ?: @""];
     }
 }
 
@@ -39,10 +44,6 @@ RCT_CUSTOM_VIEW_PROPERTY(screenName, NSString, WEInlineWidget) {
         view.screenName = screenNameValue;
     }
 }
-
-RCT_EXPORT_VIEW_PROPERTY(onDataReceived, RCTDirectEventBlock)
-RCT_EXPORT_VIEW_PROPERTY(onRendered, RCTDirectEventBlock)
-RCT_EXPORT_VIEW_PROPERTY(onPlaceholderException, RCTDirectEventBlock)
 
 @end
 

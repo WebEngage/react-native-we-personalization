@@ -20,13 +20,13 @@ export interface WEPlaceholderData {
 
 // WEInlineWidget props
 export interface WEInlineWidgetProps {
-  androidPropertyId?: string;
-  iosPropertyId?: number;
+  androidPropertyId: string;
+  iosPropertyId: number;
   screenName: string;
   onRendered?: (data: any) => void;
   onDataReceived?: (data: WEPlaceholderData) => void;
   onPlaceholderException?: (error: any) => void;
-  style?: ViewStyle;
+  style: ViewStyle;
 }
 
 // WEInlineWidget component
