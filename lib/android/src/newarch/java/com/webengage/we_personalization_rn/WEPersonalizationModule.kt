@@ -17,14 +17,12 @@ class WEPersonalizationModule(reactContext: ReactApplicationContext) :
         bridge.initWePersonalization()
     }
 
-    override fun registerProperty(propertyId: String?, screenName: String?) {
-        if (propertyId != null && screenName != null) {
-            bridge.registerProperty(propertyId, screenName)
-        }
+    override fun registerProperty(propertyId: String, screenName: String) {
+        bridge.registerProperty(propertyId, screenName)
     }
 
-    override fun deregisterProperty(propertyId: String?) {
-        propertyId?.let { bridge.deregisterProperty(it) }
+    override fun deregisterProperty(propertyId: String) {
+        bridge.deregisterProperty(propertyId)
     }
 
     override fun registerWECampaignCallback() {
@@ -35,16 +33,12 @@ class WEPersonalizationModule(reactContext: ReactApplicationContext) :
         bridge.deregisterWECampaignCallback()
     }
 
-    override fun trackClick(propertyId: String?, attributes: ReadableMap?) {
-        if (propertyId != null) {
-            bridge.trackClick(propertyId, attributes)
-        }
+    override fun trackClick(propertyId: String, attributes: ReadableMap?) {
+        bridge.trackClick(propertyId, attributes)
     }
 
-    override fun trackImpression(propertyId: String?, attributes: ReadableMap?) {
-        if (propertyId != null) {
-            bridge.trackImpression(propertyId, attributes)
-        }
+    override fun trackImpression(propertyId: String, attributes: ReadableMap?) {
+        bridge.trackImpression(propertyId, attributes)
     }
 
     override fun addListener(eventType: String?) {

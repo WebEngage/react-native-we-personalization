@@ -3,12 +3,12 @@ import { TurboModuleRegistry } from 'react-native';
 
 export interface Spec extends TurboModule {
   initWePersonalization(): void;
-  registerProperty(propertyId: string | number, screenName: string): void;
-  deregisterProperty(propertyId: string | number): void;
+  registerProperty(propertyId: string, screenName: string): void;
+  deregisterProperty(propertyId: string): void;
   registerWECampaignCallback(): void;
   deregisterWECampaignCallback(): void;
-  trackClick(propertyId: string | number, attributes?: Object): void;
-  trackImpression(propertyId: string | number, attributes?: Object): void;
+  trackClick(propertyId: string, attributes?: Object): void;
+  trackImpression(propertyId: string, attributes?: Object): void;
   
   // NativeEventEmitter methods for the New Architecture
   addListener: (eventType: string) => void;

@@ -1,5 +1,8 @@
+import { TurboModuleRegistry } from 'react-native';
+
 export const getArchitectureInfo = () => {
-  const isTurboModuleEnabled = global.__turboModuleProxy != null;
+
+  const isTurboModuleEnabled = TurboModuleRegistry?.get != null || global.__turboModuleProxy != null;
   const isFabricEnabled = global.nativeFabricUIManager != null;
   const isBridgeless = global.RN$Bridgeless === true;
 

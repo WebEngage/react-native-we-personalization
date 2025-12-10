@@ -44,7 +44,6 @@ export default function App() {
   }
 
   React.useEffect(() => {
-    Alert.alert("App Mounted: Registering campaign callbacks");
     const WECampaignCallback = {
       onCampaignPrepared,
       onCampaignShown,

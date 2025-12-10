@@ -6,6 +6,8 @@ import WEPersonalization
 public class WEInlineWidget: UIView{
     var inlineView: WEInlineView? = nil
     var campaignData: WECampaignData? = nil
+    private var isViewSetup = false
+    private var isLoadInProgress = false
     @objc var width: CGFloat = 0.1 {
         didSet {
             setupView()
@@ -50,6 +52,10 @@ public class WEInlineWidget: UIView{
             if let viewToreload = self.inlineView,
                viewToreload.superview != nil{
                 self.inlineView?.load(tag: self.propertyId, callbacks: self)
+            } else {
+                self.isViewSetup = false
+                self.isLoadInProgress = false
+                self.setupView()
             }
         }
     }
@@ -76,11 +82,22 @@ public class WEInlineWidget: UIView{
     deinit{
         WELogger.d(WEConstants.TAG+"WEP: WEInlineWidget: deInit called for \(self.propertyId)")
         NotificationCenter.default.removeObserver(self)
-        if let scrollview = self.getScrollview(view: self){
-            scrollview.removeObserver(self, forKeyPath:  #keyPath(UIScrollView.contentOffset))
-        }
+        removeScrollObserver()
         WEPersonalization.shared.unregisterWEPlaceholderCallback(self.propertyId)
         WEPersonalization.shared.deRegisterCampaignControlGroupCallback(tag: self.propertyId)
+    }
+    
+    private func removeScrollObserver() {
+        guard isObserverAdded, let scrollview = observedScrollView else { return }
+        do {
+            scrollview.removeObserver(self, forKeyPath: #keyPath(UIScrollView.contentOffset))
+            isObserverAdded = false
+            observedScrollView = nil
+        } catch {
+            WELogger.d(WEConstants.TAG+"WEP: WEInlineWidget: Error removing observer: \(error)")
+            isObserverAdded = false
+            observedScrollView = nil
+        }
     }
     
     
@@ -96,21 +113,23 @@ public class WEInlineWidget: UIView{
         WELogger.d(WEConstants.TAG+"WEP: WEInlineWidget: setupView - frame: \(self.frame)")
         WELogger.d(WEConstants.TAG+"WEP: WEInlineWidget: setupView - screenName: \(self.screenName)")
         
-        if(self.height > 0.1 && self.width > 0.1 && propertyId != 0) {
+        if(self.height > 0.1 && self.width > 0.1 && propertyId != 0 && !isViewSetup) {
             WELogger.d(WEConstants.TAG+"WEP: WEInlineWidget: setupView - Conditions met, creating inlineView")
+            isViewSetup = true
             inlineView?.removeFromSuperview()
             inlineView = WEInlineView(frame: CGRect(x: 0, y: 0, width: self.width, height: self.height))
             inlineView?.tag = self.propertyId
-            if(self.propertyId != 0) {
+            if(self.propertyId != 0 && !isLoadInProgress) {
                 WELogger.d(WEConstants.TAG+"WEP: WEInlineWidget: LoadView called for - \(self.propertyId)")
                 WELogger.d(WEConstants.TAG+"WEP: WEInlineWidget: Calling load with tag: \(self.propertyId)")
+                isLoadInProgress = true
                 inlineView?.load(tag: self.propertyId, callbacks: self)
                 monitorVisibilityAndFireEvent()
             }
             addSubview(inlineView!)
             WELogger.d(WEConstants.TAG+"WEP: WEInlineWidget: inlineView added to subview")
         } else {
-            WELogger.d(WEConstants.TAG+"WEP: WEInlineWidget: setupView - Conditions NOT met - height: \(self.height > 0.1), width: \(self.width > 0.1), propertyId: \(propertyId != 0)")
+            WELogger.d(WEConstants.TAG+"WEP: WEInlineWidget: setupView - Conditions NOT met - height: \(self.height > 0.1), width: \(self.width > 0.1), propertyId: \(propertyId != 0), isViewSetup: \(isViewSetup)")
         }
     }
     
@@ -120,14 +139,18 @@ public class WEInlineWidget: UIView{
     }
     
     private var observerContextCG = 0
+    private var isObserverAdded = false
+    private weak var observedScrollView: UIScrollView?
     
     func monitorVisibilityAndFireEvent(){
             // for cg
             if(self.isVisibleToUser){
                 fireCGEvent()
             }else{
-                if let scrollview = self.getScrollview(view: self){
+                if let scrollview = self.getScrollview(view: self), !isObserverAdded {
                     scrollview.addObserver(self, forKeyPath: #keyPath(UIScrollView.contentOffset), options: [.old, .new], context: &observerContextCG)
+                    observedScrollView = scrollview
+                    isObserverAdded = true
                 }
                 
             }
@@ -147,14 +170,17 @@ extension WEInlineWidget : WEPlaceholderCallback{
             data.trackImpression(attributes: nil)
         } else {
             WELogger.d(WEConstants.TAG+"WEP: WEInlineWidget: onRendered - View not visible, adding scroll observer")
-            if let scrollview = self.getScrollview(view: self){
+            if let scrollview = self.getScrollview(view: self), !isObserverAdded {
                 scrollview.addObserver(self, forKeyPath: #keyPath(UIScrollView.contentOffset), options: [.old, .new], context: nil)
+                observedScrollView = scrollview
+                isObserverAdded = true
             }
         }
         
     }
     public func onDataReceived(_ data: WECampaignData) {
         self.campaignData = data;
+        isLoadInProgress = false
         WELogger.d(WEConstants.TAG+"WEP: WEInlineWidget: onDataReceived \(self.propertyId)")
         WELogger.d(WEConstants.TAG+"WEP: WEInlineWidget: onDataReceived - campaignId: \(data.campaignId ?? "nil"), targetViewTag: \(data.targetViewTag)")
         let campaignData: [String: Any] = [WEConstants.PAYLOAD_TARGET_VIEW_ID: data.targetViewTag, WEConstants.PAYLOAD_CAMPAIGN_ID: data.campaignId ?? "", WEConstants.PAYLOAD: data.toJSONString() ?? ""]
@@ -179,9 +205,8 @@ extension WEInlineWidget {
     public override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         if keyPath == #keyPath(UIScrollView.contentOffset) {
             if self.isVisibleToUser == true{
-                if let scrollview = self.getScrollview(view: self){
-                    // removes observer added to scrollview
-                    scrollview.removeObserver(self, forKeyPath:  #keyPath(UIScrollView.contentOffset))
+                if isObserverAdded {
+                    removeScrollObserver()
                     if context == &self.observerContextCG {
                         fireCGEvent()
                     }else if let data = self.campaignData{

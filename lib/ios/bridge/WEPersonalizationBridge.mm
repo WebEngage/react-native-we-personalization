@@ -64,7 +64,7 @@ RCT_EXPORT_METHOD(deregisterWECampaignCallback)
   [[WEPersonalizationBridgeImpl shared] deregisterWECampaignCallback];
 }
 
-RCT_EXPORT_METHOD(registerProperty:(nonnull id)propertyId screenName:(nonnull NSString *)screenName)
+RCT_EXPORT_METHOD(registerProperty:(nonnull NSString *)propertyId screenName:(nonnull NSString *)screenName)
 {
   @try {
     if (!propertyId || !screenName) {
@@ -72,32 +72,14 @@ RCT_EXPORT_METHOD(registerProperty:(nonnull id)propertyId screenName:(nonnull NS
       return;
     }
     
-    NSNumber *propertyIdNum = nil;
-    
-    if ([propertyId isKindOfClass:[NSNumber class]]) {
-      propertyIdNum = (NSNumber *)propertyId;
-    } else if ([propertyId isKindOfClass:[NSString class]]) {
-      NSString *strValue = (NSString *)propertyId;
-      NSScanner *scanner = [NSScanner scannerWithString:strValue];
-      NSInteger intValue;
-      if ([scanner scanInteger:&intValue] && [scanner isAtEnd]) {
-        propertyIdNum = @(intValue);
-      } else {
-        NSLog(@"WEPersonalizationBridge: Invalid propertyId. Must be a valid number. Got: %@", strValue);
-        return;
-      }
-    } else {
-      NSLog(@"WEPersonalizationBridge: Invalid propertyId type. Must be a number or numeric string. Got: %@", propertyId);
-      return;
-    }
-    
-    [[WEPersonalizationBridgeImpl shared] registerProperty:[propertyIdNum integerValue] screenName:screenName];
+    NSInteger intValue = [propertyId integerValue];
+    [[WEPersonalizationBridgeImpl shared] registerProperty:intValue screenName:screenName];
   } @catch (NSException *exception) {
     NSLog(@"WEPersonalizationBridge: Error in registerProperty: %@", exception.reason);
   }
 }
 
-RCT_EXPORT_METHOD(deregisterProperty:(nonnull id)propertyId)
+RCT_EXPORT_METHOD(deregisterProperty:(nonnull NSString *)propertyId)
 {
   @try {
     if (!propertyId) {
@@ -105,32 +87,14 @@ RCT_EXPORT_METHOD(deregisterProperty:(nonnull id)propertyId)
       return;
     }
     
-    NSNumber *propertyIdNum = nil;
-    
-    if ([propertyId isKindOfClass:[NSNumber class]]) {
-      propertyIdNum = (NSNumber *)propertyId;
-    } else if ([propertyId isKindOfClass:[NSString class]]) {
-      NSString *strValue = (NSString *)propertyId;
-      NSScanner *scanner = [NSScanner scannerWithString:strValue];
-      NSInteger intValue;
-      if ([scanner scanInteger:&intValue] && [scanner isAtEnd]) {
-        propertyIdNum = @(intValue);
-      } else {
-        NSLog(@"WEPersonalizationBridge: Invalid propertyId. Must be a valid number. Got: %@", strValue);
-        return;
-      }
-    } else {
-      NSLog(@"WEPersonalizationBridge: Invalid propertyId type. Must be a number or numeric string. Got: %@", propertyId);
-      return;
-    }
-    
-    [[WEPersonalizationBridgeImpl shared] deregisterProperty:[propertyIdNum integerValue]];
+    NSInteger intValue = [propertyId integerValue];
+    [[WEPersonalizationBridgeImpl shared] deregisterProperty:intValue];
   } @catch (NSException *exception) {
     NSLog(@"WEPersonalizationBridge: Error in deregisterProperty: %@", exception.reason);
   }
 }
 
-RCT_EXPORT_METHOD(trackClick:(nonnull id)propertyId attributes:(NSDictionary *)attributes)
+RCT_EXPORT_METHOD(trackClick:(nonnull NSString *)propertyId attributes:(NSDictionary *)attributes)
 {
   @try {
     if (!propertyId) {
@@ -138,32 +102,14 @@ RCT_EXPORT_METHOD(trackClick:(nonnull id)propertyId attributes:(NSDictionary *)a
       return;
     }
     
-    NSNumber *propertyIdNum = nil;
-    
-    if ([propertyId isKindOfClass:[NSNumber class]]) {
-      propertyIdNum = (NSNumber *)propertyId;
-    } else if ([propertyId isKindOfClass:[NSString class]]) {
-      NSString *strValue = (NSString *)propertyId;
-      NSScanner *scanner = [NSScanner scannerWithString:strValue];
-      NSInteger intValue;
-      if ([scanner scanInteger:&intValue] && [scanner isAtEnd]) {
-        propertyIdNum = @(intValue);
-      } else {
-        NSLog(@"WEPersonalizationBridge: Invalid propertyId for trackClick. Must be a valid number. Got: %@", strValue);
-        return;
-      }
-    } else {
-      NSLog(@"WEPersonalizationBridge: Invalid propertyId type for trackClick. Got: %@", propertyId);
-      return;
-    }
-    
-    [[WEPersonalizationBridgeImpl shared] trackClick:[propertyIdNum integerValue] attributes:attributes];
+    NSInteger intValue = [propertyId integerValue];
+    [[WEPersonalizationBridgeImpl shared] trackClick:intValue attributes:attributes];
   } @catch (NSException *exception) {
     NSLog(@"WEPersonalizationBridge: Error in trackClick: %@", exception.reason);
   }
 }
 
-RCT_EXPORT_METHOD(trackImpression:(nonnull id)propertyId attributes:(NSDictionary *)attributes)
+RCT_EXPORT_METHOD(trackImpression:(nonnull NSString *)propertyId attributes:(NSDictionary *)attributes)
 {
   @try {
     if (!propertyId) {
@@ -171,26 +117,8 @@ RCT_EXPORT_METHOD(trackImpression:(nonnull id)propertyId attributes:(NSDictionar
       return;
     }
     
-    NSNumber *propertyIdNum = nil;
-    
-    if ([propertyId isKindOfClass:[NSNumber class]]) {
-      propertyIdNum = (NSNumber *)propertyId;
-    } else if ([propertyId isKindOfClass:[NSString class]]) {
-      NSString *strValue = (NSString *)propertyId;
-      NSScanner *scanner = [NSScanner scannerWithString:strValue];
-      NSInteger intValue;
-      if ([scanner scanInteger:&intValue] && [scanner isAtEnd]) {
-        propertyIdNum = @(intValue);
-      } else {
-        NSLog(@"WEPersonalizationBridge: Invalid propertyId for trackImpression. Must be a valid number. Got: %@", strValue);
-        return;
-      }
-    } else {
-      NSLog(@"WEPersonalizationBridge: Invalid propertyId type for trackImpression. Got: %@", propertyId);
-      return;
-    }
-    
-    [[WEPersonalizationBridgeImpl shared] trackImpression:[propertyIdNum integerValue] attributes:attributes];
+    NSInteger intValue = [propertyId integerValue];
+    [[WEPersonalizationBridgeImpl shared] trackImpression:intValue attributes:attributes];
   } @catch (NSException *exception) {
     NSLog(@"WEPersonalizationBridge: Error in trackImpression: %@", exception.reason);
   }

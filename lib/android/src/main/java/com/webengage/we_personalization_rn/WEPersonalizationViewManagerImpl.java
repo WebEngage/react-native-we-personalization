@@ -29,7 +29,7 @@ public class WEPersonalizationViewManagerImpl {
         properties.put(WEConstants.HEIGHT, 0);
         properties.put(WEConstants.WIDTH, 0);
         
-        return new WEInlineWidget(appContext, properties, null);
+        return new WEInlineWidget(appContext, properties);
     }
 
     public static void updateProperties(ViewGroup view, String screenName, String propertyId) {

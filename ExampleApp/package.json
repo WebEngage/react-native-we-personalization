@@ -24,7 +24,7 @@
     "react-native-screens": "4.18.0",
     "react-native-gesture-handler": "^2.20.2",
     "react-native-we-personalization": "file:../lib/react-native-we-personalization-1.1.76.tgz",
-    "react-native-webengage": "file:../../react-native-webengage/lib/react-native-webengage-1.6.82.tgz",
+    "react-native-webengage": "file:../react-native-webengage-1.6.82.tgz",
     "react-native-worklets": "^0.6.1"
   },
   "devDependencies": {

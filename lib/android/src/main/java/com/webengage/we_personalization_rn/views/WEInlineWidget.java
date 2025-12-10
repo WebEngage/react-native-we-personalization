@@ -55,7 +55,7 @@ public class WEInlineWidget extends FrameLayout implements ScreenNavigatorCallba
         }
     }
 
-    public WEInlineWidget(@NonNull ReactApplicationContext context, HashMap<String, Object> map, WEPersonalizationViewManager ref) {
+    public WEInlineWidget(@NonNull ReactApplicationContext context, HashMap<String, Object> map) {
         super(context);
         this.applicationContext = context;
         init(context);
