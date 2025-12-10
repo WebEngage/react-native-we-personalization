@@ -22,7 +22,7 @@ class WECampaignCallbackHandler:WECampaignCallback{
         WEPersonalizationBridgeImpl.emitter.sendEvent(withName: "onCampaignShown", body: campaignData)
     }
     
-    private func onCampaignException(_ campaignId: String?, _ targetViewId: Int, _ exception: Error) {
+    func onCampaignException(_ campaignId: String?, _ targetViewId: String, _ exception: any Error) {
         WELogger.d(WEConstants.TAG+" WEP: WECampaignCallbackHandler: onCampaignException for \(targetViewId) error: \(exception.localizedDescription)")
         let campaignData: [String: Any] = ["targetViewId": targetViewId, "campaingId": campaignId ?? "", "exception": exception]
         WEPersonalizationBridgeImpl.emitter.sendEvent(withName: "onCampaignException", body: campaignData)
