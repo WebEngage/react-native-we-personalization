@@ -142,7 +142,7 @@ export default function DynamicScreen(props: DynamicScreenProps) {
         isCustomView = viewItem.isCustomView;
       }
     });
-    const styleList = isRecyclerView ? styles.flatColor : {};
+    const styleList = isRecyclerView ? styles.flatColor : [];
     if (inlineView) {
       const inlineHeight = inlineView?.height || 250;
       const inlineWidth = inlineView?.width || Dimensions.get('window').width;
