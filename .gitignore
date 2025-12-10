@@ -11,3 +11,6 @@ ExampleApp/ios/Podfile.lock
 lib/react-native-we-personalization-*
 react-native-webview/
 example-component/
+ExampleNewArch/
+ExampleNewArch/*
+ExampleApp/src_backup/*

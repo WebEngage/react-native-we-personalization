@@ -7,25 +7,33 @@ import {
   TouchableHighlight,
   View,
 } from 'react-native';
-import PropTypes from 'prop-types';
 import WebEngage from 'react-native-webengage';
-import {getValueFromAsyncStorage} from './Utils';
+import {getValueFromAsyncStorage, removeItem} from './Utils';
 import {getArchitectureInfo} from './Utils/ArchitectureHelper';
+import {SCREEN_NAMES, BUTTON_LABELS} from './constants';
 
-import {removeItem} from './Utils';
-const ListScreen = (props) => {
-  const {navigation} = props;
+interface ArchInfo {
+  architectureMode: string;
+  bridgeMode: string;
+  isTurboModuleEnabled: boolean;
+  isFabricEnabled: boolean;
+}
+
+interface ListScreenProps {
+  navigation: any;
+}
+
+const ListScreen: React.FC<ListScreenProps> = ({navigation}) => {
   const [isUserLoggedIn, setIsUserLoggedIn] = React.useState(false);
-  const [archInfo, setArchInfo] = React.useState(null);
+  const [archInfo, setArchInfo] = React.useState<ArchInfo | null>(null);
 
   const webengage = new WebEngage();
-  const userNameRef = React.useRef(null);
+  const userNameRef = React.useRef<string | null>(null);
 
   React.useEffect(() => {
     webengage.screen('test');
     setArchInfo(getArchitectureInfo());
   }, []);
-
 
   React.useEffect(() => {
     (async () => {
@@ -44,22 +52,26 @@ const ListScreen = (props) => {
 
   return (
     <SafeAreaView style={styles.mainContainer}>
-      {isUserLoggedIn &&
-      <TouchableHighlight
-        style={[styles.button, styles.logout]}
-        onPress={logout}
-      >
-        <Text> Logout </Text>
-      </TouchableHighlight>
-      }
+      {isUserLoggedIn && (
+        <TouchableHighlight
+          style={[styles.button, styles.logout]}
+          onPress={logout}
+        >
+          <Text> Logout </Text>
+        </TouchableHighlight>
+      )}
 
       {archInfo && (
         <View style={styles.archInfoContainer}>
           <Text style={styles.archTitle}>Architecture Info</Text>
           <Text style={styles.archText}>Mode: {archInfo.architectureMode}</Text>
           <Text style={styles.archText}>Bridge: {archInfo.bridgeMode}</Text>
-          <Text style={styles.archText}>TurboModules: {archInfo.isTurboModuleEnabled ? 'Enabled' : 'Disabled'}</Text>
-          <Text style={styles.archText}>Fabric: {archInfo.isFabricEnabled ? 'Enabled' : 'Disabled'}</Text>
+          <Text style={styles.archText}>
+            TurboModules: {archInfo.isTurboModuleEnabled ? 'Enabled' : 'Disabled'}
+          </Text>
+          <Text style={styles.archText}>
+            Fabric: {archInfo.isFabricEnabled ? 'Enabled' : 'Disabled'}
+          </Text>
         </View>
       )}
 
@@ -67,7 +79,28 @@ const ListScreen = (props) => {
         style={styles.button}
         onPress={() => navigation.navigate('customScreens')}
       >
-        <Text style={styles.textStyle}> Add Your Screens </Text>
+        <Text style={styles.textStyle}> Add Your custom Screens </Text>
+      </Pressable>
+
+      <Pressable
+        style={[styles.button, styles.homeButton]}
+        onPress={() => navigation.navigate(SCREEN_NAMES.HOME)}
+      >
+        <Text style={styles.textStyle}>{BUTTON_LABELS.HOME}</Text>
+      </Pressable>
+
+      <Pressable
+        style={[styles.button, styles.ordersButton]}
+        onPress={() => navigation.navigate(SCREEN_NAMES.ORDERS)}
+      >
+        <Text style={styles.textStyle}>{BUTTON_LABELS.ORDERS}</Text>
+      </Pressable>
+
+      <Pressable
+        style={[styles.button, styles.cartButton]}
+        onPress={() => navigation.navigate(SCREEN_NAMES.CART)}
+      >
+        <Text style={styles.textStyle}>{BUTTON_LABELS.CART}</Text>
       </Pressable>
     </SafeAreaView>
   );
@@ -93,6 +126,15 @@ const styles = StyleSheet.create({
     height: 35,
     alignItems: 'center',
     backgroundColor: '#f59518',
+  },
+  homeButton: {
+    backgroundColor: '#4CAF50',
+  },
+  ordersButton: {
+    backgroundColor: '#673AB7',
+  },
+  cartButton: {
+    backgroundColor: '#FF5722',
   },
   textStyle: {
     fontSize: 20,
@@ -120,8 +162,5 @@ const styles = StyleSheet.create({
     color: '#333',
   },
 });
-export default ListScreen;
 
-ListScreen.propTypes = {
-  navigation: PropTypes.object,
-};
+export default ListScreen;

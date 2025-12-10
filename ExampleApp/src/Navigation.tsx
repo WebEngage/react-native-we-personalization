@@ -6,13 +6,18 @@ import CustomScreens from './Custom/CustomScreens';
 import ScreenDetails from './Custom/ScreenDetails';
 import DynamicScreen from './Custom/DynamicScreen';
 import LoginScreen from './LoginScreen';
+import HomeScreen from './HomeScreen';
+import OrdersScreen from './OrdersScreen';
+import CartScreen from './CartScreen';
+import {SCREEN_NAMES, BUTTON_LABELS} from './constants';
 
 const Stack = createNativeStackNavigator();
 
-export const ScreenNamesContext = React.createContext([]);
+export const ScreenNamesContext = React.createContext<[any[], React.Dispatch<React.SetStateAction<any[]>>]>([[], () => {}]);
 
 const Navigation = () => {
-  const [screenNames, setScreenNames] = React.useState([]);
+  const [screenNames, setScreenNames] = React.useState<any[]>([]);
+  
   const renderScreenName = () => {
     return screenNames?.map((item) => {
       const {screenName} = item;
@@ -26,6 +31,7 @@ const Navigation = () => {
       );
     });
   };
+
   return (
     <ScreenNamesContext.Provider value={[screenNames, setScreenNames]}>
       <NavigationContainer>
@@ -48,7 +54,22 @@ const Navigation = () => {
           <Stack.Screen
             name="dynamicScreen"
             component={DynamicScreen}
-            options={({route}) => ({title: route.params.item.screenName})}
+            options={({route}: any) => ({title: route.params.item.screenName})}
+          />
+          <Stack.Screen
+            name={SCREEN_NAMES.HOME}
+            component={HomeScreen}
+            options={{title: BUTTON_LABELS.HOME}}
+          />
+          <Stack.Screen
+            name={SCREEN_NAMES.ORDERS}
+            component={OrdersScreen}
+            options={{title: BUTTON_LABELS.ORDERS}}
+          />
+          <Stack.Screen
+            name={SCREEN_NAMES.CART}
+            component={CartScreen}
+            options={{title: BUTTON_LABELS.CART}}
           />
           {renderScreenName()}
         </Stack.Navigator>
@@ -56,4 +77,5 @@ const Navigation = () => {
     </ScreenNamesContext.Provider>
   );
 };
+
 export default Navigation;

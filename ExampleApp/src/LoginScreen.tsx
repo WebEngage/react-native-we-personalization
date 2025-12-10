@@ -1,11 +1,15 @@
 import React from 'react';
-import {Image, StyleSheet, TouchableHighlight} from 'react-native';
-import PropTypes from 'prop-types';
-import {TextInput, Text, SafeAreaView} from 'react-native';
+import {Image, StyleSheet, TouchableHighlight, TextInput, Text, SafeAreaView} from 'react-native';
 import {saveToAsyncStorage} from './Utils';
 import {webengageInstance} from './Utils/WebEngageManager';
 
-export default function LoginScreen(props) {
+interface LoginScreenProps {
+  updateLoginDetails?: (userName: string) => void;
+  navigation?: any;
+  updateGuestState?: () => void;
+}
+
+export default function LoginScreen(props: LoginScreenProps) {
   const {
     updateLoginDetails = () => {},
     navigation = null,
@@ -13,7 +17,7 @@ export default function LoginScreen(props) {
   } = props;
   const [userName, setuserName] = React.useState('');
 
-  const onChange = (val) => {
+  const onChange = (val: string) => {
     setuserName(val);
   };
 
@@ -29,13 +33,14 @@ export default function LoginScreen(props) {
       webengageInstance.user.login(userName);
     }
   };
+
   const skipLogin = () => {
     updateGuestState();
   };
 
   return (
     <SafeAreaView style={styles.container}>
-       <Image source={require('./Assets/images/webengageImage.jpeg')} style={{width: 300, height: 300}} />
+      <Image source={require('./Assets/images/webengageImage.jpeg')} style={{width: 300, height: 300}} />
       <Text style={styles.textDesc}> Please enter your name to proceed </Text>
       <TextInput onChangeText={onChange} style={styles.textBox} />
       <TouchableHighlight onPress={login} style={styles.button}>
@@ -84,9 +89,3 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
 });
-
-LoginScreen.propTypes = {
-  updateLoginDetails: PropTypes.func,
-  navigation: PropTypes.object,
-  updateGuestState: PropTypes.func,
-};

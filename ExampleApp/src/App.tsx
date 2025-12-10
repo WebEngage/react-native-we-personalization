@@ -1,12 +1,16 @@
 import * as React from 'react';
-
 import LoginScreen from './LoginScreen';
 import Navigation from './Navigation';
-import { getValueFromAsyncStorage } from './Utils';
-import { initWebEngage } from './Utils/WebEngageManager';
-import { Alert, LogBox } from 'react-native';
-import { initWePersonalization, registerWECampaignCallback, enableDevMode, deregisterWECampaignCallback } from 'react-native-we-personalization';
-LogBox.ignoreAllLogs()
+import {getValueFromAsyncStorage} from './Utils';
+import {initWebEngage} from './Utils/WebEngageManager';
+import {LogBox} from 'react-native';
+import {
+  initWePersonalization,
+  registerWECampaignCallback,
+  deregisterWECampaignCallback,
+} from 'react-native-we-personalization';
+
+// LogBox.ignoreAllLogs();
 
 export default function App() {
   const [isUserLoggedIn, setIsUserLoggedIn] = React.useState(false);
@@ -14,7 +18,7 @@ export default function App() {
 
   initWebEngage();
   initWePersonalization();
-  const userNameRef = React.useRef(null);
+  const userNameRef = React.useRef<string | null>(null);
 
   React.useEffect(() => {
     (async () => {
@@ -23,25 +27,24 @@ export default function App() {
         setIsUserLoggedIn(true);
       }
       userNameRef.current = name;
-      // enableDevMode();
     })();
   }, []);
 
-  const onCampaignPrepared = (data) => {
-    console.log('Arch: js:  App.js:  onCampaignPrepared: ', data);
+  const onCampaignPrepared = (data: any) => {
+    console.log('App: onCampaignPrepared:', data);
   };
 
-  const onCampaignShown = (data) => {
-    console.log('Arch: js:  App.js:  onCampaignShown: ', data);
-  }
+  const onCampaignShown = (data: any) => {
+    console.log('App: onCampaignShown:', data);
+  };
 
-  const onCampaignClicked = (data) => {
-    console.log('Arch: js:  App.js:  onCampaignClicked: ', data);
-  }
+  const onCampaignClicked = (data: any) => {
+    console.log('App: onCampaignClicked:', data);
+  };
 
-  const onCampaignException = (data) => {
-    console.log('Arch: js:  App.js:  onCampaignException: ', data);
-  }
+  const onCampaignException = (data: any) => {
+    console.log('App: onCampaignException:', data);
+  };
 
   React.useEffect(() => {
     const WECampaignCallback = {
@@ -50,18 +53,17 @@ export default function App() {
       onCampaignClicked,
       onCampaignException,
     };
-    console.log('Arch: js:  App.js: Registering campaign callbacks');
+    console.log('App: Registering campaign callbacks');
 
     registerWECampaignCallback(WECampaignCallback);
     return () => {
-      console.log("Arch: deRegistering campaign callback")
+      console.log('App: Deregistering campaign callback');
       deregisterWECampaignCallback();
-      // removeCustomViews();
     };
-  }, [])
+  }, []);
 
-  const updateLoginDetails = (loginState) => {
-    setIsUserLoggedIn(loginState);
+  const updateLoginDetails = (loginState: string) => {
+    setIsUserLoggedIn(!!loginState);
   };
 
   const updateGuestState = () => {
@@ -74,9 +76,9 @@ export default function App() {
     if (!continueAsGuest) {
       return (
         <LoginScreen
-          isUserLoggedIn
           updateLoginDetails={updateLoginDetails}
-          updateGuestState={updateGuestState} />
+          updateGuestState={updateGuestState}
+        />
       );
     } else {
       return <Navigation />;
