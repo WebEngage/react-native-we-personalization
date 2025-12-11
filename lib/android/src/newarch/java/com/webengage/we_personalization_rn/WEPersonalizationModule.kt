@@ -3,15 +3,14 @@ package com.webengage.we_personalization_rn
 import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReadableMap
 import com.webengage.we_personalization_rn.bridge.WEPersonalizationBridge
+import com.webengage.we_personalization_rn.utils.WEConstants
 
 class WEPersonalizationModule(reactContext: ReactApplicationContext) :
     com.webengage.we_personalization_rn.NativeWEPersonalizationBridgeSpec(reactContext) {
 
-    private val bridge: WEPersonalizationBridge = WEPersonalizationBridge(reactContext)
+    private val bridge = WEPersonalizationBridge(reactContext)
 
-    override fun getName(): String {
-        return "WEPersonalizationBridge"
-    }
+    override fun getName(): String = WEConstants.PERSONALIZATION_BRIDGE
 
     override fun initWePersonalization() {
         bridge.initWePersonalization()

@@ -243,5 +243,5 @@ const styles = StyleSheet.create({
   textInput: {height: 45, borderBottomWidth: 2, marginBottom: 2, marginHorizontal: 20, borderBottomColor: '#ccc'},
   trackButton: {height: 30, width: 100, backgroundColor: '#fcc111', justifyContent: 'center', alignItems: 'center', alignSelf: 'center'},
   trackText: {color: '#000', fontSize: 20, fontWeight: 'bold'},
-  box: {width: Dimensions.get('window').width, height: 200},
+  box: {width: Dimensions.get('window').width, height: 200, alignContent: 'center', justifyContent: 'center', alignItems: 'center', marginLeft: 25 },
 });

@@ -18,7 +18,7 @@ const OrdersScreen: React.FC<OrdersScreenProps> = ({navigation}) => {
   const SCREEN_NAME = 'screen2';
   
   const WIDGET_1 = {
-    androidPropertyId: 'S2P1',
+    androidPropertyId: 'S2P2',
     iosPropertyId: 22,
     width: 350,
     height: 200,

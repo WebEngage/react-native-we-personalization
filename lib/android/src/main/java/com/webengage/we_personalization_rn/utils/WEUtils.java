@@ -22,21 +22,33 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class WEUtils {
+public final class WEUtils {
+  private WEUtils() {}
   public static void sendEventToHybrid(ReactApplicationContext reactContext,
                                        String eventName, @Nullable WritableMap params) {
-    Logger.d(WEConstants.TAG, "sendEventToHybrid triggered for " + eventName + " for " + params.getString("targetViewId"));
-    reactContext
-      .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
-      .emit(eventName, params);
+    if (reactContext == null || eventName == null) {
+      Logger.d(WEConstants.TAG, "sendEventToHybrid - null parameter");
+      return;
+    }
+    try {
+      String targetViewId = params != null && params.hasKey("targetViewId") ? params.getString("targetViewId") : "unknown";
+      Logger.d(WEConstants.TAG, "sendEventToHybrid triggered for " + eventName + " for " + targetViewId);
+      reactContext
+        .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
+        .emit(eventName, params);
+    } catch (Exception e) {
+      Logger.d(WEConstants.TAG, "sendEventToHybrid failed: " + e.getMessage());
+    }
   }
 
 
   public static WritableMap generateParams(WECampaignData weCampaignData) {
     WritableMap params = Arguments.createMap();
-    params.putString(WEConstants.TARGETVIEW_ID, weCampaignData.getTargetViewId());
-    params.putString(WEConstants.CAMPAIGN_ID, weCampaignData.getCampaignId());
-    params.putString(WEConstants.PAYLOAD_DATA, weCampaignData.toJSONString());
+    if (weCampaignData != null) {
+      params.putString(WEConstants.TARGETVIEW_ID, weCampaignData.getTargetViewId());
+      params.putString(WEConstants.CAMPAIGN_ID, weCampaignData.getCampaignId());
+      params.putString(WEConstants.PAYLOAD_DATA, weCampaignData.toJSONString());
+    }
     params.putString(WEConstants.TRACK_IMPRESSION, "WEPersonalizationBridge.trackImpression");
     params.putString(WEConstants.TRACK_CLICK, "WEPersonalizationBridge.trackClick");
     return params;
@@ -52,9 +64,11 @@ public class WEUtils {
 
   public static WritableMap generateParams(String actionId, String deepLink, WECampaignData weCampaignData) {
     WritableMap params = Arguments.createMap();
-    params.putString(WEConstants.TARGETVIEW_ID, weCampaignData.getTargetViewId());
-    params.putString(WEConstants.CAMPAIGN_ID, weCampaignData.getCampaignId());
-    params.putString(WEConstants.PAYLOAD_DATA, weCampaignData.toJSONString());
+    if (weCampaignData != null) {
+      params.putString(WEConstants.TARGETVIEW_ID, weCampaignData.getTargetViewId());
+      params.putString(WEConstants.CAMPAIGN_ID, weCampaignData.getCampaignId());
+      params.putString(WEConstants.PAYLOAD_DATA, weCampaignData.toJSONString());
+    }
     params.putString(WEConstants.ACTION_ID, actionId);
     params.putString(WEConstants.DEEPLINK, deepLink);
     return params;
@@ -76,61 +90,79 @@ public class WEUtils {
   }
 
   public static Map<String, Object> convertHybridMapToNativeMap(ReadableMap readableMap) {
+    if (readableMap == null) {
+      return null;
+    }
     Map<String, Object> map = new HashMap<>();
-    if (readableMap != null) {
+    try {
       ReadableMapKeySetIterator iterator = readableMap.keySetIterator();
       while (iterator.hasNextKey()) {
         String key = iterator.nextKey();
-        switch (readableMap.getType(key)) {
-          case Null:
-            map.put(key, null);
-            break;
-          case Boolean:
-            map.put(key, readableMap.getBoolean(key));
-            break;
-          case Number:
-            map.put(key, readableMap.getDouble(key));
-            break;
-          case String:
-            map.put(key, readableMap.getString(key));
-            break;
-          case Map:
-            map.put(key, convertHybridMapToNativeMap(readableMap.getMap(key)));
-            break;
-          case Array:
-            map.put(key, convertReadableArrayToList(readableMap.getArray(key)));
-            break;
+        try {
+          switch (readableMap.getType(key)) {
+            case Null:
+              map.put(key, null);
+              break;
+            case Boolean:
+              map.put(key, readableMap.getBoolean(key));
+              break;
+            case Number:
+              map.put(key, readableMap.getDouble(key));
+              break;
+            case String:
+              map.put(key, readableMap.getString(key));
+              break;
+            case Map:
+              map.put(key, convertHybridMapToNativeMap(readableMap.getMap(key)));
+              break;
+            case Array:
+              map.put(key, convertReadableArrayToList(readableMap.getArray(key)));
+              break;
+          }
+        } catch (Exception e) {
+          Logger.d(WEConstants.TAG, "convertHybridMapToNativeMap - failed for key: " + key + ", error: " + e.getMessage());
         }
       }
-      return map;
-    } else {
-      return null;
+    } catch (Exception e) {
+      Logger.d(WEConstants.TAG, "convertHybridMapToNativeMap failed: " + e.getMessage());
     }
+    return map;
   }
 
   private static List<Object> convertReadableArrayToList(ReadableArray readableArray) {
+    if (readableArray == null) {
+      return null;
+    }
     List<Object> list = new ArrayList<>();
-    for (int i = 0; i < readableArray.size(); i++) {
-      switch (readableArray.getType(i)) {
-        case Null:
-          list.add(null);
-          break;
-        case Boolean:
-          list.add(readableArray.getBoolean(i));
-          break;
-        case Number:
-          list.add(readableArray.getDouble(i));
-          break;
-        case String:
-          list.add(readableArray.getString(i));
-          break;
-        case Map:
-          list.add(convertHybridMapToNativeMap(readableArray.getMap(i)));
-          break;
-        case Array:
-          list.add(convertReadableArrayToList(readableArray.getArray(i)));
-          break;
+    try {
+      for (int i = 0; i < readableArray.size(); i++) {
+        try {
+          switch (readableArray.getType(i)) {
+            case Null:
+              list.add(null);
+              break;
+            case Boolean:
+              list.add(readableArray.getBoolean(i));
+              break;
+            case Number:
+              list.add(readableArray.getDouble(i));
+              break;
+            case String:
+              list.add(readableArray.getString(i));
+              break;
+            case Map:
+              list.add(convertHybridMapToNativeMap(readableArray.getMap(i)));
+              break;
+            case Array:
+              list.add(convertReadableArrayToList(readableArray.getArray(i)));
+              break;
+          }
+        } catch (Exception e) {
+          Logger.d(WEConstants.TAG, "convertReadableArrayToList - failed for index: " + i + ", error: " + e.getMessage());
+        }
       }
+    } catch (Exception e) {
+      Logger.d(WEConstants.TAG, "convertReadableArrayToList failed: " + e.getMessage());
     }
     return list;
   }

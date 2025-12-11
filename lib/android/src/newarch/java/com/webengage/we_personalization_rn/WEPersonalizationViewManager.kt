@@ -9,17 +9,15 @@ import com.facebook.react.uimanager.annotations.ReactProp
 import com.facebook.react.uimanager.annotations.ReactPropGroup
 import com.webengage.we_personalization_rn.utils.WEConstants
 
-@ReactModule(name = "WEPersonalizationView")
+@ReactModule(name = WEConstants.REACT_CLASS)
 class WEPersonalizationViewManager(context: ReactApplicationContext) : SimpleViewManager<ViewGroup>() {
 
-    private var width: Int = 0
-    private var height: Int = 0
+    private var width = 0
+    private var height = 0
     private var screenName: String? = null
     private var propertyId: String? = null
 
-    override fun getName(): String {
-        return "WEPersonalizationView"
-    }
+    override fun getName(): String = WEConstants.REACT_CLASS
 
     override fun createViewInstance(context: ThemedReactContext): ViewGroup {
         return WEPersonalizationViewManagerImpl.createViewInstance(context)
@@ -31,18 +29,18 @@ class WEPersonalizationViewManager(context: ReactApplicationContext) : SimpleVie
             0 -> width = value
             1 -> height = value
         }
-        WEPersonalizationViewManagerImpl.setStyle(view, width, height)
+            WEPersonalizationViewManagerImpl.setStyle(view, width, height)
     }
 
     @ReactProp(name = WEConstants.PROPERTY_ID)
     fun setPropertyId(view: ViewGroup, propertyId: String?) {
         this.propertyId = propertyId
-        WEPersonalizationViewManagerImpl.updateProperties(view, screenName, propertyId)
+            WEPersonalizationViewManagerImpl.updateProperties(view, screenName, propertyId)
     }
 
     @ReactProp(name = WEConstants.SCREEN_NAME)
     fun setScreenName(view: ViewGroup, screenName: String?) {
         this.screenName = screenName
-        WEPersonalizationViewManagerImpl.updateProperties(view, screenName, propertyId)
+            WEPersonalizationViewManagerImpl.updateProperties(view, screenName, propertyId)
     }
 }

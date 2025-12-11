@@ -56,8 +56,8 @@ export declare function deregisterWEPlaceholderCallback(
 ): void;
 
 // Tracking functions
-export declare function trackClick(propertyId?: string, attributes?: Record<string, any>): void;
-export declare function trackImpression(propertyId?: string, attributes?: Record<string, any>): void;
+export declare function trackClick(propertyId: string, attributes?: Record<string, any>): void;
+export declare function trackImpression(propertyId: string, attributes?: Record<string, any>): void;
 
 // Native module spec
 export interface Spec {

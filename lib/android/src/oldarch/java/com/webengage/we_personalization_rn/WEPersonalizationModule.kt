@@ -5,15 +5,14 @@ import com.facebook.react.bridge.ReactContextBaseJavaModule
 import com.facebook.react.bridge.ReactMethod
 import com.facebook.react.bridge.ReadableMap
 import com.webengage.we_personalization_rn.bridge.WEPersonalizationBridge
+import com.webengage.we_personalization_rn.utils.WEConstants
 
 class WEPersonalizationModule(reactContext: ReactApplicationContext) :
     ReactContextBaseJavaModule(reactContext) {
 
-    private val bridge: WEPersonalizationBridge = WEPersonalizationBridge(reactContext)
+    private val bridge = WEPersonalizationBridge(reactContext)
 
-    override fun getName(): String {
-        return "WEPersonalizationBridge"
-    }
+    override fun getName(): String = WEConstants.PERSONALIZATION_BRIDGE
 
     @ReactMethod
     fun initWePersonalization() {
