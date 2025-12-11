@@ -8,15 +8,20 @@ public class WEInlineWidget: UIView{
     var campaignData: WECampaignData? = nil
     private var isViewSetup = false
     private var isLoadInProgress = false
+    private var isReloading = false
     @objc var width: CGFloat = 0.1 {
         didSet {
-            setupView()
+            if !isReloading {
+                setupView()
+            }
         }
     }
     
     @objc var height: CGFloat = 0.1 {
         didSet {
-            setupView()
+            if !isReloading {
+                setupView()
+            }
         }
     }
     
@@ -40,24 +45,34 @@ public class WEInlineWidget: UIView{
      */
     @objc public func updateProperties(_ propertyId: String, screenName: String) {
         NSLog("\(WEConstants.TAG) updateProperties: property=%@, screen=%@", propertyId, screenName)
+        let wasReloading = isReloading
+        if wasReloading {
+            isReloading = false
+        }
+        
         if let propertyIdInt = Int(propertyId) {
             self.propertyId = propertyIdInt
         }
         self.screenName = screenName
+        
+        if wasReloading && self.propertyId != 0 && self.width > 0.1 && self.height > 0.1 && !self.screenName.isEmpty {
+            self.setupView()
+        }
     }
     
     @objc func reloadViews(){
         WELogger.d(WEConstants.TAG+" reloadView: property=\(self.propertyId)")
-        DispatchQueue.main.async {
-            if let viewToreload = self.inlineView,
-               viewToreload.superview != nil{
-                self.inlineView?.load(tag: self.propertyId, callbacks: self)
-            } else {
-                self.isViewSetup = false
-                self.isLoadInProgress = false
-                self.setupView()
-            }
+        guard Thread.isMainThread else {
+            DispatchQueue.main.async { self.reloadViews() }
+            return
         }
+        
+        self.inlineView?.removeFromSuperview()
+        self.inlineView = nil
+        self.isViewSetup = false
+        self.isLoadInProgress = false
+        self.campaignData = nil
+        self.isReloading = true
     }
     
     override init(frame: CGRect) {
@@ -76,6 +91,12 @@ public class WEInlineWidget: UIView{
             WELogger.d(WEConstants.TAG+" layoutSubviews: updating dimensions \(self.width)x\(self.height) → \(self.bounds.width)x\(self.bounds.height)")
             self.width = self.bounds.width
             self.height = self.bounds.height
+        }
+        
+        if isReloading && self.propertyId != 0 && self.width > 0.1 && self.height > 0.1 && !self.screenName.isEmpty {
+            WELogger.d(WEConstants.TAG+" layoutSubviews: triggering setup after reload")
+            isReloading = false
+            setupView()
         }
     }
     
@@ -113,6 +134,11 @@ public class WEInlineWidget: UIView{
         WELogger.d(WEConstants.TAG+" setupView: frame=\(self.frame)")
         WELogger.d(WEConstants.TAG+" setupView: screen=\(self.screenName)")
         
+        if isReloading {
+            WELogger.d(WEConstants.TAG+" setupView: skipping - waiting for new props after reload")
+            return
+        }
+        
         if(self.height > 0.1 && self.width > 0.1 && propertyId != 0 && !isViewSetup) {
             WELogger.d(WEConstants.TAG+" setupView: conditions met, creating inlineView")
             isViewSetup = true
@@ -126,16 +152,19 @@ public class WEInlineWidget: UIView{
                 inlineView?.load(tag: self.propertyId, callbacks: self)
                 monitorVisibilityAndFireEvent()
             }
-            addSubview(inlineView!)
-            WELogger.d(WEConstants.TAG+" inlineView added to subview")
+            if let view = inlineView {
+                addSubview(view)
+                WELogger.d(WEConstants.TAG+" inlineView added to subview")
+            }
         } else {
             WELogger.d(WEConstants.TAG+" setupView: conditions not met - height=\(self.height > 0.1), width=\(self.width > 0.1), property=\(propertyId != 0), isViewSetup=\(isViewSetup)")
         }
     }
     
     func fireCGEvent(){
-        WEPersonalization.shared.trackCGEvent(forPropertyId: inlineView!.tag)
-        WEPersonalization.shared.registerCampaignControlGroupCallback(tag: inlineView!.tag, callback: self)
+        guard let view = inlineView else { return }
+        WEPersonalization.shared.trackCGEvent(forPropertyId: view.tag)
+        WEPersonalization.shared.registerCampaignControlGroupCallback(tag: view.tag, callback: self)
     }
     
     private var observerContextCG = 0
