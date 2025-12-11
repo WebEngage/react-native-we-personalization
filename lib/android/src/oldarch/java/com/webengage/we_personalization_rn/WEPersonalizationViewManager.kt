@@ -6,10 +6,12 @@ import com.facebook.react.uimanager.SimpleViewManager
 import com.facebook.react.uimanager.ThemedReactContext
 import com.facebook.react.uimanager.annotations.ReactProp
 import com.facebook.react.uimanager.annotations.ReactPropGroup
+import com.webengage.sdk.android.Logger
 import com.webengage.we_personalization_rn.utils.WEConstants
 
 class WEPersonalizationViewManager(private val applicationContext: ReactApplicationContext) : SimpleViewManager<ViewGroup>() {
 
+    private val TAG = "WE-Inline-OldArch"
     private var width = 0
     private var height = 0
     private var screenName: String? = null
@@ -18,6 +20,7 @@ class WEPersonalizationViewManager(private val applicationContext: ReactApplicat
     override fun getName(): String = WEPersonalizationViewManagerImpl.NAME
 
     override fun createViewInstance(context: ThemedReactContext): ViewGroup {
+        Logger.d(TAG, "createViewInstance called")
         return WEPersonalizationViewManagerImpl.createViewInstance(context)
     }
 

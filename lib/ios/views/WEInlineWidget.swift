@@ -22,14 +22,14 @@ public class WEInlineWidget: UIView{
     
     @objc public var screenName: String = ""{
         didSet {
-            WELogger.d(WEConstants.TAG+"WEP: WEInlineWidget: Initialization for screenName- \(screenName)")
+            WELogger.d(WEConstants.TAG+" Initialization: screenName=\(screenName)")
             self.setupView()
         }
     }
     
     @objc var propertyId: Int = 0 {
         didSet {
-            WELogger.d(WEConstants.TAG+"WEP: WEInlineWidget: Initialization for propertyId - \(propertyId)")
+            WELogger.d(WEConstants.TAG+" Initialization: propertyId=\(propertyId)")
             self.setupView()
         }
     }
@@ -39,7 +39,7 @@ public class WEInlineWidget: UIView{
      * Converts string propertyId to int for internal use
      */
     @objc public func updateProperties(_ propertyId: String, screenName: String) {
-        NSLog("WEPersonalization: WEInlineWidget: updateProperties: propertyId=%@, screenName=%@", propertyId, screenName)
+        NSLog("\(WEConstants.TAG) updateProperties: property=%@, screen=%@", propertyId, screenName)
         if let propertyIdInt = Int(propertyId) {
             self.propertyId = propertyIdInt
         }
@@ -47,7 +47,7 @@ public class WEInlineWidget: UIView{
     }
     
     @objc func reloadViews(){
-        WELogger.d(WEConstants.TAG+"WEP:  WEInlineWidget: reloadView called for \(self.propertyId)")
+        WELogger.d(WEConstants.TAG+" reloadView: property=\(self.propertyId)")
         DispatchQueue.main.async {
             if let viewToreload = self.inlineView,
                viewToreload.superview != nil{
@@ -61,26 +61,26 @@ public class WEInlineWidget: UIView{
     }
     
     override init(frame: CGRect) {
-        NSLog("WEPersonalization: WEInlineWidget: init: frame=%@", NSCoder.string(for: frame))
-        WELogger.d(WEConstants.TAG+"WEP: WEInlineWidget: init called for inlineWidget")
+        NSLog("\(WEConstants.TAG) init: frame=%@", NSCoder.string(for: frame))
+        WELogger.d(WEConstants.TAG+" init called")
         super.init(frame: frame)
         NotificationCenter.default.addObserver(self, selector: #selector(reloadViews), name: Notification.Name(WEConstants.SCREEN_NAVIGATED), object: nil)
     }
     
     public override func layoutSubviews() {
         super.layoutSubviews()
-        WELogger.d(WEConstants.TAG+"WEP: WEInlineWidget: layoutSubviews - bounds: \(self.bounds)")
-        WELogger.d(WEConstants.TAG+"WEP: WEInlineWidget: layoutSubviews - current width: \(self.width), height: \(self.height)")
-        WELogger.d(WEConstants.TAG+"WEP: WEInlineWidget: layoutSubviews - propertyId: \(self.propertyId), screenName: \(self.screenName)")
+        WELogger.d(WEConstants.TAG+" layoutSubviews: bounds=\(self.bounds)")
+        WELogger.d(WEConstants.TAG+" layoutSubviews: width=\(self.width), height=\(self.height)")
+        WELogger.d(WEConstants.TAG+" layoutSubviews: property=\(self.propertyId), screen=\(self.screenName)")
         if self.width != self.bounds.width || self.height != self.bounds.height {
-            WELogger.d(WEConstants.TAG+"WEP: WEInlineWidget: layoutSubviews - Updating dimensions from \(self.width)x\(self.height) to \(self.bounds.width)x\(self.bounds.height)")
+            WELogger.d(WEConstants.TAG+" layoutSubviews: updating dimensions \(self.width)x\(self.height) → \(self.bounds.width)x\(self.bounds.height)")
             self.width = self.bounds.width
             self.height = self.bounds.height
         }
     }
     
     deinit{
-        WELogger.d(WEConstants.TAG+"WEP: WEInlineWidget: deInit called for \(self.propertyId)")
+        WELogger.d(WEConstants.TAG+" deinit: property=\(self.propertyId)")
         NotificationCenter.default.removeObserver(self)
         removeScrollObserver()
         WEPersonalization.shared.unregisterWEPlaceholderCallback(self.propertyId)
@@ -94,7 +94,7 @@ public class WEInlineWidget: UIView{
             isObserverAdded = false
             observedScrollView = nil
         } catch {
-            WELogger.d(WEConstants.TAG+"WEP: WEInlineWidget: Error removing observer: \(error)")
+            WELogger.d(WEConstants.TAG+" removeScrollObserver error: \(error)")
             isObserverAdded = false
             observedScrollView = nil
         }
@@ -108,28 +108,28 @@ public class WEInlineWidget: UIView{
     
     
     private func setupView(){
-        WELogger.d(WEConstants.TAG+"WEP: WEInlineWidget: setupView - width: \(self.width), height: \(self.height), propertyId: \(self.propertyId)")
-        WELogger.d(WEConstants.TAG+"WEP: WEInlineWidget: setupView - bounds: \(self.bounds)")
-        WELogger.d(WEConstants.TAG+"WEP: WEInlineWidget: setupView - frame: \(self.frame)")
-        WELogger.d(WEConstants.TAG+"WEP: WEInlineWidget: setupView - screenName: \(self.screenName)")
+        WELogger.d(WEConstants.TAG+" setupView: width=\(self.width), height=\(self.height), property=\(self.propertyId)")
+        WELogger.d(WEConstants.TAG+" setupView: bounds=\(self.bounds)")
+        WELogger.d(WEConstants.TAG+" setupView: frame=\(self.frame)")
+        WELogger.d(WEConstants.TAG+" setupView: screen=\(self.screenName)")
         
         if(self.height > 0.1 && self.width > 0.1 && propertyId != 0 && !isViewSetup) {
-            WELogger.d(WEConstants.TAG+"WEP: WEInlineWidget: setupView - Conditions met, creating inlineView")
+            WELogger.d(WEConstants.TAG+" setupView: conditions met, creating inlineView")
             isViewSetup = true
             inlineView?.removeFromSuperview()
             inlineView = WEInlineView(frame: CGRect(x: 0, y: 0, width: self.width, height: self.height))
             inlineView?.tag = self.propertyId
             if(self.propertyId != 0 && !isLoadInProgress) {
-                WELogger.d(WEConstants.TAG+"WEP: WEInlineWidget: LoadView called for - \(self.propertyId)")
-                WELogger.d(WEConstants.TAG+"WEP: WEInlineWidget: Calling load with tag: \(self.propertyId)")
+                WELogger.d(WEConstants.TAG+" loadView: property=\(self.propertyId)")
+                WELogger.d(WEConstants.TAG+" load: tag=\(self.propertyId)")
                 isLoadInProgress = true
                 inlineView?.load(tag: self.propertyId, callbacks: self)
                 monitorVisibilityAndFireEvent()
             }
             addSubview(inlineView!)
-            WELogger.d(WEConstants.TAG+"WEP: WEInlineWidget: inlineView added to subview")
+            WELogger.d(WEConstants.TAG+" inlineView added to subview")
         } else {
-            WELogger.d(WEConstants.TAG+"WEP: WEInlineWidget: setupView - Conditions NOT met - height: \(self.height > 0.1), width: \(self.width > 0.1), propertyId: \(propertyId != 0), isViewSetup: \(isViewSetup)")
+            WELogger.d(WEConstants.TAG+" setupView: conditions not met - height=\(self.height > 0.1), width=\(self.width > 0.1), property=\(propertyId != 0), isViewSetup=\(isViewSetup)")
         }
     }
     
@@ -161,15 +161,14 @@ public class WEInlineWidget: UIView{
 extension WEInlineWidget : WEPlaceholderCallback{
     public func onRendered(data: WECampaignData) {
         self.monitorVisibilityAndFireEvent();
-        WELogger.d(WEConstants.TAG+"WEP: WEInlineWidget: onRendered \(self.propertyId)")
-        WELogger.d(WEConstants.TAG+"WEP: WEInlineWidget: onRendered - campaignId: \(data.campaignId ?? "nil"), targetViewTag: \(data.targetViewTag)")
+        WELogger.d(WEConstants.TAG+" onRendered: property=\(self.propertyId), campaign=\(data.campaignId ?? "nil")")
         let campaignData: [String: Any] = [WEConstants.PAYLOAD_TARGET_VIEW_ID: data.targetViewTag, WEConstants.PAYLOAD_CAMPAIGN_ID: data.campaignId ?? "", WEConstants.PAYLOAD: data.toJSONString() ?? ""]
         WEPersonalizationBridgeImpl.emitter.sendEvent(withName: WEConstants.METHOD_NAME_ON_RENDERED, body: campaignData)
         if(self.isVisibleToUser) {
-            WELogger.d(WEConstants.TAG+"WEP: WEInlineWidget: onRendered - View is visible, tracking impression")
+            WELogger.d(WEConstants.TAG+" onRendered: view visible, tracking impression")
             data.trackImpression(attributes: nil)
         } else {
-            WELogger.d(WEConstants.TAG+"WEP: WEInlineWidget: onRendered - View not visible, adding scroll observer")
+            WELogger.d(WEConstants.TAG+" onRendered: view not visible, adding scroll observer")
             if let scrollview = self.getScrollview(view: self), !isObserverAdded {
                 scrollview.addObserver(self, forKeyPath: #keyPath(UIScrollView.contentOffset), options: [.old, .new], context: nil)
                 observedScrollView = scrollview
@@ -181,14 +180,13 @@ extension WEInlineWidget : WEPlaceholderCallback{
     public func onDataReceived(_ data: WECampaignData) {
         self.campaignData = data;
         isLoadInProgress = false
-        WELogger.d(WEConstants.TAG+"WEP: WEInlineWidget: onDataReceived \(self.propertyId)")
-        WELogger.d(WEConstants.TAG+"WEP: WEInlineWidget: onDataReceived - campaignId: \(data.campaignId ?? "nil"), targetViewTag: \(data.targetViewTag)")
+        WELogger.d(WEConstants.TAG+" onDataReceived: property=\(self.propertyId), campaign=\(data.campaignId ?? "nil")")
         let campaignData: [String: Any] = [WEConstants.PAYLOAD_TARGET_VIEW_ID: data.targetViewTag, WEConstants.PAYLOAD_CAMPAIGN_ID: data.campaignId ?? "", WEConstants.PAYLOAD: data.toJSONString() ?? ""]
         
         WEPersonalizationBridgeImpl.emitter.sendEvent(withName: WEConstants.METHOD_NAME_ON_DATA_RECEIVED, body: campaignData)
     }
     public func onPlaceholderException(_ campaignId: String?, _ targetViewId: String, _ exception: Error) {
-        WELogger.d(WEConstants.TAG+"WEP: WEInlineWidget: onPlaceholderException \(self.propertyId)")
+        WELogger.d(WEConstants.TAG+" onPlaceholderException: property=\(self.propertyId), error=\(exception.localizedDescription)")
         let campaignData: [String: Any] = [WEConstants.PAYLOAD_TARGET_VIEW_ID: targetViewId, WEConstants.PAYLOAD_CAMPAIGN_ID: campaignId ?? "", WEConstants.EXCEPTION: exception.localizedDescription]
         WEPersonalizationBridgeImpl.emitter.sendEvent(withName: WEConstants.METHOD_NAME_ON_PLACEHOLDER_EXCEPTION, body: campaignData)
     }

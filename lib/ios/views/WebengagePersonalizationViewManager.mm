@@ -18,19 +18,19 @@
 RCT_EXPORT_MODULE(WEPersonalizationView)
 
 - (UIView *)view {
-    NSLog(@"WEPersonalization: WEPersonalizationViewManager: view: Creating WEInlineWidget");
+    NSLog(@"WE-Inline-Legacy: Creating WEInlineWidget");
     UIView *createdView = [WEPersonalizationViewManagerImpl createView];
-    NSLog(@"WEPersonalization: WEPersonalizationViewManager: view: Created view=%@", createdView);
+    NSLog(@"WE-Inline-Legacy: Created view=%@", createdView);
     return createdView;
 }
 
 + (BOOL)requiresMainQueueSetup {
-    NSLog(@"WEH: LegacyView: ViewManager: requiresMainQueueSetup");
+    NSLog(@"WE-Inline-Legacy: requiresMainQueueSetup");
     return NO;
 }
 
 RCT_CUSTOM_VIEW_PROPERTY(propertyId, NSString, WEInlineWidget) {
-    NSLog(@"WEH: LegacyView: ViewManager: RCT_CUSTOM_VIEW_PROPERTY propertyId = %@", json);
+    NSLog(@"WE-Inline-Legacy: propertyId = %@", json);
     NSString *propertyIdValue = json ? [RCTConvert NSString:json] : nil;
     if (propertyIdValue && view) {
         [view updateProperties:propertyIdValue screenName:view.screenName ?: @""];
@@ -38,7 +38,7 @@ RCT_CUSTOM_VIEW_PROPERTY(propertyId, NSString, WEInlineWidget) {
 }
 
 RCT_CUSTOM_VIEW_PROPERTY(screenName, NSString, WEInlineWidget) {
-    NSLog(@"WEH: LegacyView: ViewManager: RCT_CUSTOM_VIEW_PROPERTY screenName = %@", json);
+    NSLog(@"WE-Inline-Legacy: screenName = %@", json);
     NSString *screenNameValue = json ? [RCTConvert NSString:json] : nil;
     if (screenNameValue && view) {
         view.screenName = screenNameValue;

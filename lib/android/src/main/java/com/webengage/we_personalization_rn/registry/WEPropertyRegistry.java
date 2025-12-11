@@ -26,7 +26,7 @@ public class WEPropertyRegistry {
 
   public void setImpressionTrackedDetails(String targetViewId, String campaignId) {
     if (targetViewId == null || campaignId == null) {
-      Logger.d(WEConstants.TAG, "WEPropertyRegistry: setImpressionTrackedDetails - null parameter");
+      Logger.d(WEConstants.TAG, "[WE-Inline-Android] setImpressionTracked: null parameter");
       return;
     }
       String value = targetViewId + "_" + campaignId;
@@ -35,18 +35,19 @@ public class WEPropertyRegistry {
 
   public boolean isImpressionAlreadyTracked(String targetViewId, String campaignId) {
     if (targetViewId == null || campaignId == null) {
-      Logger.d(WEConstants.TAG, "WEPropertyRegistry: isImpressionAlreadyTracked - null parameter");
+      Logger.d(WEConstants.TAG, "[WE-Inline-Android] isImpressionTracked: null parameter");
       return false;
     }
       String value = targetViewId + "_" + campaignId;
       boolean flag = impressionTrackedForTargetViews.contains(value);
-      Logger.d(WEConstants.TAG, "trackImpression: isImpressionAlreadyTracked " + flag);
+      Logger.d(WEConstants.TAG, "[WE-Inline-Android] isImpressionTracked: property=" + targetViewId + ", campaign=" + campaignId + ", tracked=" + flag);
       return flag;
   }
 
   public void clearCacheData() {
+    int count = impressionTrackedForTargetViews.size();
     impressionTrackedForTargetViews.clear();
-    Logger.d(WEConstants.TAG, "trackImpression: Clear impression tracked data ");
+    Logger.d(WEConstants.TAG, "[WE-Inline-Android] clearCache: cleared " + count + " impressions");
 
   }
 }

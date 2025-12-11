@@ -11,8 +11,8 @@ export interface Spec extends TurboModule {
   readonly deregisterProperty: (propertyId: string) => void;
   readonly registerWECampaignCallback: () => void;
   readonly deregisterWECampaignCallback: () => void;
-  readonly trackClick: (propertyId: string, attributes: Record<string, unknown> | null) => void;
-  readonly trackImpression: (propertyId: string, attributes: Record<string, unknown> | null) => void;
+  readonly trackClick: (propertyId: string, attributes?: Object) => void;
+  readonly trackImpression: (propertyId: string, attributes?: Object) => void;
   readonly addListener: (eventType: string) => void;
   readonly removeListeners: (count: number) => void;
 }

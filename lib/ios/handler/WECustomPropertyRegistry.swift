@@ -26,7 +26,7 @@ public class WECustomPropertyRegistry: WEPlaceholderCallback {
                                     campaignData: map[WEConstants.PAYLOAD_WEGDATA] as? WECampaignData)
         
         registryMap[id] = weghinline
-        WELogger.d("WEP: WECustomPropertyRegistry: updateRegisterData \(registryMap)")
+        WELogger.d(WEConstants.TAG+" updateRegisterData: property=\(id)")
     }
     
     public func removeRegisterData(id:Int) {
@@ -50,13 +50,13 @@ public class CustomCallbackHandler: WEPlaceholderCallback {
     static let shared = CustomCallbackHandler()
     
     public func onRendered(_ data: WECampaignData) {
-        WELogger.d("WEP: WECustomPropertyRegistry: onRendered \(data.targetViewTag)")
+        WELogger.d(WEConstants.TAG+" onRendered: property=\(data.targetViewTag), campaign=\(data.campaignId ?? "nil")")
         let campaignData: [String: Any] = ["targetViewId": data.targetViewTag, "campaingId": data.campaignId ?? "", "payloadData": data.toJSONString() ?? ""]
         WEPersonalizationBridgeImpl.emitter.sendEvent(withName: "onRendered", body: campaignData)
     }
     
     public func onDataReceived(_ data: WECampaignData) {
-        WELogger.d("WEP: WECustomPropertyRegistry: onCustomDataReceived \(data.targetViewTag)")
+        WELogger.d(WEConstants.TAG+" onCustomDataReceived: property=\(data.targetViewTag), campaign=\(data.campaignId ?? "nil")")
         
         let campaignData: [String: Any] = ["targetViewId": data.targetViewTag, "campaingId": data.campaignId ?? "", "payloadData": data.toJSONString() ?? "", "trackImpression": "WEPersonalizationBridgeImpl.trackImpression","trackClick": "WEPersonalizationBridgeImpl.trackClick" ]
         let customData: [String: Any] = [
@@ -69,7 +69,7 @@ public class CustomCallbackHandler: WEPlaceholderCallback {
     }
     
     public func onPlaceholderException(_ campaignId: String?, _ targetViewId: Int, _ exception: Error) {
-        WELogger.d("WEP: WECustomPropertyRegistry: onCustomPlaceholderException \(targetViewId)")
+        WELogger.d(WEConstants.TAG+" onCustomPlaceholderException: property=\(targetViewId), campaign=\(campaignId ?? "nil"), error=\(exception.localizedDescription)")
         let campaignData: [String: Any] = ["targetViewId": targetViewId, "campaingId": campaignId ?? "", "exception": exception.localizedDescription]
         WEPersonalizationBridgeImpl.emitter.sendEvent(withName: "onCustomPlaceholderException", body: campaignData)
     }

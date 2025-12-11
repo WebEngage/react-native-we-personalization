@@ -27,17 +27,17 @@ public final class WEUtils {
   public static void sendEventToHybrid(ReactApplicationContext reactContext,
                                        String eventName, @Nullable WritableMap params) {
     if (reactContext == null || eventName == null) {
-      Logger.d(WEConstants.TAG, "sendEventToHybrid - null parameter");
+      Logger.d(WEConstants.TAG, "[WE-Inline-Android] sendEventToHybrid: null parameter");
       return;
     }
     try {
       String targetViewId = params != null && params.hasKey("targetViewId") ? params.getString("targetViewId") : "unknown";
-      Logger.d(WEConstants.TAG, "sendEventToHybrid triggered for " + eventName + " for " + targetViewId);
+      Logger.d(WEConstants.TAG, "[WE-Inline-Android] sendEventToHybrid: event=" + eventName + ", property=" + targetViewId);
       reactContext
         .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
         .emit(eventName, params);
     } catch (Exception e) {
-      Logger.d(WEConstants.TAG, "sendEventToHybrid failed: " + e.getMessage());
+      Logger.d(WEConstants.TAG, "[WE-Inline-Android] sendEventToHybrid failed: " + e.getMessage());
     }
   }
 
@@ -120,11 +120,11 @@ public final class WEUtils {
               break;
           }
         } catch (Exception e) {
-          Logger.d(WEConstants.TAG, "convertHybridMapToNativeMap - failed for key: " + key + ", error: " + e.getMessage());
+          Logger.d(WEConstants.TAG, "[WE-Inline-Android] convertMap failed for key=" + key + ": " + e.getMessage());
         }
       }
     } catch (Exception e) {
-      Logger.d(WEConstants.TAG, "convertHybridMapToNativeMap failed: " + e.getMessage());
+      Logger.d(WEConstants.TAG, "[WE-Inline-Android] convertMap failed: " + e.getMessage());
     }
     return map;
   }
@@ -158,11 +158,11 @@ public final class WEUtils {
               break;
           }
         } catch (Exception e) {
-          Logger.d(WEConstants.TAG, "convertReadableArrayToList - failed for index: " + i + ", error: " + e.getMessage());
+          Logger.d(WEConstants.TAG, "[WE-Inline-Android] convertArray failed for index=" + i + ": " + e.getMessage());
         }
       }
     } catch (Exception e) {
-      Logger.d(WEConstants.TAG, "convertReadableArrayToList failed: " + e.getMessage());
+      Logger.d(WEConstants.TAG, "[WE-Inline-Android] convertArray failed: " + e.getMessage());
     }
     return list;
   }

@@ -19,7 +19,7 @@ public class WEPluginCallbackHandler implements WEPropertyRegistryCallback {
   // TODO - Test this scenario properly 
   public static synchronized void setScreenNavigatorCallback(String screenName, String propertyId, ScreenNavigatorCallback screenNavigatedCallback) {
     if (screenName == null || propertyId == null || screenNavigatedCallback == null) {
-      Logger.d(WEConstants.TAG, "WEPluginCallbackHandler: setScreenNavigatorCallback - null parameter found");
+      Logger.d(WEConstants.TAG, "[WE-Inline-Android] setScreenNavigatorCallback: null parameter");
       return;
     }
     HashMap<String, ScreenNavigatorCallback> callback = mapOfScreenNavigatedCallbacks.get(screenName);
@@ -34,14 +34,14 @@ public class WEPluginCallbackHandler implements WEPropertyRegistryCallback {
       try {
         screenNavigatedCallback.screenNavigated(screenName);
       } catch (Exception e) {
-        Logger.d(WEConstants.TAG, "WEPluginCallbackHandler: setScreenNavigatorCallback - callback failed: " + e.getMessage());
+        Logger.d(WEConstants.TAG, "[WE-Inline-Android] setScreenNavigatorCallback failed: " + e.getMessage());
       }
     }
   }
 
   public static synchronized void removeScreenNavigatorCallback(String screenName, ScreenNavigatorCallback screenNavigatedCallback) {
     if (screenName == null) {
-      Logger.d(WEConstants.TAG, "WEPluginCallbackHandler: removeScreenNavigatorCallback - screenName not found");
+      Logger.d(WEConstants.TAG, "[WE-Inline-Android] removeScreenNavigatorCallback: screenName is null");
       return;
     }
     mapOfScreenNavigatedCallbacks.remove(screenName);
@@ -49,22 +49,24 @@ public class WEPluginCallbackHandler implements WEPropertyRegistryCallback {
 
   @Override
   public synchronized void onPropertyCacheCleared(@NonNull String navigatedScreen) {
-    Logger.d(WEConstants.TAG, "WEPluginCallbackHandler: onPropertyCacheCleared: Screen changed! to " + navigatedScreen);
+    String oldScreen = currentScreen;
+    Logger.d(WEConstants.TAG, "[WE-Inline-Android] onPropertyCacheCleared: " + (oldScreen != null ? oldScreen : "null") + "→" + navigatedScreen);
     currentScreen = navigatedScreen;
     try {
       WEPropertyRegistry.get().clearCacheData();
     } catch (Exception e) {
-      Logger.d(WEConstants.TAG, "WEPluginCallbackHandler: onPropertyCacheCleared - clearCacheData failed: " + e.getMessage());
+      Logger.d(WEConstants.TAG, "[WE-Inline-Android] clearCacheData failed: " + e.getMessage());
     }
     HashMap<String, ScreenNavigatorCallback> callbacksList = mapOfScreenNavigatedCallbacks.get(navigatedScreen);
     if (callbacksList != null) {
+      Logger.d(WEConstants.TAG, "[WE-Inline-Android] notifyWidgets: screen=" + navigatedScreen + ", count=" + callbacksList.size());
       for (String propertyKey : callbacksList.keySet()) {
         ScreenNavigatorCallback propertyCallback = callbacksList.get(propertyKey);
         if (propertyCallback != null) {
           try {
             propertyCallback.screenNavigated(navigatedScreen);
           } catch (Exception e) {
-            Logger.d(WEConstants.TAG, "WEPluginCallbackHandler: onPropertyCacheCleared - callback failed for propertyKey: " + propertyKey + ", error: " + e.getMessage());
+            Logger.d(WEConstants.TAG, "[WE-Inline-Android] callback failed: property=" + propertyKey + ", error=" + e.getMessage());
           }
         }
       }

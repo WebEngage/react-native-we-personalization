@@ -34,6 +34,7 @@ export declare const WEInlineWidget: React.ComponentType<WEInlineWidgetProps>;
 
 // Bridge functions
 export declare function initWePersonalization(): void;
+export declare function enableDevMode(): void;
 export declare function getArchitectureStatus(): { turboModule: boolean; fabric: false; };
 
 // Campaign callback functions
