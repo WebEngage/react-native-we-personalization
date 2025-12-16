@@ -25,23 +25,41 @@ RCT_EXPORT_MODULE(WEPersonalizationView)
 }
 
 + (BOOL)requiresMainQueueSetup {
-    NSLog(@"WE-Inline-Legacy: requiresMainQueueSetup");
-    return NO;
+    return YES;
 }
 
 RCT_CUSTOM_VIEW_PROPERTY(propertyId, NSString, WEInlineWidget) {
-    NSLog(@"WE-Inline-Legacy: propertyId = %@", json);
-    NSString *propertyIdValue = json ? [RCTConvert NSString:json] : nil;
-    if (propertyIdValue && view) {
-        [view updateProperties:propertyIdValue screenName:view.screenName ?: @""];
+    @try {
+        if (!view || ![view isKindOfClass:[WEInlineWidget class]]) {
+            return;
+        }
+        
+        NSString *propertyIdValue = json ? [RCTConvert NSString:json] : nil;
+        if (!propertyIdValue || [propertyIdValue length] == 0) {
+            return;
+        }
+        
+        NSString *screenName = view.screenName ?: @"";
+        [view updateProperties:propertyIdValue screenName:screenName];
+    } @catch (NSException *exception) {
+        NSLog(@"WE-Inline-Legacy: Error setting propertyId: %@", exception.reason);
     }
 }
 
 RCT_CUSTOM_VIEW_PROPERTY(screenName, NSString, WEInlineWidget) {
-    NSLog(@"WE-Inline-Legacy: screenName = %@", json);
-    NSString *screenNameValue = json ? [RCTConvert NSString:json] : nil;
-    if (screenNameValue && view) {
+    @try {
+        if (!view || ![view isKindOfClass:[WEInlineWidget class]]) {
+            return;
+        }
+        
+        NSString *screenNameValue = json ? [RCTConvert NSString:json] : nil;
+        if (!screenNameValue || [screenNameValue length] == 0) {
+            return;
+        }
+        
         view.screenName = screenNameValue;
+    } @catch (NSException *exception) {
+        NSLog(@"WE-Inline-Legacy: Error setting screenName: %@", exception.reason);
     }
 }
 

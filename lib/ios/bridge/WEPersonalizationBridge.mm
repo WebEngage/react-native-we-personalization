@@ -1,5 +1,4 @@
 #import "WEPersonalizationBridge.h"
-#include <Foundation/NSObjCRuntime.h>
 
 #if __has_include(<react_native_we_personalization/react_native_we_personalization-Swift.h>)
 #import <react_native_we_personalization/react_native_we_personalization-Swift.h>
@@ -10,10 +9,8 @@
 #import <WebEngage/WebEngage-Swift.h>
 
 #ifdef RCT_NEW_ARCH_ENABLED
-
 #import "WEPersonalizationSpec.h"
 #endif
-// https://github.com/react-native-community/RNNewArchitectureLibraries/tree/feat/swift-event-emitter
 @implementation WEPersonalizationBridge
 
 RCT_EXPORT_MODULE();
@@ -51,17 +48,17 @@ RCT_EXPORT_MODULE();
 RCT_EXPORT_METHOD(initWePersonalization)
 {
   NSLog(@"Arch: iOS.m - Initializing WE Personalization SDK");
-  [[WEPersonalizationBridgeImpl shared] initWePersonalization];
+    [[WEPersonalizationBridgeImpl shared] initWePersonalization];
 }
 
 RCT_EXPORT_METHOD(registerWECampaignCallback)
 {
-  [[WEPersonalizationBridgeImpl shared] registerWECampaignCallback];
+    [[WEPersonalizationBridgeImpl shared] registerWECampaignCallback];
 }
 
 RCT_EXPORT_METHOD(deregisterWECampaignCallback)
 {
-  [[WEPersonalizationBridgeImpl shared] deregisterWECampaignCallback];
+    [[WEPersonalizationBridgeImpl shared] deregisterWECampaignCallback];
 }
 
 RCT_EXPORT_METHOD(registerProperty:(nonnull NSString *)propertyId screenName:(nonnull NSString *)screenName)
@@ -126,14 +123,20 @@ RCT_EXPORT_METHOD(trackImpression:(nonnull NSString *)propertyId attributes:(NSD
 
 RCT_EXPORT_METHOD(addListener:(NSString *)eventType)
 {
-  [super addListener:eventType];
-  [[WEPersonalizationBridgeImpl shared] addListener:eventType];
+  @try {
+    if (eventType) {
+      [super addListener:eventType];
+      [[WEPersonalizationBridgeImpl shared] addListener:eventType];
+    }
+  } @catch (NSException *exception) {
+    NSLog(@"WEPersonalizationBridge: Error in addListener: %@", exception.reason);
+  }
 }
 
 RCT_EXPORT_METHOD(removeListeners:(double)count)
 {
-  [super removeListeners:count];
-  [[WEPersonalizationBridgeImpl shared] removeListeners:count];
+      [super removeListeners:count];
+      [[WEPersonalizationBridgeImpl shared] removeListeners:count];
 }
 
 - (void)startObserving

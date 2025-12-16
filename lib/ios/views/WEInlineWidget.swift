@@ -110,15 +110,9 @@ public class WEInlineWidget: UIView{
     
     private func removeScrollObserver() {
         guard isObserverAdded, let scrollview = observedScrollView else { return }
-        do {
-            scrollview.removeObserver(self, forKeyPath: #keyPath(UIScrollView.contentOffset))
-            isObserverAdded = false
-            observedScrollView = nil
-        } catch {
-            WELogger.d(WEConstants.TAG+" removeScrollObserver error: \(error)")
-            isObserverAdded = false
-            observedScrollView = nil
-        }
+        scrollview.removeObserver(self, forKeyPath: #keyPath(UIScrollView.contentOffset))
+        isObserverAdded = false
+        observedScrollView = nil
     }
     
     
@@ -128,18 +122,20 @@ public class WEInlineWidget: UIView{
     }
     
     
-    private func setupView(){
+    private func setupView() {
+        guard Thread.isMainThread else {
+            DispatchQueue.main.async { self.setupView() }
+            return
+        }
+        
         WELogger.d(WEConstants.TAG+" setupView: width=\(self.width), height=\(self.height), property=\(self.propertyId)")
-        WELogger.d(WEConstants.TAG+" setupView: bounds=\(self.bounds)")
-        WELogger.d(WEConstants.TAG+" setupView: frame=\(self.frame)")
-        WELogger.d(WEConstants.TAG+" setupView: screen=\(self.screenName)")
         
         if isReloading {
             WELogger.d(WEConstants.TAG+" setupView: skipping - waiting for new props after reload")
             return
         }
         
-        if(self.height > 0.1 && self.width > 0.1 && propertyId != 0 && !isViewSetup) {
+        if self.height > 0.1 && self.width > 0.1 && propertyId != 0 && !isViewSetup {
             WELogger.d(WEConstants.TAG+" setupView: conditions met, creating inlineView")
             isViewSetup = true
             inlineView?.removeFromSuperview()
@@ -189,22 +185,14 @@ public class WEInlineWidget: UIView{
 
 extension WEInlineWidget : WEPlaceholderCallback{
     public func onRendered(data: WECampaignData) {
-        self.monitorVisibilityAndFireEvent();
         WELogger.d(WEConstants.TAG+" onRendered: property=\(self.propertyId), campaign=\(data.campaignId ?? "nil")")
         let campaignData: [String: Any] = [WEConstants.PAYLOAD_TARGET_VIEW_ID: data.targetViewTag, WEConstants.PAYLOAD_CAMPAIGN_ID: data.campaignId ?? "", WEConstants.PAYLOAD: data.toJSONString() ?? ""]
-        WEPersonalizationBridgeImpl.emitter.sendEvent(withName: WEConstants.METHOD_NAME_ON_RENDERED, body: campaignData)
-        if(self.isVisibleToUser) {
+        WEPersonalizationBridgeImpl.emitter?.sendEvent(withName: WEConstants.METHOD_NAME_ON_RENDERED, body: campaignData)
+        
+        if self.isVisibleToUser {
             WELogger.d(WEConstants.TAG+" onRendered: view visible, tracking impression")
             data.trackImpression(attributes: nil)
-        } else {
-            WELogger.d(WEConstants.TAG+" onRendered: view not visible, adding scroll observer")
-            if let scrollview = self.getScrollview(view: self), !isObserverAdded {
-                scrollview.addObserver(self, forKeyPath: #keyPath(UIScrollView.contentOffset), options: [.old, .new], context: nil)
-                observedScrollView = scrollview
-                isObserverAdded = true
-            }
         }
-        
     }
     public func onDataReceived(_ data: WECampaignData) {
         self.campaignData = data;
@@ -212,12 +200,12 @@ extension WEInlineWidget : WEPlaceholderCallback{
         WELogger.d(WEConstants.TAG+" onDataReceived: property=\(self.propertyId), campaign=\(data.campaignId ?? "nil")")
         let campaignData: [String: Any] = [WEConstants.PAYLOAD_TARGET_VIEW_ID: data.targetViewTag, WEConstants.PAYLOAD_CAMPAIGN_ID: data.campaignId ?? "", WEConstants.PAYLOAD: data.toJSONString() ?? ""]
         
-        WEPersonalizationBridgeImpl.emitter.sendEvent(withName: WEConstants.METHOD_NAME_ON_DATA_RECEIVED, body: campaignData)
+        WEPersonalizationBridgeImpl.emitter?.sendEvent(withName: WEConstants.METHOD_NAME_ON_DATA_RECEIVED, body: campaignData)
     }
     public func onPlaceholderException(_ campaignId: String?, _ targetViewId: String, _ exception: Error) {
         WELogger.d(WEConstants.TAG+" onPlaceholderException: property=\(self.propertyId), error=\(exception.localizedDescription)")
         let campaignData: [String: Any] = [WEConstants.PAYLOAD_TARGET_VIEW_ID: targetViewId, WEConstants.PAYLOAD_CAMPAIGN_ID: campaignId ?? "", WEConstants.EXCEPTION: exception.localizedDescription]
-        WEPersonalizationBridgeImpl.emitter.sendEvent(withName: WEConstants.METHOD_NAME_ON_PLACEHOLDER_EXCEPTION, body: campaignData)
+        WEPersonalizationBridgeImpl.emitter?.sendEvent(withName: WEConstants.METHOD_NAME_ON_PLACEHOLDER_EXCEPTION, body: campaignData)
     }
 }
 
@@ -229,53 +217,62 @@ extension WEInlineWidget {
         return view.superview == nil ? nil : getScrollview(view: view.superview!)
     }
     
-    public override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
-        if keyPath == #keyPath(UIScrollView.contentOffset) {
-            if self.isVisibleToUser == true{
-                if isObserverAdded {
-                    removeScrollObserver()
-                    if context == &self.observerContextCG {
-                        fireCGEvent()
-                    }else if let data = self.campaignData{
-                        data.trackImpression(attributes: nil)
-                    }
-                }
+    public override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
+        guard keyPath == #keyPath(UIScrollView.contentOffset) else {
+            super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
+            return
+        }
+        
+        if self.isVisibleToUser && isObserverAdded {
+            removeScrollObserver()
+            if context == &self.observerContextCG {
+                fireCGEvent()
+            } else if let data = self.campaignData {
+                data.trackImpression(attributes: nil)
             }
         }
     }
 }
 
-extension UIView{
+extension UIView {
     var isVisibleToUser: Bool {
-        
         if isHidden || alpha == 0 || superview == nil || window == nil {
             return false
         }
         
-        guard let rootViewController = UIApplication.shared.keyWindow?.rootViewController else {
+        guard let window = self.window else {
             return false
         }
         
-        let viewFrame = convert(bounds, to: rootViewController.view)
+        let rootViewController: UIViewController?
+        if #available(iOS 13.0, *) {
+            rootViewController = window.windowScene?.windows.first?.rootViewController
+        } else {
+            rootViewController = window.rootViewController
+        }
+        
+        guard let rootVC = rootViewController else {
+            return false
+        }
+        
+        let viewFrame = convert(bounds, to: rootVC.view)
         
         let topSafeArea: CGFloat
         let bottomSafeArea: CGFloat
         
         if #available(iOS 11.0, *) {
-            topSafeArea = rootViewController.view.safeAreaInsets.top
-            bottomSafeArea = rootViewController.view.safeAreaInsets.bottom
+            topSafeArea = rootVC.view.safeAreaInsets.top
+            bottomSafeArea = rootVC.view.safeAreaInsets.bottom
         } else {
-            topSafeArea = rootViewController.topLayoutGuide.length
-            bottomSafeArea = rootViewController.bottomLayoutGuide.length
+            topSafeArea = rootVC.topLayoutGuide.length
+            bottomSafeArea = rootVC.bottomLayoutGuide.length
         }
         
         return viewFrame.maxX >= 0 &&
-        viewFrame.minX <= rootViewController.view.bounds.width &&
-        viewFrame.maxY >= topSafeArea &&
-        viewFrame.minY <= rootViewController.view.bounds.height - bottomSafeArea
+            viewFrame.minX <= rootVC.view.bounds.width &&
+            viewFrame.maxY >= topSafeArea &&
+            viewFrame.minY <= rootVC.view.bounds.height - bottomSafeArea
     }
-    
-       
 }
 
 extension WEInlineWidget : WECampaignControlInternalCallback{

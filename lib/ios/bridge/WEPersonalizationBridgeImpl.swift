@@ -9,14 +9,16 @@ public class WEPersonalizationBridgeImpl: NSObject {
     
     @objc public static let shared = WEPersonalizationBridgeImpl()
     
-    @objc public static var emitter: RCTEventEmitter!
+    @objc public static var emitter: RCTEventEmitter?
     @objc public var propertyId = 0
     @objc public var weCampaignData: WECampaignData? = nil
     @objc public var customPropertiesList = [Int]()
     @objc public var WEGPEPluginVersion = "1.1.2"
-    private var listenerCount: Int = 0
     
-    @objc public func setEmitter(_ emitter: RCTEventEmitter) {
+    private var listenerCount: Int = 0
+    private let listenerQueue = DispatchQueue(label: "com.webengage.personalization.listener", attributes: .concurrent)
+    
+    @objc public func setEmitter(_ emitter: RCTEventEmitter?) {
         WEPersonalizationBridgeImpl.emitter = emitter
     }
     
@@ -58,6 +60,11 @@ public class WEPersonalizationBridgeImpl: NSObject {
     }
     
     @objc public func registerProperty(_ propertyId: Int, screenName: String) {
+        guard !screenName.isEmpty else {
+            WELogger.d(WEConstants.TAG+" registerProperty: invalid screenName")
+            return
+        }
+        
         WELogger.d(WEConstants.TAG+" registerProperty: property=\(propertyId), screen=\(screenName)")
         self.propertyId = propertyId
         let data: [String: Any] = [
@@ -75,28 +82,42 @@ public class WEPersonalizationBridgeImpl: NSObject {
         WEPersonalization.shared.unregisterWEPlaceholderCallback(propertyId)
     }
     
-    @objc public func trackClick(_ propertyId: Int, attributes: [String: Any]) {
-        let weginline = WECustomPropertyRegistry.instance.getWEGHinline(targetViewTag: propertyId)
-        weginline?.campaignData?.trackClick(attributes: attributes)
+    @objc public func trackClick(_ propertyId: Int, attributes: [String: Any]?) {
+        guard let weginline = WECustomPropertyRegistry.instance.getWEGHinline(targetViewTag: propertyId),
+              let campaignData = weginline.campaignData else {
+            WELogger.d(WEConstants.TAG+" trackClick: no campaign data for property=\(propertyId)")
+            return
+        }
+        campaignData.trackClick(attributes: attributes)
     }
     
-    @objc public func trackImpression(_ propertyId: Int, attributes: [String: Any]) {
-        let weginline = WECustomPropertyRegistry.instance.getWEGHinline(targetViewTag: propertyId)
-        weginline?.campaignData?.trackImpression(attributes: attributes)
+    @objc public func trackImpression(_ propertyId: Int, attributes: [String: Any]?) {
+        guard let weginline = WECustomPropertyRegistry.instance.getWEGHinline(targetViewTag: propertyId),
+              let campaignData = weginline.campaignData else {
+            WELogger.d(WEConstants.TAG+" trackImpression: no campaign data for property=\(propertyId)")
+            return
+        }
+        campaignData.trackImpression(attributes: attributes)
     }
     
     @objc public func addListener(_ eventType: String) {
-        listenerCount += 1
+        listenerQueue.async(flags: .barrier) {
+            self.listenerCount += 1
+        }
     }
     
     @objc public func removeListeners(_ count: Double) {
-        listenerCount -= Int(count)
-        if listenerCount < 0 {
-            listenerCount = 0
+        listenerQueue.async(flags: .barrier) {
+            self.listenerCount -= Int(count)
+            if self.listenerCount < 0 {
+                self.listenerCount = 0
+            }
         }
     }
     
     @objc public func hasListeners() -> Bool {
-        return listenerCount > 0
+        return listenerQueue.sync {
+            return self.listenerCount > 0
+        }
     }
 }

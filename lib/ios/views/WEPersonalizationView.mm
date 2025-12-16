@@ -50,15 +50,39 @@ using namespace facebook::react;
 
 - (void)updateProps:(Props::Shared const &)props oldProps:(Props::Shared const &)oldProps
 {
-    NSLog(@"WE-Inline-Fabric: updateProps called");
     const auto &oldViewProps = *std::static_pointer_cast<WEPersonalizationViewProps const>(_props);
     const auto &newViewProps = *std::static_pointer_cast<WEPersonalizationViewProps const>(props);
 
     if (oldViewProps.propertyId != newViewProps.propertyId || oldViewProps.screenName != newViewProps.screenName) {
-        NSString *propertyId = [[NSString alloc] initWithUTF8String: newViewProps.propertyId.c_str()];
-        NSString *screenName = [[NSString alloc] initWithUTF8String: newViewProps.screenName.c_str()];
-        NSLog(@"WE-Inline-Fabric: propertyId=%@, screenName=%@", propertyId, screenName);
-        [WEPersonalizationViewManagerImpl updateView:_view propertyId:propertyId screenName:screenName];
+        @try {
+            if (!_view) {
+                NSLog(@"WE-Inline-Fabric: updateProps - view is nil");
+                [super updateProps:props oldProps:oldProps];
+                return;
+            }
+            
+            const char *propertyIdCStr = newViewProps.propertyId.c_str();
+            const char *screenNameCStr = newViewProps.screenName.c_str();
+            
+            if (!propertyIdCStr || !screenNameCStr) {
+                NSLog(@"WE-Inline-Fabric: updateProps - invalid C string");
+                [super updateProps:props oldProps:oldProps];
+                return;
+            }
+            
+            NSString *propertyId = [[NSString alloc] initWithUTF8String:propertyIdCStr];
+            NSString *screenName = [[NSString alloc] initWithUTF8String:screenNameCStr];
+            
+            if (!propertyId || !screenName || [propertyId length] == 0 || [screenName length] == 0) {
+                NSLog(@"WE-Inline-Fabric: updateProps - invalid NSString conversion");
+                [super updateProps:props oldProps:oldProps];
+                return;
+            }
+            
+            [WEPersonalizationViewManagerImpl updateView:_view propertyId:propertyId screenName:screenName];
+        } @catch (NSException *exception) {
+            NSLog(@"WE-Inline-Fabric: Error in updateProps: %@", exception.reason);
+        }
     }
 
     [super updateProps:props oldProps:oldProps];
