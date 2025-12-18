@@ -16,7 +16,6 @@ public class WEPluginCallbackHandler implements WEPropertyRegistryCallback {
   private static volatile String currentScreen = null;
   private static final HashMap<String, HashMap<String, ScreenNavigatorCallback>> mapOfScreenNavigatedCallbacks = new HashMap<>();
 
-  // TODO - Test this scenario properly 
   public static synchronized void setScreenNavigatorCallback(String screenName, String propertyId, ScreenNavigatorCallback screenNavigatedCallback) {
     if (screenName == null || propertyId == null || screenNavigatedCallback == null) {
       Logger.d(WEConstants.TAG, "[WE-Inline-Android] setScreenNavigatorCallback: null parameter");

@@ -6,9 +6,7 @@ public class WEPersonalizationViewManagerImpl: NSObject {
     
     @objc
     public static func createView() -> UIView {
-        NSLog("WEPersonalization: WEPersonalizationViewManagerImpl: createView: Creating WEInlineWidget")
         let widget = WEInlineWidget(frame: .zero)
-        NSLog("WEPersonalization: WEPersonalizationViewManagerImpl: createView: Created widget=%@", widget)
         return widget
     }
     

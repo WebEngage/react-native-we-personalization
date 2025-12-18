@@ -36,13 +36,11 @@ using namespace facebook::react;
 
 - (instancetype)initWithFrame:(CGRect)frame
 {
-    NSLog(@"WE-Inline-Fabric: initWithFrame: frame=%@", NSStringFromCGRect(frame));
     if (self = [super initWithFrame:frame]) {
         static const auto defaultProps = std::make_shared<const WEPersonalizationViewProps>();
         _props = defaultProps;
         
         _view = [WEPersonalizationViewManagerImpl createView];
-        NSLog(@"WE-Inline-Fabric: _view created=%@", _view);
         self.contentView = _view;
     }
     return self;

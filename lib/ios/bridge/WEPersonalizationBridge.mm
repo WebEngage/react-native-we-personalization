@@ -47,7 +47,6 @@ RCT_EXPORT_MODULE();
 
 RCT_EXPORT_METHOD(initWePersonalization)
 {
-  NSLog(@"Arch: iOS.m - Initializing WE Personalization SDK");
     [[WEPersonalizationBridgeImpl shared] initWePersonalization];
 }
 

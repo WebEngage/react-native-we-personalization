@@ -44,18 +44,14 @@ public class WEPersonalizationBridgeImpl: NSObject {
     }
     
     @objc public func initWePersonalization() {
-      print("\(WEConstants.TAG) initWePersonalization called");
-      
         // Implementation if needed
     }
     
     @objc public func registerWECampaignCallback() {
-        WELogger.d(WEConstants.TAG+" registerWECampaignCallback called")
         WEPersonalization.shared.registerWECampaignCallback(WECampaignCallbackHandler.shared)
     }
     
     @objc public func deregisterWECampaignCallback() {
-        WELogger.d(WEConstants.TAG+" deregisterWECampaignCallback called")
         WEPersonalization.shared.unregisterWECampaignCallback(WECampaignCallbackHandler.shared)
     }
     
@@ -65,7 +61,6 @@ public class WEPersonalizationBridgeImpl: NSObject {
             return
         }
         
-        WELogger.d(WEConstants.TAG+" registerProperty: property=\(propertyId), screen=\(screenName)")
         self.propertyId = propertyId
         let data: [String: Any] = [
             WEConstants.PAYLOAD_ID: propertyId,
@@ -77,7 +72,6 @@ public class WEPersonalizationBridgeImpl: NSObject {
     }
     
     @objc public func deregisterProperty(_ propertyId: Int) {
-        WELogger.d(WEConstants.TAG+" deregisterProperty: property=\(propertyId)")
         WECustomPropertyRegistry.instance.removeRegisterData(id: propertyId)
         WEPersonalization.shared.unregisterWEPlaceholderCallback(propertyId)
     }

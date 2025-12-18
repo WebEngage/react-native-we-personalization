@@ -76,25 +76,18 @@ public class WEInlineWidget: UIView{
     }
     
     override init(frame: CGRect) {
-        NSLog("\(WEConstants.TAG) init: frame=%@", NSCoder.string(for: frame))
-        WELogger.d(WEConstants.TAG+" init called")
         super.init(frame: frame)
         NotificationCenter.default.addObserver(self, selector: #selector(reloadViews), name: Notification.Name(WEConstants.SCREEN_NAVIGATED), object: nil)
     }
     
     public override func layoutSubviews() {
         super.layoutSubviews()
-        WELogger.d(WEConstants.TAG+" layoutSubviews: bounds=\(self.bounds)")
-        WELogger.d(WEConstants.TAG+" layoutSubviews: width=\(self.width), height=\(self.height)")
-        WELogger.d(WEConstants.TAG+" layoutSubviews: property=\(self.propertyId), screen=\(self.screenName)")
         if self.width != self.bounds.width || self.height != self.bounds.height {
-            WELogger.d(WEConstants.TAG+" layoutSubviews: updating dimensions \(self.width)x\(self.height) → \(self.bounds.width)x\(self.bounds.height)")
             self.width = self.bounds.width
             self.height = self.bounds.height
         }
         
         if isReloading && self.propertyId != 0 && self.width > 0.1 && self.height > 0.1 && !self.screenName.isEmpty {
-            WELogger.d(WEConstants.TAG+" layoutSubviews: triggering setup after reload")
             isReloading = false
             setupView()
         }

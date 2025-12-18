@@ -18,9 +18,7 @@
 RCT_EXPORT_MODULE(WEPersonalizationView)
 
 - (UIView *)view {
-    NSLog(@"WE-Inline-Legacy: Creating WEInlineWidget");
     UIView *createdView = [WEPersonalizationViewManagerImpl createView];
-    NSLog(@"WE-Inline-Legacy: Created view=%@", createdView);
     return createdView;
 }
 
