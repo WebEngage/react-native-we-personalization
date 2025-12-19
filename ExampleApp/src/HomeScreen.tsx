@@ -40,6 +40,12 @@ const HomeScreen: React.FC<HomeScreenProps> = ({navigation}) => {
   // ========== Widget Event Handlers ==========
   const handleWidgetRendered = (data: any) => {
     console.log('Widget rendered:', data);
+    const { targetViewId = 0 } = data;
+    if (targetViewId === WIDGET_2.androidPropertyId || targetViewId === WIDGET_2.iosPropertyId) {
+      setIsVisible2(true);
+    } else if(targetViewId === WIDGET_1.androidPropertyId || targetViewId === WIDGET_1.iosPropertyId) {
+      setIsVisible1(true);
+    }
   };
 
   const handleWidgetDataReceived = (data: any) => {
@@ -86,18 +92,17 @@ const HomeScreen: React.FC<HomeScreenProps> = ({navigation}) => {
         ))}
       </View>
 
-<View style={[{ height: isVisible1 ? WIDGET_2.height : 1, width: WIDGET_2.width }]}>
-
       {/* Widget 1 - After Categories */}
-      <WEInlineWidget
-        style={{height: WIDGET_1.height, width: WIDGET_1.width}}
-        screenName={SCREEN_NAME}
-        androidPropertyId={WIDGET_1.androidPropertyId}
-        iosPropertyId={WIDGET_1.iosPropertyId}
-        onRendered={handleWidgetRendered}
-        onDataReceived={handleWidgetDataReceived}
-        onPlaceholderException={handleWidgetError}
-      />
+      <View style={{ height: isVisible1 ? WIDGET_1.height : 1, width: WIDGET_1.width }}>
+        <WEInlineWidget
+          style={{height: WIDGET_1.height, width: WIDGET_1.width}}
+          screenName={SCREEN_NAME}
+          androidPropertyId={WIDGET_1.androidPropertyId}
+          iosPropertyId={WIDGET_1.iosPropertyId}
+          onRendered={handleWidgetRendered}
+          onDataReceived={handleWidgetDataReceived}
+          onPlaceholderException={handleWidgetError}
+        />
       </View>
 
       {/* Featured Products Section */}
@@ -113,17 +118,17 @@ const HomeScreen: React.FC<HomeScreenProps> = ({navigation}) => {
       ))}
 
 
-<View style={[{ height: isVisible2 ? WIDGET_2.height : 1, width: WIDGET_2.width }]}>
       {/* Widget 2 - After Products */}
-      <WEInlineWidget
-        style={{height: WIDGET_2.height, width: WIDGET_2.width}}
-        screenName={SCREEN_NAME}
-        androidPropertyId={WIDGET_2.androidPropertyId}
-        iosPropertyId={WIDGET_2.iosPropertyId}
-        onRendered={handleWidgetRendered}
-        onDataReceived={handleWidgetDataReceived}
-        onPlaceholderException={handleWidgetError}
-      />
+      <View style={{ height: isVisible2 ? WIDGET_2.height : 1, width: WIDGET_2.width }}>
+        <WEInlineWidget
+          style={{height: WIDGET_2.height, width: WIDGET_2.width}}
+          screenName={SCREEN_NAME}
+          androidPropertyId={WIDGET_2.androidPropertyId}
+          iosPropertyId={WIDGET_2.iosPropertyId}
+          onRendered={handleWidgetRendered}
+          onDataReceived={handleWidgetDataReceived}
+          onPlaceholderException={handleWidgetError}
+        />
       </View>
       </ScrollView>
     </View>

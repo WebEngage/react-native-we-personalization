@@ -1,22 +1,24 @@
 import { useFocusEffect } from '@react-navigation/native';
 import React from 'react';
-import {View, Text, StyleSheet, ScrollView, Pressable} from 'react-native';
-import {WEInlineWidget} from 'react-native-we-personalization';
+import { View, Text, StyleSheet, ScrollView, Pressable } from 'react-native';
+import { WEInlineWidget } from 'react-native-we-personalization';
 import WebEngage from 'react-native-webengage';
-import {SCREEN_NAMES, BUTTON_LABELS} from './constants';
+import { SCREEN_NAMES, BUTTON_LABELS } from './constants';
 
 interface OrdersScreenProps {
   navigation: any;
 }
 
-const OrdersScreen: React.FC<OrdersScreenProps> = ({navigation}) => {
+const OrdersScreen: React.FC<OrdersScreenProps> = ({ navigation }) => {
+  const [isVisible1, setIsVisible1] = React.useState(false);
+  const [isVisible2, setIsVisible2] = React.useState(false);
   const orders = [
-    {id: '#12345', date: '2024-01-15', status: 'Delivered', total: '$299', items: 2},
-    {id: '#12344', date: '2024-01-10', status: 'Shipped', total: '$149', items: 1},
-    {id: '#12343', date: '2024-01-05', status: 'Processing', total: '$499', items: 3},
+    { id: '#12345', date: '2024-01-15', status: 'Delivered', total: '$299', items: 2 },
+    { id: '#12344', date: '2024-01-10', status: 'Shipped', total: '$149', items: 1 },
+    { id: '#12343', date: '2024-01-05', status: 'Processing', total: '$499', items: 3 },
   ];
   const SCREEN_NAME = 'screen2';
-  
+
   const WIDGET_1 = {
     androidPropertyId: 'S2P2',
     iosPropertyId: 22,
@@ -30,9 +32,9 @@ const OrdersScreen: React.FC<OrdersScreenProps> = ({navigation}) => {
     width: 350,
     height: 200,
   };
-   // ========== WebEngage Tracking ==========
+  // ========== WebEngage Tracking ==========
   const webengage = new WebEngage();
-  
+
   useFocusEffect(
     React.useCallback(() => {
       webengage.screen(SCREEN_NAME);
@@ -42,6 +44,13 @@ const OrdersScreen: React.FC<OrdersScreenProps> = ({navigation}) => {
   // ========== Widget Event Handlers ==========
   const handleWidgetRendered = (data: any) => {
     console.log('Widget rendered:', data);
+    // setIsVisible(true);
+    const { targetViewId = 0 } = data;
+    if (targetViewId === WIDGET_2.androidPropertyId || targetViewId === WIDGET_2.iosPropertyId) {
+      setIsVisible2(true);
+    } else if(targetViewId === WIDGET_1.androidPropertyId || targetViewId === WIDGET_1.iosPropertyId) {
+      setIsVisible1(true);
+    }
   };
 
   const handleWidgetDataReceived = (data: any) => {
@@ -76,52 +85,57 @@ const OrdersScreen: React.FC<OrdersScreenProps> = ({navigation}) => {
           <Text style={styles.headerText}>My Orders</Text>
           <Text style={styles.subHeaderText}>{orders.length} orders</Text>
         </View>
-      
-      {/* Widget 1 - After Categories */}
-      <WEInlineWidget
-        style={{height: WIDGET_1.height, width: WIDGET_1.width}}
-        screenName={SCREEN_NAME}
-        androidPropertyId={WIDGET_1.androidPropertyId}
-        iosPropertyId={WIDGET_1.iosPropertyId}
-        onRendered={handleWidgetRendered}
-        onDataReceived={handleWidgetDataReceived}
-        onPlaceholderException={handleWidgetError}
-      />
+
+        {/* Widget 1 - After Categories */}
+        <View style={{ height: isVisible1 ? WIDGET_1.height : 1, width: WIDGET_1.width }}>
+
+          <WEInlineWidget
+            style={{ height: WIDGET_1.height, width: WIDGET_1.width }}
+            screenName={SCREEN_NAME}
+            androidPropertyId={WIDGET_1.androidPropertyId}
+            iosPropertyId={WIDGET_1.iosPropertyId}
+            onRendered={handleWidgetRendered}
+            onDataReceived={handleWidgetDataReceived}
+            onPlaceholderException={handleWidgetError}
+          />
+        </View>
 
 
-      {orders.map(order => (
-        <View key={order.id} style={styles.orderCard}>
-          <View style={styles.orderHeader}>
-            <Text style={styles.orderId}>Order {order.id}</Text>
-            <View style={[styles.statusBadge, {backgroundColor: getStatusColor(order.status)}]}>
-              <Text style={styles.statusText}>{order.status}</Text>
+        {orders.map(order => (
+          <View key={order.id} style={styles.orderCard}>
+            <View style={styles.orderHeader}>
+              <Text style={styles.orderId}>Order {order.id}</Text>
+              <View style={[styles.statusBadge, { backgroundColor: getStatusColor(order.status) }]}>
+                <Text style={styles.statusText}>{order.status}</Text>
+              </View>
+            </View>
+            <View style={styles.orderDetails}>
+              <Text style={styles.detailText}>Date: {order.date}</Text>
+              <Text style={styles.detailText}>Items: {order.items}</Text>
+              <Text style={styles.totalText}>Total: {order.total}</Text>
             </View>
           </View>
-          <View style={styles.orderDetails}>
-            <Text style={styles.detailText}>Date: {order.date}</Text>
-            <Text style={styles.detailText}>Items: {order.items}</Text>
-            <Text style={styles.totalText}>Total: {order.total}</Text>
+        ))}
+
+        <View>
+          <Text style={{ textAlign: 'center', marginVertical: 10, color: '#666' }}>
+            Below will be another widget instance
+          </Text>
+          {/* Widget 1 - After Categories */}
+          <View style={{ height: isVisible2 ? WIDGET_2.height : 1, width: WIDGET_2.width }}>
+            <WEInlineWidget
+              style={{ height: WIDGET_2.height, width: WIDGET_2.width }}
+              screenName={SCREEN_NAME}
+              androidPropertyId={WIDGET_2.androidPropertyId}
+              iosPropertyId={WIDGET_2.iosPropertyId}
+              onRendered={handleWidgetRendered}
+              onDataReceived={handleWidgetDataReceived}
+              onPlaceholderException={handleWidgetError}
+            />
           </View>
+
+          <Text style={{ textAlign: 'center', marginVertical: 10, color: '#666' }}> End of Orders </Text>
         </View>
-      ))}
-
-      <View>
-        <Text style={{textAlign: 'center', marginVertical: 10, color: '#666'}}>
-          Below will be another widget instance
-        </Text>
-        {/* Widget 1 - After Categories */}
-      <WEInlineWidget
-        style={{height: WIDGET_2.height, width: WIDGET_2.width}}
-        screenName={SCREEN_NAME}
-        androidPropertyId={WIDGET_2.androidPropertyId}
-        iosPropertyId={WIDGET_2.iosPropertyId}
-        onRendered={handleWidgetRendered}
-        onDataReceived={handleWidgetDataReceived}
-        onPlaceholderException={handleWidgetError}
-      />
-
-      <Text style={{textAlign: 'center', marginVertical: 10, color: '#666'}}> End of Orders </Text>
-      </View>
       </ScrollView>
     </View>
   );
