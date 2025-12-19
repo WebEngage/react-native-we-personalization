@@ -23,6 +23,13 @@ const OrdersScreen: React.FC<OrdersScreenProps> = ({navigation}) => {
     width: 350,
     height: 200,
   };
+
+  const WIDGET_2 = {
+    androidPropertyId: 'S2P4',
+    iosPropertyId: 24,
+    width: 350,
+    height: 200,
+  };
    // ========== WebEngage Tracking ==========
   const webengage = new WebEngage();
   
@@ -97,6 +104,24 @@ const OrdersScreen: React.FC<OrdersScreenProps> = ({navigation}) => {
           </View>
         </View>
       ))}
+
+      <View>
+        <Text style={{textAlign: 'center', marginVertical: 10, color: '#666'}}>
+          Below will be another widget instance
+        </Text>
+        {/* Widget 1 - After Categories */}
+      <WEInlineWidget
+        style={{height: WIDGET_2.height, width: WIDGET_2.width}}
+        screenName={SCREEN_NAME}
+        androidPropertyId={WIDGET_2.androidPropertyId}
+        iosPropertyId={WIDGET_2.iosPropertyId}
+        onRendered={handleWidgetRendered}
+        onDataReceived={handleWidgetDataReceived}
+        onPlaceholderException={handleWidgetError}
+      />
+
+      <Text style={{textAlign: 'center', marginVertical: 10, color: '#666'}}> End of Orders </Text>
+      </View>
       </ScrollView>
     </View>
   );

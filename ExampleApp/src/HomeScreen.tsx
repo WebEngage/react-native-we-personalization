@@ -1,5 +1,5 @@
 import {useFocusEffect} from '@react-navigation/native';
-import React from 'react';
+import React, { useState } from 'react';
 import {View, Text, StyleSheet, ScrollView, Pressable} from 'react-native';
 import {WEInlineWidget} from 'react-native-we-personalization';
 import WebEngage from 'react-native-webengage';
@@ -12,7 +12,8 @@ interface HomeScreenProps {
 const HomeScreen: React.FC<HomeScreenProps> = ({navigation}) => {
   // ========== WebEngage Configuration ==========
   const SCREEN_NAME = 'screen1';
-  
+  const [isVisible1, setIsVisible1] = useState(false);
+  const [isVisible2, setIsVisible2] = useState(false);
   const WIDGET_1 = {
     androidPropertyId: 'S1P1',
     iosPropertyId: 1,
@@ -85,6 +86,8 @@ const HomeScreen: React.FC<HomeScreenProps> = ({navigation}) => {
         ))}
       </View>
 
+<View style={[{ height: isVisible1 ? WIDGET_2.height : 1, width: WIDGET_2.width }]}>
+
       {/* Widget 1 - After Categories */}
       <WEInlineWidget
         style={{height: WIDGET_1.height, width: WIDGET_1.width}}
@@ -95,6 +98,7 @@ const HomeScreen: React.FC<HomeScreenProps> = ({navigation}) => {
         onDataReceived={handleWidgetDataReceived}
         onPlaceholderException={handleWidgetError}
       />
+      </View>
 
       {/* Featured Products Section */}
       <Text style={styles.sectionTitle}>Featured Products</Text>
@@ -108,6 +112,8 @@ const HomeScreen: React.FC<HomeScreenProps> = ({navigation}) => {
         </View>
       ))}
 
+
+<View style={[{ height: isVisible2 ? WIDGET_2.height : 1, width: WIDGET_2.width }]}>
       {/* Widget 2 - After Products */}
       <WEInlineWidget
         style={{height: WIDGET_2.height, width: WIDGET_2.width}}
@@ -118,6 +124,7 @@ const HomeScreen: React.FC<HomeScreenProps> = ({navigation}) => {
         onDataReceived={handleWidgetDataReceived}
         onPlaceholderException={handleWidgetError}
       />
+      </View>
       </ScrollView>
     </View>
   );

@@ -26,7 +26,6 @@
 	<true/>
 	<key>NSAppTransportSecurity</key>
 	<dict>
-	  <!-- Do not change NSAllowsArbitraryLoads to true, or you will risk app rejection! -->
 		<key>NSAllowsArbitraryLoads</key>
 		<false/>
 		<key>NSAllowsLocalNetworking</key>
@@ -34,6 +33,8 @@
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string></string>
+	<key>RCTNewArchEnabled</key>
+	<true/>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>remote-notification</string>
@@ -52,9 +53,9 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-  <key>WEGLicenseCode</key>
-    <string>LICENSE_CODE</string>
-    <key>WEGLogLevel</key>
-    <string>VERBOSE</string>
+	<key>WEGLicenseCode</key>
+	<string>~1341056cd</string>
+	<key>WEGLogLevel</key>
+	<string>VERBOSE</string>
 </dict>
 </plist>

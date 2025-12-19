@@ -3,7 +3,7 @@
 #import <React/RCTBundleURLProvider.h>
 #import <ReactAppDependencyProvider/RCTAppDependencyProvider.h>
 #import <WebEngage/WebEngage.h>
-#import "WebEngageReact.h"
+#import <WEGWebEngageBridge.h>
 
 @implementation AppDelegate
 
@@ -18,9 +18,9 @@
   
   // Initialize WebEngage
   // Docs: Add below 2 lines to Docs
-  self.weManager = [WebEngageReact new];
-  
-  [self.weManager autoRegister:application launchOptions:launchOptions];
+  self.weBridge = [WEGWebEngageBridge new];
+      
+    [self.weBridge autoRegister:application launchOptions:launchOptions];
   return [super application:application didFinishLaunchingWithOptions:launchOptions];
 }
 
