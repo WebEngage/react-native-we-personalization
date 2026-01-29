@@ -1,8 +1,0 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.webengage.we_personalization_rn">
-  <application>
-    <meta-data
-      android:name="com.webengage.child.rn_pe"
-      android:value="rn_pe:${we_rn_pe_version}" />
-  </application>
-</manifest>
