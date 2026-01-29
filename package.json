@@ -1,0 +1,51 @@
+{
+  "name": "react-native-we-personalization",
+  "version": "1.2.68",
+  "description": "React-Native WebEngage Personalization",
+  "repository": "https://github.com/WebEngage/react-native-we-personalization",
+  "author": "Webengage",
+  "license": "MIT",
+  "types": "index.d.ts",
+  "bugs": {
+    "url": "https://github.com/WebEngage/react-native-we-personalization/issues"
+  },
+  "homepage": "https://docs.webengage.com/docs/react-native-app-in-line-content",
+  "main": "src/index.js",
+  "keywords": [
+    "webengage",
+    "react",
+    "react-native",
+    "analytics",
+    "push",
+    "in-app",
+    "notification",
+    "android",
+    "ios",
+    "personalization",
+    "webengage personalization",
+    "webengage inline"
+  ],
+  "devDependencies": {
+    "react": "18.1.0",
+    "react-native": "0.70.6"
+  },
+  "peerDependencies": {
+    "react-native": ">=0.39.0"
+  },
+  "dependencies": {
+    "prop-types": "^15.8.1"
+  },
+  "codegenConfig": {
+    "name": "WEPersonalizationSpec",
+    "type": "all",
+    "jsSrcsDir": "./src/bridge",
+    "android": {
+      "javaPackageName": "com.webengage.we_personalization_rn"
+    },
+    "ios": {
+      "componentProvider": {
+        "WEPersonalizationView": "WEPersonalizationView"
+      }
+    }
+  }
+}
