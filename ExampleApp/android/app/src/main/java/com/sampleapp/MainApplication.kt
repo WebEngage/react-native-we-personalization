@@ -39,10 +39,7 @@ class MainApplication : Application(), ReactApplication {
   override fun onCreate() {
     super.onCreate()
     SoLoader.init(this, OpenSourceMergedSoMapping)
-    if (BuildConfig.IS_NEW_ARCHITECTURE_ENABLED) {
-      // If you opted-in for the New Architecture, we load the native entry point for this app.
-      load(bridgelessEnabled=BuildConfig.IS_BRIDGELESS_ENABLED)
-    }
+    load()
     WebengageBridge.getInstance();        // Add This
     // ... Webengage Initialization
     val webEngageConfig = WebEngageConfig.Builder()
