@@ -11,14 +11,21 @@ Pod::Spec.new do |s|
   s.license      = package["license"]
   s.authors      = package["author"]
 
-  s.platforms    = { :ios => "11.0" }
+  s.platforms    = { :ios => "13.0" }
   s.source       = { :git => "https://github.com/WebEngage/react-native-we-personalization.git", :tag => "#{s.version}" }
 
   s.source_files = "ios/**/*.{h,m,mm,swift}"
 
   s.dependency "React-Core"
-  s.dependency "WebEngage/Core",'>= 6.9.0'
-  s.dependency "WEPersonalization"
+
+  # WebEngage and WEPersonalization native SDKs are now provided via SPM.
+  # See react-native-webengage/ios/add_webengage_spm.rb
+
+  s.pod_target_xcconfig = {
+    'FRAMEWORK_SEARCH_PATHS' => '"$(PODS_CONFIGURATION_BUILD_DIR)"',
+    'HEADER_SEARCH_PATHS' => '"$(PODS_CONFIGURATION_BUILD_DIR)/WebEngage.framework/Headers" "$(PODS_CONFIGURATION_BUILD_DIR)/WEPersonalization.framework/Headers"',
+    'OTHER_LDFLAGS' => '-framework WebEngage -framework WEPersonalization'
+  }
 
   # Don't install the dependencies when we run `pod install` in the old architecture.
   if ENV['RCT_NEW_ARCH_ENABLED'] == '1' then
