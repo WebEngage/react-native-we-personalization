@@ -17,7 +17,6 @@
   self.initialProps = @{};
   
   // Initialize WebEngage
-  // Docs: Add below 2 lines to Docs
   self.weBridge = [WEGWebEngageBridge new];
       
     [self.weBridge autoRegister:application launchOptions:launchOptions];

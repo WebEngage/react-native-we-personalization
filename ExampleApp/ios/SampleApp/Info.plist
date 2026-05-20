@@ -54,7 +54,7 @@
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
 	<key>WEGLicenseCode</key>
-	<string>~1341056cd</string>
+	<string>LICENSE_CODE</string>
 	<key>WEGLogLevel</key>
 	<string>VERBOSE</string>
 </dict>
