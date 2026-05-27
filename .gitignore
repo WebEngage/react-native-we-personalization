@@ -5,6 +5,10 @@ lib/android/build/
 lib/android/.idea/workspace.xml
 lib/android/bin/.project
 lib/android/bin/
+lib/node_modules
+lib/node_modules/
+lib/node_modules/*
+lib/coverage/
 Example_oldArch
 ExampleApp/yarn.lock
 ExampleApp/ios/Podfile.lock
@@ -14,3 +18,4 @@ example-component/
 ExampleNewArch/
 ExampleNewArch/*
 ExampleApp/src_backup/*
+lib/package-lock.json
