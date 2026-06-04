@@ -3,5 +3,5 @@
 #import <WEGWebEngageBridge.h>
 
 @interface AppDelegate : RCTAppDelegate
-@property (nonatomic, strong) WEGWebEngageBridge *webEngageBridge;
+@property (nonatomic, strong) WEGWebEngageBridge *weBridge;
 @end

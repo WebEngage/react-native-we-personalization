@@ -10,6 +10,7 @@ buildscript {
   dependencies {
     classpath "com.android.tools.build:gradle:7.2.1"
     classpath 'com.google.gms:google-services:4.3.14'
+    classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.20"
   }
 }
 
@@ -18,6 +19,7 @@ def isNewArchitectureEnabled() {
 }
 
 apply plugin: "com.android.library"
+apply plugin: "kotlin-android"
 
 if (isNewArchitectureEnabled()) {
   apply plugin: "com.facebook.react"
@@ -53,6 +55,16 @@ android {
   compileOptions {
     sourceCompatibility JavaVersion.VERSION_1_8
     targetCompatibility JavaVersion.VERSION_1_8
+  }
+
+  sourceSets {
+    main {
+      if (isNewArchitectureEnabled()) {
+        java.srcDirs += ['src/newarch/java']
+      } else {
+        java.srcDirs += ['src/oldarch/java']
+      }
+    }
   }
 
 }
@@ -93,7 +105,7 @@ dependencies {
   // CoroutineScope
   api 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.0'
   api 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.0'
-  api "org.jetbrains.kotlin:kotlin-stdlib:1.4.10"
+  api "org.jetbrains.kotlin:kotlin-stdlib:1.5.20"
 }
 
 if (isNewArchitectureEnabled()) {
