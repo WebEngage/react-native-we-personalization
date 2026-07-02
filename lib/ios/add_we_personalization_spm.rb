@@ -10,10 +10,14 @@
 #     add_we_personalization_spm(installer)    # from this plugin
 #   end
 
-require 'xcodeproj'
+begin
+  require 'xcodeproj'
+rescue LoadError
+  raise "[react-native-we-personalization] The 'xcodeproj' gem is required. Run: sudo gem install xcodeproj"
+end
 
-WEP_REPO_URL = 'https://github.com/WebEngage/webengage-ios-sdk'
-WEP_PRODUCT_NAME = 'WebEngagePersonalization'
+WEP_REPO_URL = defined?(WEP_REPO_URL) ? WEP_REPO_URL : 'https://github.com/WebEngage/webengage-ios-sdk'
+WEP_PRODUCT_NAME = defined?(WEP_PRODUCT_NAME) ? WEP_PRODUCT_NAME : 'WebEngagePersonalization'
 
 def add_we_personalization_spm(installer, options = {})
   repo_url = options[:repo_url] || WEP_REPO_URL
@@ -32,6 +36,8 @@ def add_we_personalization_spm(installer, options = {})
     return
   end
 
+  project_modified = false
+
   # Find the existing webengage-ios-sdk package reference (added by react-native-webengage)
   pkg_ref = project.root_object.package_references.find { |ref| ref.repositoryURL == repo_url }
   unless pkg_ref
@@ -40,20 +46,25 @@ def add_we_personalization_spm(installer, options = {})
   end
 
   app_target = project.targets.find { |t| t.product_type == 'com.apple.product-type.application' }
-  if app_target
-    existing = app_target.package_product_dependencies.any? { |d| d.product_name == product_name }
-    unless existing
-      dep = project.new(Xcodeproj::Project::Object::XCSwiftPackageProductDependency)
-      dep.package = pkg_ref
-      dep.product_name = product_name
-      app_target.package_product_dependencies << dep
-      puts "[react-native-we-personalization] Added SPM product: #{product_name}"
-    else
-      puts "[react-native-we-personalization] SPM product #{product_name} already present, skipping."
-    end
+  unless app_target
+    puts "[react-native-we-personalization] Could not find application target, skipping SPM product setup."
+    return
   end
 
-  project.save
+  existing = app_target.package_product_dependencies.any? { |d| d.product_name == product_name }
+  unless existing
+    dep = project.new(Xcodeproj::Project::Object::XCSwiftPackageProductDependency)
+    dep.package = pkg_ref
+    dep.product_name = product_name
+    app_target.package_product_dependencies << dep
+    puts "[react-native-we-personalization] Added SPM product: #{product_name}"
+    project_modified = true
+  else
+    puts "[react-native-we-personalization] SPM product #{product_name} already present, skipping."
+  end
+
+  # only save if something actually changed
+  project.save if project_modified
 end
 
 # Auto-register into CocoaPods post_install hook

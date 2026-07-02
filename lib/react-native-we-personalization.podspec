@@ -15,7 +15,7 @@ Pod::Spec.new do |s|
   s.platforms    = { :ios => '11.0' }
 
   s.source       = {
-    :git => "https://github.com/WebEngage/react-native-we-personalization.git",
+    :git => package["repository"].is_a?(Hash) ? package["repository"]["url"].gsub('git+', '') : package["repository"].gsub('git+', ''),
     :tag => "#{s.version}"
   }
 
@@ -28,8 +28,8 @@ Pod::Spec.new do |s|
     'DEFINES_MODULE' => 'YES',
     'SWIFT_OBJC_INTERFACE_HEADER_NAME' => 'react_native_we_personalization-Swift.h',
     'FRAMEWORK_SEARCH_PATHS' => '"$(PODS_CONFIGURATION_BUILD_DIR)"',
-    'HEADER_SEARCH_PATHS' => '"$(PODS_CONFIGURATION_BUILD_DIR)/WebEngage.framework/Headers" "$(PODS_CONFIGURATION_BUILD_DIR)/WEPersonalization.framework/Headers"',
-    'OTHER_LDFLAGS' => '-framework WebEngage -framework WEPersonalization'
+    'HEADER_SEARCH_PATHS' => '"$(PODS_CONFIGURATION_BUILD_DIR)/WebEngageCore.framework/Headers" "$(PODS_CONFIGURATION_BUILD_DIR)/WebEngagePersonalization.framework/Headers"',
+    'OTHER_LDFLAGS' => '-framework WebEngageCore -framework WebEngagePersonalization'
   }
 
   if respond_to?(:install_modules_dependencies, true)

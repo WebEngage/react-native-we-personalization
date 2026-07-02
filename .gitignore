@@ -19,3 +19,4 @@ ExampleNewArch/
 ExampleNewArch/*
 ExampleApp/src_backup/*
 lib/package-lock.json
+*.bak
