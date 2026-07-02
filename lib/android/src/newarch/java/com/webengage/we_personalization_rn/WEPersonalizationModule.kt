@@ -1,0 +1,50 @@
+package com.webengage.we_personalization_rn
+
+import com.facebook.react.bridge.ReactApplicationContext
+import com.facebook.react.bridge.ReadableMap
+import com.webengage.we_personalization_rn.bridge.WEPersonalizationBridge
+import com.webengage.we_personalization_rn.utils.WEConstants
+
+class WEPersonalizationModule(reactContext: ReactApplicationContext) :
+    com.webengage.we_personalization_rn.NativeWEPersonalizationBridgeSpec(reactContext) {
+
+    private val bridge = WEPersonalizationBridge(reactContext)
+
+    override fun getName(): String = WEConstants.PERSONALIZATION_BRIDGE
+
+    override fun initWePersonalization() {
+        bridge.initWePersonalization()
+    }
+
+    override fun registerProperty(propertyId: String, screenName: String) {
+        bridge.registerProperty(propertyId, screenName)
+    }
+
+    override fun deregisterProperty(propertyId: String) {
+        bridge.deregisterProperty(propertyId)
+    }
+
+    override fun registerWECampaignCallback() {
+        bridge.registerWECampaignCallback()
+    }
+
+    override fun deregisterWECampaignCallback() {
+        bridge.deregisterWECampaignCallback()
+    }
+
+    override fun trackClick(propertyId: String, attributes: ReadableMap?) {
+        bridge.trackClick(propertyId, attributes)
+    }
+
+    override fun trackImpression(propertyId: String, attributes: ReadableMap?) {
+        bridge.trackImpression(propertyId, attributes)
+    }
+
+    override fun addListener(eventType: String?) {
+        // Handled by React Native
+    }
+
+    override fun removeListeners(count: Double) {
+        // Handled by React Native
+    }
+}

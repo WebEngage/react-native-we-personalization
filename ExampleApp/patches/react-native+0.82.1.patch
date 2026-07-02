@@ -1,0 +1,13 @@
+diff --git a/node_modules/react-native/ReactAndroid/src/main/jni/react/renderer/graphics/conversions.h b/node_modules/react-native/ReactAndroid/src/main/jni/react/renderer/graphics/conversions.h
+index 1234567..abcdefg 100644
+--- a/node_modules/react-native/ReactAndroid/src/main/jni/react/renderer/graphics/conversions.h
++++ b/node_modules/react-native/ReactAndroid/src/main/jni/react/renderer/graphics/conversions.h
+@@ -77,7 +77,7 @@ inline folly::dynamic toDynamic(YGDimension const& dimension) {
+     case YGDimensionPercent:
+       return folly::dynamic::object("unit", "percent")(
+           "value",
+-          return std::format("{}%", dimension.value);
++          folly::to<std::string>(dimension.value) + "%");
+     case YGDimensionAuto:
+       return "auto";
+     case YGDimensionUndefined:

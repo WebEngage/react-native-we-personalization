@@ -2,17 +2,16 @@ package com.webengage.we_personalization_rn.views;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.Choreographer;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
-import android.widget.Toast;
-
 import com.webengage.personalization.WEPersonalization;
 import com.webengage.personalization.callbacks.WECampaignControlInternalCallback;
-import com.webengage.we_personalization_rn.regisrty.WEPropertyRegistry;
+import com.webengage.we_personalization_rn.registry.WEPropertyRegistry;
 
 import androidx.annotation.NonNull;
 
@@ -32,10 +31,13 @@ import com.webengage.we_personalization_rn.model.ScreenNavigatorCallback;
 import java.util.HashMap;
 
 public class WEInlineWidget extends FrameLayout implements ScreenNavigatorCallback, WECampaignControlInternalCallback {
-    WEInlineView weInlineView;
-    private ReactApplicationContext applicationContext = null;
-    int height = 0, width = 0;
-    String tagName = "", screenName = "";
+    private WEInlineView weInlineView;
+    private final ReactApplicationContext applicationContext;
+    private int height;
+    private int width;
+    private String tagName = "";
+    private String screenName = "";
+    private boolean isCGViewListenerAlreadyAttach;
 
     @Override
     protected void onAttachedToWindow() {
@@ -49,13 +51,15 @@ public class WEInlineWidget extends FrameLayout implements ScreenNavigatorCallba
         super.onDetachedFromWindow();
         Logger.d(WEConstants.TAG, "WEInlineWidget: onDetachedFromWindow: " + tagName);
         WEPluginCallbackHandler.removeScreenNavigatorCallback(this.screenName, this);
-        View view = weInlineView.findViewWithTag("INLINE_PERSONALIZATION_TAG");
-        if (view != null) {
-            weInlineView.removeView(view);
+        if (weInlineView != null) {
+            View view = weInlineView.findViewWithTag("INLINE_PERSONALIZATION_TAG");
+            if (view != null) {
+                weInlineView.removeView(view);
+            }
         }
     }
 
-    public WEInlineWidget(@NonNull ReactApplicationContext context, HashMap<String, Object> map, WEPersonalizationViewManager ref) {
+    public WEInlineWidget(@NonNull ReactApplicationContext context, HashMap<String, Object> map) {
         super(context);
         this.applicationContext = context;
         init(context);
@@ -67,10 +71,7 @@ public class WEInlineWidget extends FrameLayout implements ScreenNavigatorCallba
         addView(view);
     }
 
-    @Override
-    public void addOnLayoutChangeListener(OnLayoutChangeListener listener) {
-        super.addOnLayoutChangeListener(listener);
-    }
+
 
     //  Enforce this to reflect new Changes to the UI
     public void setupLayout(View view, WECampaignData weCampaignData) {
@@ -102,6 +103,10 @@ public class WEInlineWidget extends FrameLayout implements ScreenNavigatorCallba
     }
 
     public void trackImpression(WECampaignData weCampaignData) {
+        if (weCampaignData == null) {
+            Logger.d(WEConstants.TAG, "WEInlineWidget: trackImpression - weCampaignData is null");
+            return;
+        }
         String targetViewId = weCampaignData.getTargetViewId();
         String campaignId = weCampaignData.getCampaignId();
         if (!WEPropertyRegistry.get().isImpressionAlreadyTracked(targetViewId, campaignId)) {
@@ -157,29 +162,38 @@ public class WEInlineWidget extends FrameLayout implements ScreenNavigatorCallba
     }
 
     public void loadView(String tagName) {
+        if (TextUtils.isEmpty(tagName) || weInlineView == null) {
+            Logger.d(WEConstants.TAG, "WEInlineWidget: loadView - invalid parameters");
+            return;
+        }
         Logger.d(WEConstants.TAG, "WEInlineWidget: loadView called for - " + tagName);
         weInlineView.load(tagName, new WEPlaceholderCallback() {
             @Override
             public void onDataReceived(WECampaignData weCampaignData) {
+                if (weCampaignData == null) {
+                    Logger.d(WEConstants.TAG, "WEInlineWidget: onDataReceived - weCampaignData is null");
+                    return;
+                }
                 Logger.d(WEConstants.TAG, "WEInlineWidget: onDataReceived called " + weCampaignData.getTargetViewId());
-                WritableMap params = Arguments.createMap();
-                params = WEUtils.generateParams(weCampaignData);
+                WritableMap params = WEUtils.generateParams(weCampaignData);
                 WEUtils.sendEventToHybrid(applicationContext, "onDataReceived", params);
             }
 
             @Override
             public void onPlaceholderException(String campaignId, String targetViewId, Exception e) {
                 Logger.d(WEConstants.TAG, "WEInlineWidget: onPlaceholderException from personalization view manager-> \ncampaignId- " + campaignId + "\ntargetViewId- " + targetViewId + "\nerror-" + e);
-                WritableMap params = Arguments.createMap();
-                params = WEUtils.generateParams(campaignId, targetViewId, e);
+                WritableMap params = WEUtils.generateParams(campaignId, targetViewId, e);
                 WEUtils.sendEventToHybrid(applicationContext, "onPlaceholderException", params);
             }
 
             @Override
             public void onRendered(WECampaignData weCampaignData) {
+                if (weCampaignData == null || weInlineView == null) {
+                    Logger.d(WEConstants.TAG, "WEInlineWidget: onRendered - invalid state");
+                    return;
+                }
                 Logger.d(WEConstants.TAG, "WEInlineWidget: onRendered called " + weCampaignData.getTargetViewId());
-                WritableMap params = Arguments.createMap();
-                params = WEUtils.generateParams(weCampaignData);
+                WritableMap params = WEUtils.generateParams(weCampaignData);
                 WEUtils.sendEventToHybrid(applicationContext, "onRendered", params);
                 View view = null;
                 if (weInlineView.getChildCount() > 1) {
@@ -197,8 +211,8 @@ public class WEInlineWidget extends FrameLayout implements ScreenNavigatorCallba
 
     @Override
     public void screenNavigated(String screenName) {
-        Logger.d(WEConstants.TAG, "WEInlineWidget: screenNavigated  called for screen - " + screenName + " for tagName- " + this.tagName);
-        if (!this.tagName.equals("")) {
+        Logger.d(WEConstants.TAG, "WEInlineWidget: screenNavigated called for screen - " + screenName + " for tagName- " + this.tagName);
+        if (!TextUtils.isEmpty(this.tagName)) {
             loadView(this.tagName);
         }
     }
@@ -209,14 +223,16 @@ public class WEInlineWidget extends FrameLayout implements ScreenNavigatorCallba
     }
 
     private void fireCGevent() {
-        WEPersonalization.get().trackCGEvents(this.tagName);
+        if (!TextUtils.isEmpty(this.tagName)) {
+            WEPersonalization.get().trackCGEvents(this.tagName);
+        }
     }
 
-    boolean isCGViewListenerAlreadyAttach = false;
-
     public void monitorVisibilityAndFireEvent(View view) {
-//        if(true)
-//            return;
+        if (view == null) {
+            Logger.d(WEConstants.TAG, "WEInlineWidget: monitorVisibilityAndFireEvent - view is null");
+            return;
+        }
         Choreographer.getInstance().postFrameCallback(new Choreographer.FrameCallback() {
             @Override
             public void doFrame(long frameTimeNanos) {

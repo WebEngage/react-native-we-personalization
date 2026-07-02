@@ -6,6 +6,39 @@
 	objectVersion = 46;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		BA175EF12ECD726F004CCD76 /* WebengagePersonalizationViewManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = BA175EF02ECD724F004CCD76 /* WebengagePersonalizationViewManager.mm */; };
+		BA58F9532EC5CAD8007BC8C6 /* WEPersonalizationBridgeImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA58F9522EC5CAD8007BC8C6 /* WEPersonalizationBridgeImpl.swift */; };
+		BA58F9542EC5CAD8007BC8C6 /* WEPersonalizationBridge.mm in Sources */ = {isa = PBXBuildFile; fileRef = BA58F9502EC5CAD8007BC8C6 /* WEPersonalizationBridge.mm */; };
+		BA58F9552EC5CAD8007BC8C6 /* WEPersonalizationBridge-Bridging-Header.h in Headers */ = {isa = PBXBuildFile; fileRef = BA58F9512EC5CAD8007BC8C6 /* WEPersonalizationBridge-Bridging-Header.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		BA58F9562EC5CAD8007BC8C6 /* WEPersonalizationBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = BA58F94F2EC5CAD8007BC8C6 /* WEPersonalizationBridge.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		BA64430B2ED577D800EAA8B2 /* WEPersonalizationView.mm in Sources */ = {isa = PBXBuildFile; fileRef = BA64430A2ED577D800EAA8B2 /* WEPersonalizationView.mm */; };
+		BA64430C2ED577D800EAA8B2 /* WEPersonalizationView.h in Headers */ = {isa = PBXBuildFile; fileRef = BA6443092ED577D800EAA8B2 /* WEPersonalizationView.h */; };
+		BA64430E2ED577DC00EAA8B2 /* WEPersonalizationView.h in Sources */ = {isa = PBXBuildFile; fileRef = BA6443092ED577D800EAA8B2 /* WEPersonalizationView.h */; };
+		BA76153A2ECC7DC70035F179 /* WEPersonalizationBridge.h in Sources */ = {isa = PBXBuildFile; fileRef = BA58F94F2EC5CAD8007BC8C6 /* WEPersonalizationBridge.h */; };
+		BA76153B2ECC7DC70035F179 /* WEPersonalizationBridge-Bridging-Header.h in Sources */ = {isa = PBXBuildFile; fileRef = BA58F9512EC5CAD8007BC8C6 /* WEPersonalizationBridge-Bridging-Header.h */; };
+		BA76153D2ECC7DE40035F179 /* WECampaignCallbackHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAA66F022EC58F5D00D2737D /* WECampaignCallbackHandler.swift */; };
+		BA76153E2ECC7DE40035F179 /* WECustomPropertyRegistry.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAA66F032EC58F5D00D2737D /* WECustomPropertyRegistry.swift */; };
+		BA76153F2ECC7DE40035F179 /* WEProperty.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAA66F042EC58F5D00D2737D /* WEProperty.swift */; };
+		BA7615402ECC7DE40035F179 /* PersonalizationBridge-Bridging-Header.h in Headers */ = {isa = PBXBuildFile; fileRef = BAA66F0A2EC58F9C00D2737D /* PersonalizationBridge-Bridging-Header.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		BA7615412ECC7DE40035F179 /* WebengagePersonalization-Bridging-Header.h in Headers */ = {isa = PBXBuildFile; fileRef = BAA66F0B2EC58F9C00D2737D /* WebengagePersonalization-Bridging-Header.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		BA7615422ECC7DE40035F179 /* util in Sources */ = {isa = PBXBuildFile; fileRef = 7033C41B2A52D8FF0040C70F /* util */; };
+		BA7615442ECC7DE40035F179 /* WEInlineWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA58F94A2EC5CA68007BC8C6 /* WEInlineWidget.swift */; };
+		BA7615452ECC7DE40035F179 /* WEPersonalizationFabricViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA58F94B2EC5CA68007BC8C6 /* WEPersonalizationFabricViewManager.swift */; };
+		BA7615462ECC7DE40035F179 /* WEPersonalizationViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA58F94C2EC5CA68007BC8C6 /* WEPersonalizationViewManager.swift */; };
+		BA7615472ECC7DE40035F179 /* WEPersonalizationViewManagerImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA58F94D2EC5CA68007BC8C6 /* WEPersonalizationViewManagerImpl.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		BAA66F002EC58F5500D2737D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BAA66EF72EC58F5500D2737D /* WEPersonalization.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 134814201AA4EA6300B7C361;
+			remoteInfo = WEPersonalizationBridge;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXCopyFilesBuildPhase section */
 		58B511D91A9E6C8500147676 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
@@ -20,11 +53,25 @@
 
 /* Begin PBXFileReference section */
 		134814201AA4EA6300B7C361 /* libWePersonalization.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libWePersonalization.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		7033C4172A52D8FE0040C70F /* views */ = {isa = PBXFileReference; lastKnownFileType = folder; path = views; sourceTree = "<group>"; };
-		7033C4182A52D8FE0040C70F /* headers */ = {isa = PBXFileReference; lastKnownFileType = folder; path = headers; sourceTree = "<group>"; };
-		7033C4192A52D8FE0040C70F /* handler */ = {isa = PBXFileReference; lastKnownFileType = folder; path = handler; sourceTree = "<group>"; };
-		7033C41A2A52D8FF0040C70F /* bridge */ = {isa = PBXFileReference; lastKnownFileType = folder; path = bridge; sourceTree = "<group>"; };
 		7033C41B2A52D8FF0040C70F /* util */ = {isa = PBXFileReference; lastKnownFileType = folder; path = util; sourceTree = "<group>"; };
+		BA175EF02ECD724F004CCD76 /* WebengagePersonalizationViewManager.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WebengagePersonalizationViewManager.mm; sourceTree = "<group>"; };
+		BA58F94A2EC5CA68007BC8C6 /* WEInlineWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WEInlineWidget.swift; sourceTree = "<group>"; };
+		BA58F94B2EC5CA68007BC8C6 /* WEPersonalizationFabricViewManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WEPersonalizationFabricViewManager.swift; sourceTree = "<group>"; };
+		BA58F94C2EC5CA68007BC8C6 /* WEPersonalizationViewManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WEPersonalizationViewManager.swift; sourceTree = "<group>"; };
+		BA58F94D2EC5CA68007BC8C6 /* WEPersonalizationViewManagerImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WEPersonalizationViewManagerImpl.swift; sourceTree = "<group>"; };
+		BA58F94F2EC5CAD8007BC8C6 /* WEPersonalizationBridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WEPersonalizationBridge.h; sourceTree = "<group>"; };
+		BA58F9502EC5CAD8007BC8C6 /* WEPersonalizationBridge.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WEPersonalizationBridge.mm; sourceTree = "<group>"; };
+		BA58F9512EC5CAD8007BC8C6 /* WEPersonalizationBridge-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "WEPersonalizationBridge-Bridging-Header.h"; sourceTree = "<group>"; };
+		BA58F9522EC5CAD8007BC8C6 /* WEPersonalizationBridgeImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WEPersonalizationBridgeImpl.swift; sourceTree = "<group>"; };
+		BA6443092ED577D800EAA8B2 /* WEPersonalizationView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WEPersonalizationView.h; sourceTree = "<group>"; };
+		BA64430A2ED577D800EAA8B2 /* WEPersonalizationView.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = WEPersonalizationView.mm; sourceTree = "<group>"; };
+		BAA66EF72EC58F5500D2737D /* WEPersonalization.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = WEPersonalization.xcodeproj; sourceTree = "<group>"; };
+		BAA66EF82EC58F5500D2737D /* WEPersonalization.xcworkspace */ = {isa = PBXFileReference; lastKnownFileType = wrapper.workspace; path = WEPersonalization.xcworkspace; sourceTree = "<group>"; };
+		BAA66F022EC58F5D00D2737D /* WECampaignCallbackHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WECampaignCallbackHandler.swift; sourceTree = "<group>"; };
+		BAA66F032EC58F5D00D2737D /* WECustomPropertyRegistry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WECustomPropertyRegistry.swift; sourceTree = "<group>"; };
+		BAA66F042EC58F5D00D2737D /* WEProperty.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WEProperty.swift; sourceTree = "<group>"; };
+		BAA66F0A2EC58F9C00D2737D /* PersonalizationBridge-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "PersonalizationBridge-Bridging-Header.h"; sourceTree = "<group>"; };
+		BAA66F0B2EC58F9C00D2737D /* WebengagePersonalization-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "WebengagePersonalization-Bridging-Header.h"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -49,22 +96,92 @@
 		58B511D21A9E6C8500147676 = {
 			isa = PBXGroup;
 			children = (
-				7033C41A2A52D8FF0040C70F /* bridge */,
-				7033C4192A52D8FE0040C70F /* handler */,
-				7033C4182A52D8FE0040C70F /* headers */,
+				BAA66EFC2EC58F5500D2737D /* bridge */,
+				BAA66F052EC58F5D00D2737D /* handler */,
+				BAA66F0C2EC58F9C00D2737D /* headers */,
 				7033C41B2A52D8FF0040C70F /* util */,
-				7033C4172A52D8FE0040C70F /* views */,
+				BA58F94E2EC5CA68007BC8C6 /* views */,
 				134814211AA4EA7D00B7C361 /* Products */,
 			);
 			sourceTree = "<group>";
 		};
+		BA58F94E2EC5CA68007BC8C6 /* views */ = {
+			isa = PBXGroup;
+			children = (
+				BA6443092ED577D800EAA8B2 /* WEPersonalizationView.h */,
+				BA64430A2ED577D800EAA8B2 /* WEPersonalizationView.mm */,
+				BA175EF02ECD724F004CCD76 /* WebengagePersonalizationViewManager.mm */,
+				BA58F94A2EC5CA68007BC8C6 /* WEInlineWidget.swift */,
+				BA58F94B2EC5CA68007BC8C6 /* WEPersonalizationFabricViewManager.swift */,
+				BA58F94C2EC5CA68007BC8C6 /* WEPersonalizationViewManager.swift */,
+				BA58F94D2EC5CA68007BC8C6 /* WEPersonalizationViewManagerImpl.swift */,
+			);
+			path = views;
+			sourceTree = "<group>";
+		};
+		BAA66EFC2EC58F5500D2737D /* bridge */ = {
+			isa = PBXGroup;
+			children = (
+				BAA66EF72EC58F5500D2737D /* WEPersonalization.xcodeproj */,
+				BAA66EF82EC58F5500D2737D /* WEPersonalization.xcworkspace */,
+				BA58F94F2EC5CAD8007BC8C6 /* WEPersonalizationBridge.h */,
+				BA58F9502EC5CAD8007BC8C6 /* WEPersonalizationBridge.mm */,
+				BA58F9512EC5CAD8007BC8C6 /* WEPersonalizationBridge-Bridging-Header.h */,
+				BA58F9522EC5CAD8007BC8C6 /* WEPersonalizationBridgeImpl.swift */,
+			);
+			path = bridge;
+			sourceTree = "<group>";
+		};
+		BAA66EFD2EC58F5500D2737D /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				BAA66F012EC58F5500D2737D /* libWEPersonalizationBridge.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		BAA66F052EC58F5D00D2737D /* handler */ = {
+			isa = PBXGroup;
+			children = (
+				BAA66F022EC58F5D00D2737D /* WECampaignCallbackHandler.swift */,
+				BAA66F032EC58F5D00D2737D /* WECustomPropertyRegistry.swift */,
+				BAA66F042EC58F5D00D2737D /* WEProperty.swift */,
+			);
+			path = handler;
+			sourceTree = "<group>";
+		};
+		BAA66F0C2EC58F9C00D2737D /* headers */ = {
+			isa = PBXGroup;
+			children = (
+				BAA66F0A2EC58F9C00D2737D /* PersonalizationBridge-Bridging-Header.h */,
+				BAA66F0B2EC58F9C00D2737D /* WebengagePersonalization-Bridging-Header.h */,
+			);
+			path = headers;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		BAA66F0F2EC593B900D2737D /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BA58F9562EC5CAD8007BC8C6 /* WEPersonalizationBridge.h in Headers */,
+				BA58F9552EC5CAD8007BC8C6 /* WEPersonalizationBridge-Bridging-Header.h in Headers */,
+				BA7615402ECC7DE40035F179 /* PersonalizationBridge-Bridging-Header.h in Headers */,
+				BA7615412ECC7DE40035F179 /* WebengagePersonalization-Bridging-Header.h in Headers */,
+				BA64430C2ED577D800EAA8B2 /* WEPersonalizationView.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
 		58B511DA1A9E6C8500147676 /* WePersonalization */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 58B511EF1A9E6C8500147676 /* Build configuration list for PBXNativeTarget "WePersonalization" */;
 			buildPhases = (
+				BAA66F0F2EC593B900D2737D /* Headers */,
 				58B511D71A9E6C8500147676 /* Sources */,
 				58B511D81A9E6C8500147676 /* Frameworks */,
 				58B511D91A9E6C8500147676 /* CopyFiles */,
@@ -103,6 +220,12 @@
 			mainGroup = 58B511D21A9E6C8500147676;
 			productRefGroup = 58B511D21A9E6C8500147676;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = BAA66EFD2EC58F5500D2737D /* Products */;
+					ProjectRef = BAA66EF72EC58F5500D2737D /* WEPersonalization.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				58B511DA1A9E6C8500147676 /* WePersonalization */,
@@ -110,11 +233,36 @@
 		};
 /* End PBXProject section */
 
+/* Begin PBXReferenceProxy section */
+		BAA66F012EC58F5500D2737D /* libWEPersonalizationBridge.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libWEPersonalizationBridge.a;
+			remoteRef = BAA66F002EC58F5500D2737D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
+
 /* Begin PBXSourcesBuildPhase section */
 		58B511D71A9E6C8500147676 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BA64430E2ED577DC00EAA8B2 /* WEPersonalizationView.h in Sources */,
+				BA76153D2ECC7DE40035F179 /* WECampaignCallbackHandler.swift in Sources */,
+				BA76153E2ECC7DE40035F179 /* WECustomPropertyRegistry.swift in Sources */,
+				BA76153F2ECC7DE40035F179 /* WEProperty.swift in Sources */,
+				BA7615422ECC7DE40035F179 /* util in Sources */,
+				BA7615442ECC7DE40035F179 /* WEInlineWidget.swift in Sources */,
+				BA7615452ECC7DE40035F179 /* WEPersonalizationFabricViewManager.swift in Sources */,
+				BA7615462ECC7DE40035F179 /* WEPersonalizationViewManager.swift in Sources */,
+				BA64430B2ED577D800EAA8B2 /* WEPersonalizationView.mm in Sources */,
+				BA7615472ECC7DE40035F179 /* WEPersonalizationViewManagerImpl.swift in Sources */,
+				BA175EF12ECD726F004CCD76 /* WebengagePersonalizationViewManager.mm in Sources */,
+				BA76153A2ECC7DC70035F179 /* WEPersonalizationBridge.h in Sources */,
+				BA76153B2ECC7DC70035F179 /* WEPersonalizationBridge-Bridging-Header.h in Sources */,
+				BA58F9532EC5CAD8007BC8C6 /* WEPersonalizationBridgeImpl.swift in Sources */,
+				BA58F9542EC5CAD8007BC8C6 /* WEPersonalizationBridge.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -15,7 +15,7 @@ struct WEConstants{
     static let PAYLOAD_ACTION_ID = "actionId"
     static let PAYLOAD_DEEPLINK = "deeplink"
     static let SCREEN_NAVIGATED = "screenNavigated"
-    static let TAG = "WEH: "
+    static let TAG = "[WE-Inline-iOS]"
     static let EXCEPTION = "exception"
     static let PAYLOAD_WEGDATA = "wegData"
     static let METHOD_NAME_ON_DATA_RECEIVED = "onDataReceived"
