@@ -12,7 +12,10 @@
   "homepage": "https://docs.webengage.com/docs/react-native-app-in-line-content",
   "main": "src/index.js",
   "scripts": {
-    "postinstall": "node scripts/postinstall.js"
+    "postinstall": "node scripts/postinstall.js",
+    "test": "jest --config jest.config.js --verbose",
+    "test:coverage": "jest --config jest.config.js --verbose --coverage",
+    "test:watch": "jest --config jest.config.js --verbose --watch"
   },
   "keywords": [
     "webengage",
@@ -28,11 +31,6 @@
     "webengage personalization",
     "webengage inline"
   ],
-  "scripts": {
-    "test": "jest --config jest.config.js --verbose",
-    "test:coverage": "jest --config jest.config.js --verbose --coverage",
-    "test:watch": "jest --config jest.config.js --verbose --watch"
-  },
   "devDependencies": {
     "react": "18.1.0",
     "react-native": "0.70.6",
