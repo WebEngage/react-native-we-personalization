@@ -35,7 +35,14 @@ Pod::Spec.new do |s|
     s.dependency "React-Core"
   end
 
-  # Common WebEngage deps (always needed)
-  s.dependency "WebEngage/Core", '>= 6.9.0'
-  s.dependency "WEPersonalization"
+  if ENV['WEBENGAGE_USE_SPM'] == 'true' && respond_to?(:spm_dependency, true)
+    spm_dependency(s,
+      url: 'https://github.com/WebEngage/webengage-ios-sdk.git',
+      requirement: { kind: 'upToNextMajorVersion', minimumVersion: '2.0.0' },
+      products: ['WebEngagePersonalization', 'WebEngageCore']
+    )
+  else
+    s.dependency "WebEngage/Core", '>= 6.9.0'
+    s.dependency "WEPersonalization"
+  end
 end
