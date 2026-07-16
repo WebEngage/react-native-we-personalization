@@ -35,7 +35,23 @@ Pod::Spec.new do |s|
     s.dependency "React-Core"
   end
 
-  # Common WebEngage deps (always needed)
-  s.dependency "WebEngage/Core", '>= 6.9.0'
-  s.dependency "WEPersonalization"
+  # --- WebEngage native SDK: CocoaPods vs SPM -------------------------------
+  webengage_spm_min_version = '2.0.0'
+
+  spm_supported = respond_to?(:spm_dependency, true)
+  spm_disabled  = ENV['WEBENGAGE_DISABLE_SPM'] == 'true'   # explicit override, always wins
+
+  use_spm = spm_supported && !spm_disabled
+
+  if use_spm
+    spm_dependency(s,
+      url: 'https://github.com/WebEngage/webengage-ios-sdk.git',
+      requirement: { kind: 'upToNextMajorVersion', minimumVersion: webengage_spm_min_version },
+      products: ['WebEngageCore', 'WebEngagePersonalization']
+    )
+  else
+    s.dependency "WebEngage/Core", '>= 6.9.0'
+    s.dependency "WEPersonalization"
+  end
+  # ---------------------------------------------------------------------------
 end
