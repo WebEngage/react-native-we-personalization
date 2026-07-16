@@ -13,7 +13,7 @@ public class WEPersonalizationBridgeImpl: NSObject {
     @objc public var propertyId = 0
     @objc public var weCampaignData: WECampaignData? = nil
     @objc public var customPropertiesList = [Int]()
-    @objc public var WEGPEPluginVersion = "2.0.0"
+    @objc public var WEGPEPluginVersion = "2.1.0"
     
     private var listenerCount: Int = 0
     private let listenerQueue = DispatchQueue(label: "com.webengage.personalization.listener", attributes: .concurrent)
